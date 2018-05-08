@@ -75,7 +75,6 @@
 //--- muparserx framework -------------------------------------------------------------------------
 #include "mpParser.h"
 #include "mpDefines.h"
-#include "mpTest.h"
 
 //--- other includes ------------------------------------------------------------------------------
 #include "timer.h"
@@ -460,8 +459,6 @@ public:
   virtual void Eval(ptr_val_type &ret, const ptr_val_type * /*a_pArg*/, int /*a_iArgc*/)
   {
     ParserXBase::EnableDebugDump(0, 0);
-    ParserTester pt;
-    pt.Run();
     *ret = (float_type)0.0;
   }
 
@@ -640,57 +637,8 @@ public:
 */
 
 //---------------------------------------------------------------------------
-void Splash()
-{
-  console() << _T("-------------------------------------------------------------------------\n");
-  console() << _T("               __________                                 ____  ___\n");
-  console() << _T("    _____  __ _\\______   \\_____ _______  ______ __________\\   \\/  /\n");
-  console() << _T("   /     \\|  |  \\     ___/\\__  \\\\_  __ \\/  ___// __ \\_  __ \\     / \n");
-  console() << _T("  |  Y Y  \\  |  /    |     / __ \\|  | \\/\\___ \\\\  ___/|  | \\/     \\ \n");
-  console() << _T("  |__|_|  /____/|____|    (____  /__|  /____  >\\___  >__| /___/\\  \\\n");
-  console() << _T("        \\/                     \\/           \\/     \\/           \\_/\n");
-  console() << _T("  Version ") << ParserXBase::GetVersion() << _T("\n");
-  console() << _T("  Copyright (C) 2016, Ingo Berg");
-  console() << _T("\n\n");
-  console() << _T("-------------------------------------------------------------------------\n\n");
-  console() << _T( "Build configuration:\n\n");
-
-#if defined(_DEBUG)
-  console() << _T("- DEBUG build\n");
-#else
-  console() << _T("- RELEASE build\n");
-#endif
-
-#if defined(_UNICODE)
-  console() << _T("- UNICODE build\n");
-#else  
-  console() << _T("- ASCII build\n");
-#endif
-
-#if defined (__GNUC__)
-  console() << _T("- compiled with GCC Version ") << __GNUC__ << "." << __GNUC_MINOR__ << "." << __GNUC_PATCHLEVEL__ << _T("\n");
-#elif defined(_MSC_VER)
-  console() << _T("- compiled with MSC Version ") << _MSC_VER << _T("\n");
-#endif
-
-  console() << _T("- IEEE 754 (IEC 559) is ") << ((std::numeric_limits<float_type>::is_iec559) ? _T("available") : _T(" NOT AVAILABLE")) << _T("\n");
-  console() << _T("- ") << sizeof(void*)*8 << _T(" bit\n");
-  console() << _T("- Floating point type is \"") << typeid(float_type).name()
-                                               << _T("\" (") << std::numeric_limits<float_type>::digits10 << _T(" Digits)")
-                                               << _T("\n");
-  
-  console() << _T("\n");
-}
-
-//---------------------------------------------------------------------------
 void SelfTest()
 {
-  console() << _T("-------------------------------------------------------------------------\n\n");
-  console() << _T( "Running test suite:\n\n");
-
-  ParserTester pt;
-  pt.Run();
-
   console() << _T("-------------------------------------------------------------------------\n\n");
   console() << _T("Special parser functions:\n");
   console() << _T("  list_var()   - list parser variables and return the number of variables.\n");
@@ -934,7 +882,6 @@ void Calc()
 //---------------------------------------------------------------------------
 int main(int /*argc*/, char** /*argv*/)
 {
-  Splash();
   SelfTest();
 
 #if defined(_UNICODE)
