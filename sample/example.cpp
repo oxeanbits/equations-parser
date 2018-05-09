@@ -1,5 +1,7 @@
 /** \example example.cpp
-    This is example code showing you how to use muparserx.
+    This is a simple version of muparserx that works as follows...
+    Input: Equation(s)
+    Output: Result type and value of the equation(s)
 
 <pre>
                __________                                 ____  ___
@@ -98,7 +100,7 @@ int CheckKeywords(const char_type *a_szLine, ParserXBase &a_Parser)
 {
   string_type sLine(a_szLine);
 
-  if (sLine==_T("quit"))
+  if (sLine==_T("exit"))
   {
     return -1;
   }
@@ -112,98 +114,20 @@ void Calc()
   ParserX  parser(pckALL_NON_COMPLEX);
 //  ParserX  parser(pckALL_COMPLEX);
 
-  // Create an array variable
-  Value arr1(3, 0);
-  arr1.At(0) = (float_type)1.0;
-  arr1.At(1) = (float_type)2.0;
-  arr1.At(2) = (float_type)3.0;
-
-  Value arr2(3, 0);
-  arr2.At(0) = (float_type)4.0;
-  arr2.At(1) = (float_type)3.0;
-  arr2.At(2) = (float_type)2.0;
-
-  Value arr3(4, 0);
-  arr3.At(0) = (float_type)1.0;
-  arr3.At(1) = (float_type)2.0;
-  arr3.At(2) = (float_type)3.0;
-  arr3.At(3) = (float_type)4.0;
-
-  Value arr4(3, 0);
-  arr4.At(0) = (float_type)4.0;
-  arr4.At(1) = false;
-  arr4.At(2) = _T("hallo");
-
-  // Create a 3x3 matrix with zero elements
-  Value m1(3, 3, 0);
-  m1.At(0, 0) = 1.0;
-  m1.At(1, 1) = 1.0;
-  m1.At(2, 2) = 1.0;
-
-  Value m2(3, 3, 0);
-  m2.At(0, 0) = 1.0;
-  m2.At(0, 1) = 2.0;
-  m2.At(0, 2) = 3.0;
-  m2.At(1, 0) = 4.0;
-  m2.At(1, 1) = 5.0;
-  m2.At(1, 2) = 6.0;
-  m2.At(2, 0) = 7.0;
-  m2.At(2, 1) = 8.0;
-  m2.At(2, 2) = 9.0;
-
-  Value val[5];
-  val[0] = (float_type)1.1;
-  val[1] = 1.0;
-  val[2] = false;
-  val[3] = _T("Hello");
-  val[4] = _T("World");
-
-  Value fVal[3];
-  fVal[0] = 1;
-  fVal[1] = (float_type)2.22;
-  fVal[2] = (float_type)3.33;
-
-  Value sVal[3];
-  sVal[0] = _T("hello");
-  sVal[1] = _T("world");
-  sVal[2] = _T("test");
-
-  Value cVal[3];
-  cVal[0] = mup::cmplx_type(1, 1);
-  cVal[1] = mup::cmplx_type(2, 2);
-  cVal[2] = mup::cmplx_type(3, 3);
-
   Value ans;
   parser.DefineVar(_T("ans"), Variable(&ans));
-
-  // some tests for vectors
-  parser.DefineVar(_T("va"), Variable(&arr1));
-  parser.DefineVar(_T("vb"), Variable(&arr2));
-  parser.DefineVar(_T("vc"), Variable(&arr3));
-  parser.DefineVar(_T("vd"), Variable(&arr4));
-  parser.DefineVar(_T("m1"), Variable(&m1));
-  parser.DefineVar(_T("m2"), Variable(&m2));
-
-  parser.DefineVar(_T("a"),  Variable(&fVal[0]));
-  parser.DefineVar(_T("b"),  Variable(&fVal[1]));
-  parser.DefineVar(_T("c"),  Variable(&fVal[2]));
-
-  parser.DefineVar(_T("ca"), Variable(&cVal[0]));
-  parser.DefineVar(_T("cb"), Variable(&cVal[1]));
-  parser.DefineVar(_T("cc"), Variable(&cVal[2]));
-
-  parser.DefineVar(_T("sa"), Variable(&sVal[0]));
-  parser.DefineVar(_T("sb"), Variable(&sVal[1]));
  
   parser.EnableAutoCreateVar(true);
 
-  Value x = 1.0;
-  Value y = std::complex<double>(0, 1);
-  parser.DefineVar(_T("x"), Variable(&x));
-  parser.DefineVar(_T("y"), Variable(&y));
-
-  for(;;)
-  {
+// Afterwards, we need to uncomment the infinity loop => for(;;)
+// With Sockets/Daemon approach, the idea is to have this program
+// executing forever until it receives: 'exit' as input.
+//
+// The performance will be much better with Sockets/Daemon, since
+// we don't need to close and reopen the binary file each time we parse an equation
+//
+//  for(;;)
+//  {
     try
     {
       console() << sPrompt;
@@ -214,31 +138,21 @@ void Calc()
       switch(CheckKeywords(sLine.c_str(), parser)) 
       {
       case  0: break;
-      case  1: continue;
       case -1: return;
       }
     
       parser.SetExpr(sLine);
 
       // The returned result is of type Value, value is a Variant like
-      // type that can be either a boolean an integer or a floating point value
+      // type that can be either a boolean, an integer or a floating point value
       ans = parser.Eval();
+
       {
         // Value supports C++ streaming like this:
         console() << _T("Result (type: '") << ans.GetType() <<  _T("'):\n");
         console() << _T("ans = ") << ans << _T("\n");
-/*
-        // Or if you need the specific type use this:
-        switch (ans.GetType())
-        {
-        case 's': { std::string s = ans.GetString();               console() << s << " (string)"  << "\n"; } break;
-        case 'i': { int i = ans.GetInteger();                      console() << i << " (int)"     << "\n"; } break;
-        case 'f': { float_type f = ans.GetFloat();                 console() << f << " (float)"   << "\n"; } break;
-        case 'c': { std::complex<float_type> c = ans.GetComplex(); console() << c << " (complex)" << "\n"; } break;
-        case 'b': break;
-        }
-*/
       }
+
     }
     catch(ParserError &e)
     {
@@ -251,15 +165,9 @@ void Calc()
       }
 
       console() << e.GetMsg() << _T(" (Errc: ") << std::dec << e.GetCode() << _T(")") << _T("\n\n");
-
-      //if (e.GetContext().Ident.length()) 
-      //  console() << _T("Ident.: ") << e.GetContext().Ident << _T("\n");
-
-      //if (e.GetToken().length()) 
-      //  console() << _T("Token: \"") << e.GetToken() << _T("\"\n");
     } // try / catch
-  } // for (;;)
-}
+//  } // for (;;)
+} // Calc
 
 //---------------------------------------------------------------------------
 int main(int /*argc*/, char** /*argv*/)
@@ -299,4 +207,3 @@ int main(int /*argc*/, char** /*argv*/)
 
   return 0;
 }
-
