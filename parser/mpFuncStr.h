@@ -36,6 +36,20 @@
 
 MUP_NAMESPACE_START
 
+
+  //------------------------------------------------------------------------------
+  /** \brief Callback object for determining the the concatenation of two strings.
+      \ingroup functions
+  */
+  class FunStrConcat : public ICallback
+  {
+  public:
+    FunStrConcat();
+    virtual void Eval(ptr_val_type& ret, const ptr_val_type *a_pArg, int a_iArgc) override;
+    virtual const char_type* GetDesc() const override;
+    virtual IToken* Clone() const override;
+  };
+
   //------------------------------------------------------------------------------
   /** \brief Callback object for determining the length of a string. 
       \ingroup functions

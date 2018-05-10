@@ -44,6 +44,36 @@ MUP_NAMESPACE_START
 
   //------------------------------------------------------------------------------
   //
+  // Concat function
+  //
+  //------------------------------------------------------------------------------
+
+  FunStrConcat::FunStrConcat()
+    :ICallback(cmFUNC, _T("concat"), 2)
+  {}
+
+  //------------------------------------------------------------------------------
+  void FunStrConcat::Eval(ptr_val_type &ret, const ptr_val_type *a_pArg, int)
+  {
+    string_type str1 = a_pArg[0]->GetString();
+    string_type str2 = a_pArg[1]->GetString();
+    *ret = (string_type) str1 + str2;
+  }
+
+  //------------------------------------------------------------------------------
+  const char_type* FunStrConcat::GetDesc() const
+  {
+    return _T("concat(s) - Returns the concatenation of two strings s1 and s2.");
+  }
+
+  //------------------------------------------------------------------------------
+  IToken* FunStrConcat::Clone() const
+  {
+    return new FunStrConcat(*this);
+  }
+
+  //------------------------------------------------------------------------------
+  //
   // Strlen function
   //
   //------------------------------------------------------------------------------
