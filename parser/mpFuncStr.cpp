@@ -49,7 +49,7 @@ MUP_NAMESPACE_START
   //------------------------------------------------------------------------------
 
   FunStrLen::FunStrLen()
-    :ICallback(cmFUNC, _T("strlen"), 1)
+    :ICallback(cmFUNC, _T("length"), 1)
   {}
 
   //------------------------------------------------------------------------------
@@ -62,7 +62,7 @@ MUP_NAMESPACE_START
   //------------------------------------------------------------------------------
   const char_type* FunStrLen::GetDesc() const
   {
-    return _T("strlen(s) - Returns the length of the string s.");
+    return _T("length(s) - Returns the length of the string s.");
   }
 
   //------------------------------------------------------------------------------
@@ -177,4 +177,4 @@ MUP_NAMESPACE_START
   {
     return new FunStrToDbl(*this);
   }
-}  // namespace mu
+MUP_NAMESPACE_END

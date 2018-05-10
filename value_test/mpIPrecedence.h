@@ -44,7 +44,7 @@ MUP_NAMESPACE_START
     virtual int GetPri() const = 0;
     virtual EOprtAsct GetAssociativity() const = 0;
   };
-}  // namespace mu
+MUP_NAMESPACE_END
 
 #endif
 

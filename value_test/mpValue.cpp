@@ -637,4 +637,4 @@ MUP_NAMESPACE_START
   {
     m_pCache = pCache;
   }
-}  // namespace mu
+MUP_NAMESPACE_END
