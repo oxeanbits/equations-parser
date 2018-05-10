@@ -136,7 +136,7 @@ MUP_NAMESPACE_START
       string_type m_sMsg;  ///< The message string with all wildcards still in place.
       const ParserMessageProviderBase &m_ErrMsg;
   };		
-} // namespace mu
+MUP_NAMESPACE_END
 
 #endif
 

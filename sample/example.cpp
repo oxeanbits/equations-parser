@@ -109,6 +109,15 @@ int CheckKeywords(const char_type *a_szLine, ParserXBase &a_Parser)
 }
 
 //---------------------------------------------------------------------------
+/** A more readable strings concatenation function.
+ *  concat("Hello ", "World")
+*/
+string_type concat(string_type firstString, string_type secondString)
+{
+  return firstString + secondString
+}
+
+//---------------------------------------------------------------------------
 void Calc()
 {
   ParserX  parser(pckALL_NON_COMPLEX);
@@ -116,15 +125,16 @@ void Calc()
 
   Value ans;
   parser.DefineVar(_T("ans"), Variable(&ans));
+  parser.DefineFun("concat", concat);
  
   parser.EnableAutoCreateVar(true);
 
 // Afterwards, we need to uncomment the infinity loop => for(;;)
-// With Sockets/Daemon approach, the idea is to have this program
+// With the future Sockets/Daemon approach, the future idea is to have this program
 // executing forever until it receives: 'exit' as input.
 //
 // The performance will be much better with Sockets/Daemon, since
-// we don't need to close and reopen the binary file each time we parse an equation
+// we don't need to close and reopen (execute) the binary file each time we parse an equation
 //
 //  for(;;)
 //  {
@@ -160,7 +170,6 @@ void Calc()
       {
         string_type sMarker;
         sMarker.insert(0, sPrompt.size() + e.GetPos(), ' ');
-        sMarker += _T("^\n");
         console() << sMarker;
       }
 

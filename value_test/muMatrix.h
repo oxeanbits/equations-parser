@@ -392,6 +392,6 @@ namespace mu
   {
     return Matrix<T>(lhs) -= rhs;
   }
-} // namespace mu
+MUP_NAMESPACE_END
 
 #endif

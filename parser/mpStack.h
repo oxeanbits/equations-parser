@@ -149,6 +149,6 @@ MUP_NAMESPACE_START
         return &m_Cont[0];
       }
   };
-} // namespace mu
+MUP_NAMESPACE_END
 
 #endif
