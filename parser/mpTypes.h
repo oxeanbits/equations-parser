@@ -401,6 +401,6 @@ inline std::istream& console_in()
 
 #endif // _UNICODE
 
-}  // namespace mu
+MUP_NAMESPACE_END
 
 #endif

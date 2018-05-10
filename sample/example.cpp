@@ -109,6 +109,43 @@ int CheckKeywords(const char_type *a_szLine, ParserXBase &a_Parser)
 }
 
 //---------------------------------------------------------------------------
+/** A more readable strings concatenation function.
+ *  concat("Hello ", "World")
+*/
+
+// string_type concat(string_type firstString, string_type secondString)
+// {
+//   return firstString + secondString;
+// }
+
+
+// class MySine : public mup::ICallback
+// {
+//   MySine()
+//     :ICallback(cmFUNC, _T("mysin"), 1)
+//   {}
+
+//   virtual void Eval(ptr_val_type &ret, const ptr_val_type *a_pArg, int a_iArgc)
+//   {
+//     // Get the argument from the argument input vector
+//     float_type a = a_pArg[0]->GetFloat();
+
+//     // The return value is passed by writing it to the reference ret
+//     *ret = sin(a);
+//   }
+
+//   const char_type* GetDesc() const
+//   {
+//     return "mysin(x) - A custom sine function";
+//   }
+
+//   IToken* Clone() const
+//   {
+//     return new MySine(*this);
+//   }
+// };
+
+//---------------------------------------------------------------------------
 void Calc()
 {
   ParserX  parser(pckALL_NON_COMPLEX);
@@ -116,16 +153,30 @@ void Calc()
 
   Value ans;
   parser.DefineVar(_T("ans"), Variable(&ans));
- 
-  parser.EnableAutoCreateVar(true);
+  // parser.DefineFun(new MySine);
 
-// Afterwards, we need to uncomment the infinity loop => for(;;)
-// With Sockets/Daemon approach, the idea is to have this program
-// executing forever until it receives: 'exit' as input.
-//
-// The performance will be much better with Sockets/Daemon, since
-// we don't need to close and reopen the binary file each time we parse an equation
-//
+
+/*
+ Implicit creation of variables refers to the creation of parser variables
+ at parser runtime. With this feature you can create variables on the fly
+ without any additional client code. Since this is usefull only for applications requiring
+ direct user interaction it is turned off by default.
+ In order to use it you have to activate it first by calling the EnableAutoCreateVar member function
+ Reference: muparserx website (beltoforion)
+*/
+
+//  parser.EnableAutoCreateVar(true);
+
+/*
+ On future, we need to uncomment the following infinity loop => for(;;)
+ Because with the future Sockets/Daemon approach, the idea will be to let
+ this program be executing forever until it receives 'exit' as an input.
+
+ The performance will be much better with Sockets/Daemon, since
+ we don't need to close and reopen (execute) the binary file
+ each time we parse an equation to this program
+*/
+
 //  for(;;)
 //  {
     try
@@ -160,7 +211,6 @@ void Calc()
       {
         string_type sMarker;
         sMarker.insert(0, sPrompt.size() + e.GetPos(), ' ');
-        sMarker += _T("^\n");
         console() << sMarker;
       }
 

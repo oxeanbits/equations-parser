@@ -88,4 +88,4 @@ MUP_NAMESPACE_START
     ParserErrorMsg::Reset(pProvider);
   }
 
-} // namespace mu
+MUP_NAMESPACE_END

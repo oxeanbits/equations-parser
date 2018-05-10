@@ -304,4 +304,4 @@ MUP_NAMESPACE_START
   {
     return m_Err.Errc;
   }
-}  // namespace mu
+MUP_NAMESPACE_END

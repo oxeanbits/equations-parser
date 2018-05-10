@@ -148,7 +148,7 @@ MUP_NAMESPACE_START
   protected:
     virtual ~IValue();
   }; // class IValue
-}  // namespace mu
+MUP_NAMESPACE_END
 
 #endif
 

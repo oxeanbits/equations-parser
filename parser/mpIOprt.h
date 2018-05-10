@@ -111,7 +111,7 @@ MUP_NAMESPACE_START
     private:
       int m_nPrec;
     }; // class IOperator
-}  // namespace mu
+MUP_NAMESPACE_END
 
 #endif
 

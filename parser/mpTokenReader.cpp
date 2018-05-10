@@ -1010,4 +1010,4 @@ bool TokenReader::IsUndefVarTok(ptr_tok_type &a_Tok)
 	m_nSynFlags = noVAL | noVAR | noFUN | noBO | noIFX;
 	return true;
 }
-} // namespace mu
+MUP_NAMESPACE_END

@@ -256,6 +256,6 @@ MUP_NAMESPACE_START
     virtual const char_type* GetDesc() const override;
     virtual IToken* Clone() const override;
   };
-}  // namespace mu
+MUP_NAMESPACE_END
 
 #endif

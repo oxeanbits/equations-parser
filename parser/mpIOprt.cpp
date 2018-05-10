@@ -167,4 +167,4 @@ MUP_NAMESPACE_START
   {
     return oaNONE;
   }
-}  // namespace mu
+MUP_NAMESPACE_END

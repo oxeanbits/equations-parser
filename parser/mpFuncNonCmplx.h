@@ -99,6 +99,6 @@ MUP_NAMESPACE_START
     MUP_BINARY_FUNC_DEF(FunRemainder)
 #undef MUP_BINARY_FUNC_DEF
 
-}  // namespace mu
+MUP_NAMESPACE_END
 
 #endif

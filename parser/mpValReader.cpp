@@ -344,4 +344,4 @@ IValueReader* StrValReader::Clone(TokenReader *pTokenReader) const
 
     return pReader;
 }
-} // namespace mu
+MUP_NAMESPACE_END

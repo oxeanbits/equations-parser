@@ -56,7 +56,7 @@ MUP_NAMESPACE_START
 
     static void ResetErrorMessageProvider(ParserMessageProviderBase *pProvider);
   };
-} // namespace mu
+MUP_NAMESPACE_END
 
 #endif
 

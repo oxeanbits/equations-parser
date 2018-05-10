@@ -801,4 +801,4 @@ Value::operator bool()
 {
     return GetBool();
 }
-}  // namespace mu
+MUP_NAMESPACE_END

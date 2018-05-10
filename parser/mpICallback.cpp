@@ -138,4 +138,4 @@ MUP_NAMESPACE_START
     else
       return m_nArgsPresent;
   }
-} // namespace mu
+MUP_NAMESPACE_END
