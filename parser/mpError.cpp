@@ -263,4 +263,4 @@ EErrorCodes ParserError::GetCode() const
 {
     return m_Err.Errc;
 }
-}  // namespace mu
+MUP_NAMESPACE_END

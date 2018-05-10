@@ -242,6 +242,6 @@ public:
     virtual IToken* Clone() const override;
 }; // class OprtCastToInt
 
-}  // namespace mu
+MUP_NAMESPACE_END
 
 #endif

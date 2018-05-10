@@ -304,6 +304,6 @@ MUP_NAMESPACE_START
 
 #endif // _UNICODE
 
-}  // namespace mu
+MUP_NAMESPACE_END
 
 #endif

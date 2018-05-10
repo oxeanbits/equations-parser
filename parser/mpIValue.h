@@ -180,7 +180,7 @@ MUP_NAMESPACE_START
 
   //---------------------------------------------------------------------------------------------
   Value operator*(const IValue& lhs, const IValue& rhs);
-}  // namespace mu
+MUP_NAMESPACE_END
 
 #endif
 
