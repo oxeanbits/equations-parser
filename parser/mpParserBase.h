@@ -219,7 +219,7 @@ MUP_NAMESPACE_START
     mutable ValueCache m_cache;         ///< A cache for recycling value items instead of deleting them
 
   };
-} // namespace mu
+MUP_NAMESPACE_END
 
 #endif
 

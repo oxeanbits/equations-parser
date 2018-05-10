@@ -1298,4 +1298,4 @@ void ParserXBase::StackDump(const Stack<ptr_tok_type> &a_stOprt) const
 
 	console() << endl;
 }
-} // namespace mu
+MUP_NAMESPACE_END
