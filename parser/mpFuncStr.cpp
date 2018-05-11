@@ -173,12 +173,12 @@ MUP_NAMESPACE_START
   //
   //------------------------------------------------------------------------------
 
-  FunStrToDbl::FunStrToDbl()
-    :ICallback(cmFUNC, _T("str2dbl"), 1)
+  FunStrToNumber::FunStrToNumber()
+    :ICallback(cmFUNC, _T("str2number"), 1)
   {}
 
   //------------------------------------------------------------------------------
-  void FunStrToDbl::Eval(ptr_val_type &ret, const ptr_val_type *a_pArg, int a_iArgc)
+  void FunStrToNumber::Eval(ptr_val_type &ret, const ptr_val_type *a_pArg, int a_iArgc)
   {
     assert(a_iArgc==1);
     string_type in;
@@ -197,14 +197,14 @@ MUP_NAMESPACE_START
   }
 
   //------------------------------------------------------------------------------
-  const char_type* FunStrToDbl::GetDesc() const
+  const char_type* FunStrToNumber::GetDesc() const
   {
-    return _T("str2dbl(s) - Converts the string stored in s into a floating foint value.");
+    return _T("str2number(s) - Converts the string stored in s into a floating foint value.");
   }
 
   //------------------------------------------------------------------------------
-  IToken* FunStrToDbl::Clone() const
+  IToken* FunStrToNumber::Clone() const
   {
-    return new FunStrToDbl(*this);
+    return new FunStrToNumber(*this);
   }
 MUP_NAMESPACE_END
