@@ -93,14 +93,14 @@ MUP_NAMESPACE_START
   /** \brief Parse string to a floating point value. 
       \ingroup functions  
   */
-  class FunStrToDbl : public ICallback
+  class FunStrToNumber : public ICallback
   {
   public:
-    FunStrToDbl ();
+    FunStrToNumber ();
     virtual void Eval(ptr_val_type& ret, const ptr_val_type *a_pArg, int a_iArgc) override;
     virtual const char_type* GetDesc() const override;
     virtual IToken* Clone() const override;
-  }; // class FunStrToDbl
+  }; // class FunStrToNumber
 MUP_NAMESPACE_END
 
 #endif
