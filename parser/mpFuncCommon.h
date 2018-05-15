@@ -93,6 +93,19 @@ MUP_NAMESPACE_START
   }; // class FunSum
 
   //------------------------------------------------------------------------------
+  /** \brief Determine the average value from the parameter list.
+      \ingroup functions
+  */
+  class FunAvg : public ICallback
+  {
+  public:
+    FunAvg();
+    virtual void Eval(ptr_val_type &ret, const ptr_val_type *a_pArg, int a_iArgc) override;
+    virtual const char_type* GetDesc() const override;
+    virtual IToken* Clone() const override;
+  }; // class FunAvg
+
+  //------------------------------------------------------------------------------
   /** \brief Parser function callback for determining the size of an array. 
       \ingroup functions
   */

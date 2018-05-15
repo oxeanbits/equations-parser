@@ -124,7 +124,7 @@ Bugfixes:
   - Issue 14: Precedence of Unary Operators
   - Issue 17: Wrong result on complex power
   - Issue 20: Library crash when " " is calculated
-  - Issue 23: min, max and sum functions return values when called without parameters
+  - Issue 23: min, max, sum and avg functions return values when called without parameters
   - Issue 26: bugfixes for "<<" and ">>" operators.
   - Issue 27: Querying multiple results of comma separated expressions did not work 
               (multiple results are no longer supported)

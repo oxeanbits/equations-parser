@@ -84,6 +84,7 @@ void PackageCommon::AddToParser(ParserXBase *pParser)
   pParser->DefineFun(new FunMax());
   pParser->DefineFun(new FunMin());
   pParser->DefineFun(new FunSum());
+  pParser->DefineFun(new FunAvg());
 
   // misc
   pParser->DefineFun(new FunParserID);
