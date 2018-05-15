@@ -55,11 +55,11 @@ By default the parser supports the following mathematical constants:
 \section fea_predefined_fun Predefined Functions
 <ul>
   <li>Standard functions:<br/>
-  <b>abs, sin, cos, tan, sinh, cosh, tanh, ln, log, log10, exp, sqrt</b><br/>&nbsp;</li>
+  <b>abs, sin, cos, tan, sinh, cosh, tanh, asin, acos, atan, asinh, acosh, atanh, ln, log, log10, exp, sqrt, cbrt</b><br/>&nbsp;</li>
   <li>Unlimited number of arguments:<br/>
-  <b>min, max, sum</b><br/>&nbsp;</li>
+  <b>min, max, sum, avg</b><br/>&nbsp;</li>
   <li>String functions:<br/>
-  <b>str2dbl, strlen, toupper</b><br/>&nbsp;</li>
+  <b>str2dbl, length, toupper</b><br/>&nbsp;</li>
   <li>Complex functions:<br/>
   <b>real, imag, conj, arg, norm</b><br/>&nbsp;</li>  
   <li>Array functions:<br/>

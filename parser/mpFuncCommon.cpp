@@ -237,6 +237,63 @@ MUP_NAMESPACE_START
 
   //------------------------------------------------------------------------------
   //
+  // class FunAvg
+  //
+  //------------------------------------------------------------------------------
+
+  FunAvg::FunAvg() 
+    :ICallback(cmFUNC, _T("avg"), -1)
+  {}
+
+  //------------------------------------------------------------------------------
+  /** \brief Returns the minimum value of all values.
+      \param a_pArg Pointer to an array of Values
+      \param a_iArgc Number of values stored in a_pArg
+  */
+  void FunAvg::Eval(ptr_val_type &ret, const ptr_val_type *a_pArg, int a_iArgc)
+  {
+    if (a_iArgc < 1)
+        throw ParserError(ErrorContext(ecTOO_FEW_PARAMS, GetExprPos(), GetIdent()));
+
+    float_type avg(0);
+
+    for (int i=0; i<a_iArgc; ++i)
+    {
+      switch(a_pArg[i]->GetType())
+      {
+      case 'f': 
+      case 'i': avg += a_pArg[i]->GetFloat();   break;
+      default:
+        {
+          ErrorContext err;
+          err.Errc = ecTYPE_CONFLICT_FUN;
+          err.Arg = i+1;
+          err.Type1 = a_pArg[i]->GetType();
+          err.Type2 = 'f';
+          throw ParserError(err);
+        }
+      }
+    }
+
+    avg = avg/a_iArgc;
+
+    *ret = avg;
+  }
+
+  //------------------------------------------------------------------------------
+  const char_type* FunAvg::GetDesc() const
+  {
+    return _T("avg(x,y,...,z) - Returns the average of all arguments.");
+  }
+
+  //------------------------------------------------------------------------------
+  IToken* FunAvg::Clone() const
+  {
+    return new FunAvg(*this);
+  }
+
+  //------------------------------------------------------------------------------
+  //
   // SizeOf
   //
   //------------------------------------------------------------------------------
