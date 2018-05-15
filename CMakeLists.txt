@@ -55,6 +55,7 @@ set_target_properties(muparserx PROPERTIES VERSION ${MUPARSERX_VERSION})
 set_property(TARGET muparserx PROPERTY POSITION_INDEPENDENT_CODE TRUE)
 set_target_properties(muparserx PROPERTIES SOVERSION ${MUPARSERX_VERSION})
 set_target_properties(muparserx PROPERTIES VERSION ${MUPARSERX_VERSION})
+set_target_properties(muparserx PROPERTIES LINK_FLAGS "-static" )
 
 #link with lib math when found
 find_library(
