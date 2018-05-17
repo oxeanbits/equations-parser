@@ -75,6 +75,7 @@ void PackageNonCmplx::AddToParser(ParserXBase *pParser)
   pParser->DefineFun(new FunSqrt());
   pParser->DefineFun(new FunCbrt());
   pParser->DefineFun(new FunAbs());
+  pParser->DefineFun(new FunRound());
 
   // binary functions
   pParser->DefineFun(new FunPow());
