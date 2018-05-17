@@ -89,11 +89,13 @@ MUP_NAMESPACE_START
     MUP_UNARY_FUNC(FunLog10, "log10", std::log10, "Logarithm base 10")
     MUP_UNARY_FUNC(FunLog2,  "log2",  std::log2,  "Logarithm base 2")
     MUP_UNARY_FUNC(FunLn,    "ln",    std::log,   "Natural logarithm")
-    // square root
+    // root related functions
     MUP_UNARY_FUNC(FunSqrt,  "sqrt",  std::sqrt,  "sqrt(x) - square root of x")
     MUP_UNARY_FUNC(FunCbrt,  "cbrt",  std::cbrt,  "cbrt(x) - cubic root of x")
     MUP_UNARY_FUNC(FunExp,   "exp",   std::exp,   "exp(x) - e to the power of x")
+    // number functions
     MUP_UNARY_FUNC(FunAbs,   "abs",   std::fabs,  "abs(x) - absolute value of x")
+    MUP_UNARY_FUNC(FunRound, "round", std::round, "round(x) - round the value of x to its nearest integer")
 #undef MUP_UNARY_FUNC
 
 #define MUP_BINARY_FUNC(CLASS, IDENT, FUNC, DESC) \
