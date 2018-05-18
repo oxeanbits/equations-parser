@@ -63,7 +63,7 @@ MUP_NAMESPACE_START
   //------------------------------------------------------------------------------
   const char_type* FunStrConcat::GetDesc() const
   {
-    return _T("concat(s) - Returns the concatenation of two strings s1 and s2.");
+    return _T("concat(s1, s2) - Returns the concatenation of two strings s1 and s2.");
   }
 
   //------------------------------------------------------------------------------
@@ -74,7 +74,73 @@ MUP_NAMESPACE_START
 
   //------------------------------------------------------------------------------
   //
-  // Strlen function
+  // Left function
+  //
+  //------------------------------------------------------------------------------
+
+  FunStrLeft::FunStrLeft()
+    :ICallback(cmFUNC, _T("left"), 2)
+  {}
+
+  //------------------------------------------------------------------------------
+  void FunStrLeft::Eval(ptr_val_type &ret, const ptr_val_type *a_pArg, int)
+  {
+    string_type str = a_pArg[0]->GetString();
+    int cut = a_pArg[1]->GetInteger();
+
+    str = str.substr(0, cut);
+
+    *ret = (string_type) str;
+  }
+
+  //------------------------------------------------------------------------------
+  const char_type* FunStrLeft::GetDesc() const
+  {
+    return _T("left(s1, x) - Returns the left substring of a string, considering x characters.");
+  }
+
+  //------------------------------------------------------------------------------
+  IToken* FunStrLeft::Clone() const
+  {
+    return new FunStrLeft(*this);
+  }
+
+  //------------------------------------------------------------------------------
+  //
+  // Right function
+  //
+  //------------------------------------------------------------------------------
+
+  FunStrRight::FunStrRight()
+    :ICallback(cmFUNC, _T("right"), 2)
+  {}
+
+  //------------------------------------------------------------------------------
+  void FunStrRight::Eval(ptr_val_type &ret, const ptr_val_type *a_pArg, int)
+  {
+    string_type str = a_pArg[0]->GetString();
+    int cut = a_pArg[1]->GetInteger();
+
+    str = str.substr(str.size() - cut, str.size());
+
+    *ret = (string_type) str;
+  }
+
+  //------------------------------------------------------------------------------
+  const char_type* FunStrRight::GetDesc() const
+  {
+    return _T("right(s1, x) - Returns the right substring of a string, considering x characters.");
+  }
+
+  //------------------------------------------------------------------------------
+  IToken* FunStrRight::Clone() const
+  {
+    return new FunStrRight(*this);
+  }
+
+  //------------------------------------------------------------------------------
+  //
+  // Length function
   //
   //------------------------------------------------------------------------------
 

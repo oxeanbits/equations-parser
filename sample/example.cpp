@@ -79,7 +79,7 @@ using namespace mup;
 #if defined(CREATE_LEAKAGE_REPORT)
 
 // Dumping memory leaks in the destructor of the static guard
-// guarantees i won't get false positives from the ParserErrorMsg 
+// guarantees I won't get false positives from the ParserErrorMsg
 // class wich is a singleton with a static instance.
 struct DumpLeaks
 {
@@ -107,43 +107,6 @@ int CheckKeywords(const char_type *a_szLine, ParserXBase &a_Parser)
 
   return 0;
 }
-
-//---------------------------------------------------------------------------
-/** A more readable strings concatenation function.
- *  concat("Hello ", "World")
-*/
-
-// string_type concat(string_type firstString, string_type secondString)
-// {
-//   return firstString + secondString;
-// }
-
-
-// class MySine : public mup::ICallback
-// {
-//   MySine()
-//     :ICallback(cmFUNC, _T("mysin"), 1)
-//   {}
-
-//   virtual void Eval(ptr_val_type &ret, const ptr_val_type *a_pArg, int a_iArgc)
-//   {
-//     // Get the argument from the argument input vector
-//     float_type a = a_pArg[0]->GetFloat();
-
-//     // The return value is passed by writing it to the reference ret
-//     *ret = sin(a);
-//   }
-
-//   const char_type* GetDesc() const
-//   {
-//     return "mysin(x) - A custom sine function";
-//   }
-
-//   IToken* Clone() const
-//   {
-//     return new MySine(*this);
-//   }
-// };
 
 //---------------------------------------------------------------------------
 void Calc()
