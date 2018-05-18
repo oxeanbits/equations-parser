@@ -82,6 +82,7 @@ void PackageNonCmplx::AddToParser(ParserXBase *pParser)
   pParser->DefineFun(new FunHypot());
   pParser->DefineFun(new FunAtan2());
   pParser->DefineFun(new FunFmod());
+  pParser->DefineFun(new FunRoundDecimal());
   pParser->DefineFun(new FunRemainder());
 
   // Operator callbacks
