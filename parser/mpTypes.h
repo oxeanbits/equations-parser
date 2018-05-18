@@ -93,7 +93,10 @@ typedef std::vector<ptr_val_type> val_vec_type;
 /** \brief Parser datatype for floating point value. */
 typedef MUP_FLOAT_TYPE float_type;
 
-/** \brief Parser datatype for integer valuse. */
+/** \brief Parser datatype for long double values (for high precision). */
+typedef MUP_LDOUBLE_TYPE long_double_type;
+
+/** \brief Parser datatype for integer values. */
 typedef MUP_INT_TYPE int_type;
 
 /** \brief The basic type used for representing complex numbers. */
