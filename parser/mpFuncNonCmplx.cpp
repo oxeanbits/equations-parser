@@ -98,6 +98,11 @@ MUP_NAMESPACE_START
     MUP_UNARY_FUNC(FunRound, "round", std::round, "round(x) - round the value of x to its nearest integer")
 #undef MUP_UNARY_FUNC
 
+double round(double number, int precision) {
+  int decimals = std::pow(10, precision);
+  return (std::round(number * decimals)) / decimals;
+}
+
 #define MUP_BINARY_FUNC(CLASS, IDENT, FUNC, DESC) \
     CLASS::CLASS()                                                   \
     :ICallback(cmFUNC, _T(IDENT), 2)                                 \
@@ -118,11 +123,12 @@ MUP_NAMESPACE_START
       return new CLASS(*this);                                       \
     }
 
-    MUP_BINARY_FUNC(FunPow,  "pow",  std::pow,  "pow(x, y) - raise x to the power of y")
-    MUP_BINARY_FUNC(FunHypot,  "hypot",  std::hypot,  "hypot(x, y) - compute the length of the vector x,y")
-    MUP_BINARY_FUNC(FunAtan2, "atan2", std::atan2, "arcus tangens with quadrant fix")
-    MUP_BINARY_FUNC(FunFmod,  "fmod",  std::fmod,  "fmod(x, y) - floating point remainder of x / y")
-    MUP_BINARY_FUNC(FunRemainder,  "remainder",  std::remainder,  "remainder(x, y) - IEEE remainder of x / y")
+    MUP_BINARY_FUNC(FunPow,    "pow",    std::pow,   "pow(x, y) - raise x to the power of y")
+    MUP_BINARY_FUNC(FunHypot,  "hypot",  std::hypot, "hypot(x, y) - compute the length of the vector x,y")
+    MUP_BINARY_FUNC(FunAtan2,  "atan2",  std::atan2, "arcus tangens with quadrant fix")
+    MUP_BINARY_FUNC(FunFmod,   "fmod",   std::fmod,  "fmod(x, y) - floating point remainder of x / y")
+    MUP_BINARY_FUNC(FunRoundDecimal, "round_decimal", round, "round_decimal(x, y) - round the x number considering y precision")
+    MUP_BINARY_FUNC(FunRemainder,    "remainder", std::remainder,  "remainder(x, y) - IEEE remainder of x / y")
 #undef MUP_BINARY_FUNC
 
 MUP_NAMESPACE_END
