@@ -49,8 +49,8 @@
 MUP_NAMESPACE_START
 
 // Auxiliary Functions
-double round(double number, int precision) {
-  int decimals = std::pow(10, precision);
+double round(long_double_type number, int_type precision) {
+  int_type decimals = std::pow(10, precision);
   return (std::round(number * decimals)) / decimals;
 }
 

@@ -69,6 +69,10 @@
 /** \brief Floating point type used by the parser. */
 #define MUP_FLOAT_TYPE double
 
+/** \brief Long double type used by the parser for high precision values. */
+#define MUP_LDOUBLE_TYPE long double
+
+/** \brief Integer type used by the parser. */
 #define MUP_INT_TYPE int
 
 /** \brief Verifies whether a given condition is met.
