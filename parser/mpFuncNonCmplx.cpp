@@ -98,11 +98,6 @@ MUP_NAMESPACE_START
     MUP_UNARY_FUNC(FunRound, "round", std::round, "round(x) - round the value of x to its nearest integer")
 #undef MUP_UNARY_FUNC
 
-double round(double number, int precision) {
-  int decimals = std::pow(10, precision);
-  return (std::round(number * decimals)) / decimals;
-}
-
 #define MUP_BINARY_FUNC(CLASS, IDENT, FUNC, DESC) \
     CLASS::CLASS()                                                   \
     :ICallback(cmFUNC, _T(IDENT), 2)                                 \
@@ -130,5 +125,11 @@ double round(double number, int precision) {
     MUP_BINARY_FUNC(FunRoundDecimal, "round_decimal", round, "round_decimal(x, y) - round the x number considering y precision")
     MUP_BINARY_FUNC(FunRemainder,    "remainder", std::remainder,  "remainder(x, y) - IEEE remainder of x / y")
 #undef MUP_BINARY_FUNC
+
+// Auxiliary Functions
+double round(double number, int precision) {
+  int decimals = std::pow(10, precision);
+  return (std::round(number * decimals)) / decimals;
+}
 
 MUP_NAMESPACE_END
