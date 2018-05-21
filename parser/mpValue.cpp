@@ -322,7 +322,7 @@ void Value::Assign(const Value &ref)
     // a 1 x 1 matrix using:
     //
     // this->Assign(m_pvVal->At(0,0));
-    // 
+    //
     // will blow up in your face since ref will become invalid at them very
     // moment you delete m_pvVal!
 }
@@ -753,6 +753,25 @@ string_type Value::AsciiDump() const
 
     ss << ((IsFlagSet(IToken::flVOLATILE)) ? _T("; ") : _T("; not ")) << _T("vol");
     ss << _T("]");
+
+    return ss.str();
+}
+
+//---------------------------------------------------------------------------
+string_type Value::AsString() const
+{
+    stringstream_type ss;
+
+    switch (m_cType)
+    {
+    case 'i': ss << (int_type)m_val.real(); break;
+    case 'f': ss << m_val.real(); break;
+    case 'm': ss << _T("(matrix)"); break;
+    case 's':
+        assert(m_psVal != nullptr);
+        ss << GetString(); break;
+    case 'b': ss << (GetBool() ? "true" : "false"); break;
+    }
 
     return ss.str();
 }
