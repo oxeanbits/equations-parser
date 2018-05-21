@@ -769,7 +769,7 @@ string_type Value::AsString() const
     case 'm': ss << _T("(matrix)"); break;
     case 's':
         assert(m_psVal != nullptr);
-        ss << _T("\"") << m_psVal << _T("\""); break;
+        ss << GetString(); break;
     }
 
     return ss.str();
