@@ -770,6 +770,7 @@ string_type Value::AsString() const
     case 's':
         assert(m_psVal != nullptr);
         ss << GetString(); break;
+    case 'b': ss << (GetBool() ? "true" : "false"); break;
     }
 
     return ss.str();
