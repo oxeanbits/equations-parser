@@ -43,7 +43,8 @@
   // Warning: If you activate this in a project on windows all hell will break loose and Satan himself will come out of hell to eat 
   //          your soul whilst reciting verses from the Microsoft MFC programming manual.
   #define override
-  #define unique_ptr auto_ptr
+  // The below line need to be commented to work properly on MacOS
+  // #define unique_ptr auto_ptr
   #define nullptr NULL
 #endif
 
