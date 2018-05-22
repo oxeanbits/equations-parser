@@ -112,6 +112,7 @@ OprtAddCmplx::OprtAddCmplx()
 void OprtAddCmplx::Eval(ptr_val_type& ret, const ptr_val_type *a_pArg, int num)
 {
     assert(num == 2);
+    _unused(num);
 
     const IValue *arg1 = a_pArg[0].Get();
     const IValue *arg2 = a_pArg[1].Get();
@@ -164,6 +165,7 @@ OprtSubCmplx::OprtSubCmplx()
 void OprtSubCmplx::Eval(ptr_val_type &ret, const ptr_val_type *a_pArg, int num)
 {
     assert(num == 2);
+    _unused(num);
 
     const IValue *arg1 = a_pArg[0].Get();
     const IValue *arg2 = a_pArg[1].Get();
@@ -215,6 +217,8 @@ OprtMulCmplx::OprtMulCmplx()
 void OprtMulCmplx::Eval(ptr_val_type &ret, const ptr_val_type *a_pArg, int num)
 {
     assert(num == 2);
+    _unused(num);
+
     IValue *arg1 = a_pArg[0].Get();
     IValue *arg2 = a_pArg[1].Get();
     *ret = (*arg1) * (*arg2);
@@ -252,6 +256,7 @@ OprtDivCmplx::OprtDivCmplx()
 void OprtDivCmplx::Eval(ptr_val_type &ret, const ptr_val_type *a_pArg, int num)
 {
     assert(num == 2);
+    _unused(num);
 
     if (a_pArg[0]->IsNonComplexScalar() && a_pArg[1]->IsNonComplexScalar())
     {
@@ -295,6 +300,7 @@ OprtPowCmplx::OprtPowCmplx()
 void OprtPowCmplx::Eval(ptr_val_type& ret, const ptr_val_type *arg, int argc)
 {
     assert(argc == 2);
+    _unused(argc);
 
     if (arg[0]->IsComplex() || arg[1]->IsComplex() || (arg[0]->GetFloat() < 0 && !arg[1]->IsInteger()))
     {

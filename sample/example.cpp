@@ -96,7 +96,7 @@ const string_type sPrompt = _T("parsec> ");
 //---------------------------------------------------------------------------
 /** \brief Check for external keywords.
 */
-int CheckKeywords(const char_type *a_szLine, ParserXBase &a_Parser)
+int CheckKeywords(const char_type *a_szLine)
 {
   string_type sLine(a_szLine);
 

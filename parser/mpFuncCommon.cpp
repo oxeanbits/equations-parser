@@ -311,6 +311,8 @@ MUP_NAMESPACE_START
   void FunSizeOf::Eval(ptr_val_type &ret, const ptr_val_type *a_pArg, int a_iArgc)
   {
     assert(a_iArgc==1);
+    _unused(a_iArgc);
+
     *ret = (float_type)a_pArg[0]->GetArray().GetRows();
   }
 
