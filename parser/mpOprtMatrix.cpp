@@ -147,6 +147,7 @@ MUP_NAMESPACE_START
   void OprtColon::Eval(ptr_val_type& ret, const ptr_val_type *a_pArg, int num)
   { 
     assert(num==2);
+    _unused(num);
 
     const IValue *argMin = a_pArg[0].Get();
     const IValue *argMax = a_pArg[1].Get();

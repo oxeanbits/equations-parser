@@ -247,6 +247,8 @@ MUP_NAMESPACE_START
   void FunStrToNumber::Eval(ptr_val_type &ret, const ptr_val_type *a_pArg, int a_iArgc)
   {
     assert(a_iArgc==1);
+    _unused(a_iArgc);
+
     string_type in;
     double out;   // <- Ich will hier wirklich double, auch wenn der Type long double
                   // ist. sscanf und long double geht nicht mit GCC!
