@@ -75,6 +75,11 @@
 /** \brief Integer type used by the parser. */
 #define MUP_INT_TYPE int
 
+/**
+  A macro to specifically indicate when something is unused
+*/
+#define _unused(x) ((void)(x))
+
 /** \brief Verifies whether a given condition is met.
 	
   If the condition is not met an exception is thrown otherwise nothing happens.

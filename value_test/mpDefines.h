@@ -69,6 +69,11 @@
 */
 #define MUP_TOK_CAST(TYPE, POINTER)  static_cast<TYPE>(POINTER);
 
+/**
+  A macro to specifically indicate when something is unused
+*/
+#define _unused(x) ((void)(x))
+
 #if defined(_DEBUG)
 
   /** \brief Debug macro to force an abortion of the programm with a certain message.
