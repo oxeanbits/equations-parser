@@ -8,3 +8,10 @@
 *.log
 *.tlog
 *.ilk
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+example
+libmuparserx.a
+muparserx.pc
+muparserxConfigVersion.cmake
