@@ -112,36 +112,26 @@ int CheckKeywords(const char_type *a_szLine)
 void Calc()
 {
   ParserX  parser(pckALL_NON_COMPLEX);
-//  ParserX  parser(pckALL_COMPLEX);
+  //  ParserX  parser(pckALL_COMPLEX);
 
   Value ans;
   parser.DefineVar(_T("ans"), Variable(&ans));
   // parser.DefineFun(new MySine);
 
 
-/*
- Implicit creation of variables refers to the creation of parser variables
- at parser runtime. With this feature you can create variables on the fly
- without any additional client code. Since this is usefull only for applications requiring
- direct user interaction it is turned off by default.
- In order to use it you have to activate it first by calling the EnableAutoCreateVar member function
- Reference: muparserx website (beltoforion)
-*/
+  /*
+   Implicit creation of variables refers to the creation of parser variables
+   at parser runtime. With this feature you can create variables on the fly
+   without any additional client code. Since this is usefull only for applications requiring
+   direct user interaction it is turned off by default.
+   In order to use it you have to activate it first by calling the EnableAutoCreateVar member function
+   Reference: muparserx website (beltoforion)
+  */
 
-//  parser.EnableAutoCreateVar(true);
+  // parser.EnableAutoCreateVar(true);
 
-/*
- On future, we need to uncomment the following infinity loop => for(;;)
- Because with the future Sockets/Daemon approach, the idea will be to let
- this program be executing forever until it receives 'exit' as an input.
-
- The performance will be much better with Sockets/Daemon, since
- we don't need to close and reopen (execute) the binary file
- each time we parse an equation to this program
-*/
-
-//  for(;;)
-//  {
+    for(;;)
+    {
     try
     {
       console() << sPrompt;
@@ -149,7 +139,7 @@ void Calc()
       string_type sLine;
       std::getline(mup::console_in(), sLine);
 
-      switch(CheckKeywords(sLine.c_str(), parser)) 
+      switch(CheckKeywords(sLine.c_str()))
       {
       case  0: break;
       case -1: return;
@@ -179,7 +169,7 @@ void Calc()
 
       console() << e.GetMsg() << _T(" (Errc: ") << std::dec << e.GetCode() << _T(")") << _T("\n\n");
     } // try / catch
-//  } // for (;;)
+  } // for (;;)
 } // Calc
 
 //---------------------------------------------------------------------------
