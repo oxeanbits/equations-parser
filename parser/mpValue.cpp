@@ -571,9 +571,8 @@ IValue& Value::operator*=(const IValue &val)
 
 //---------------------------------------------------------------------------
 /** \brief Returns a character representing the type of this value instance.
-    \return m_cType Either one of 'c' for comlex, 'i' for integer,
-    'f' for floating point, 'b' for boolean, 's' for string or
-    'm' for matrix values.
+    \return m_cType Either one of 'i' for integer, 'f' for floating point,
+    'b' for boolean, 's' for string, 'c' for complex or 'm' for matrix values.
     */
 char_type Value::GetType() const
 {
