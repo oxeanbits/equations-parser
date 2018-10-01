@@ -134,7 +134,7 @@ typedef std::map<string_type, ptr_tok_type> val_maptype;
 typedef std::map<string_type, ptr_tok_type> fun_maptype;
 
 /** \brief Type of a container that binds Callback object pointer
-	     to operator identifiers. 
+	     to operator identifiers.
 */
 typedef std::map<string_type, ptr_tok_type, su::pred::SortByLength<string_type> > oprt_bin_maptype;
 
@@ -254,7 +254,7 @@ enum EOprtAsct
 
 //------------------------------------------------------------------------------
 /** \brief Parser operator precedence values.
-  
+
     These are predefined values for the operator precedence.
   */
 enum EOprtPrecedence
@@ -276,7 +276,7 @@ enum EOprtPrecedence
     prRELATIONAL1  =  7, ///< For "==", "!="
     prRELATIONAL2  =  8, ///< Relational operators "<", "<=", ">", ">="
     prSHIFT        =  9, ///< Shift operators "<<", ">>"
-    
+
     prCOLON        = 10, ///< Colon operator
 
     prADD_SUB      = 11, ///< addition
@@ -346,7 +346,7 @@ enum EErrorCodes
 	ecMISSING_CURLY_BRACKET     = 43,
     ecEVAL                      = 44, ///< Error while evaluating function / operator
     ecOVERFLOW                  = 45, ///< Overflow (possibly) occurred
-    
+
     // Matrix errors
     ecMATRIX_DIMENSION_MISMATCH = 46,
 
@@ -360,6 +360,9 @@ enum EErrorCodes
 
     // internal errors
     ecINTERNAL_ERROR            = 51, ///< Internal error of any kind.
+
+    // date related errors
+    ecINVALID_DATE_FORMAT       = 52, ///< Invalid date format
 
     // The last two are special entries
     ecCOUNT,                          ///< This is no error code, It just stores just the total number of error codes
@@ -385,7 +388,7 @@ inline std::wistream& console_in()
 #else
 
 /** \brief Encapsulate cout.
-  
+
     Used for supporting UNICODE more easily.
   */
 inline std::ostream& console()
