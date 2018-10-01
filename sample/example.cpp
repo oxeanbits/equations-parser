@@ -6,43 +6,43 @@
 <pre>
                __________                                 ____  ___
     _____  __ _\______   \_____ _______  ______ __________\   \/  /
-   /     \|  |  \     ___/\__  \\_  __ \/  ___// __ \_  __ \     / 
-  |  Y Y  \  |  /    |     / __ \|  | \/\___ \\  ___/|  | \/     \ 
+   /     \|  |  \     ___/\__  \\_  __ \/  ___// __ \_  __ \     /
+  |  Y Y  \  |  /    |     / __ \|  | \/\___ \\  ___/|  | \/     \
   |__|_|  /____/|____|    (____  /__|  /____  >\___  >__| /___/\  \
         \/                     \/           \/     \/           \_/
                                        Copyright (C) 2016, Ingo Berg
                                        All rights reserved.
 
-  Redistribution and use in source and binary forms, with or without 
+  Redistribution and use in source and binary forms, with or without
   modification, are permitted provided that the following conditions are met:
 
-   * Redistributions of source code must retain the above copyright notice, 
+   * Redistributions of source code must retain the above copyright notice,
      this list of conditions and the following disclaimer.
-   * Redistributions in binary form must reproduce the above copyright notice, 
-     this list of conditions and the following disclaimer in the documentation 
+   * Redistributions in binary form must reproduce the above copyright notice,
+     this list of conditions and the following disclaimer in the documentation
      and/or other materials provided with the distribution.
 
-  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
-  ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED 
-  WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. 
-  IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, 
-  INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT 
-  NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR 
-  PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, 
-  WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) 
-  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE 
+  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+  ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+  WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+  IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+  INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+  NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+  PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+  WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
   POSSIBILITY OF SUCH DAMAGE.
 </pre>
 */
 
 /** \brief This macro will enable mathematical constants like M_PI. */
-#define _USE_MATH_DEFINES 
+#define _USE_MATH_DEFINES
 
 /** \brief Needed to ensure successfull compilation on Unicode systems with MinGW. */
 #undef __STRICT_ANSI__
 
 //--- Standard include ------------------------------------------------------
-#if defined(_WIN32) 
+#if defined(_WIN32)
   // Memory leak dumping
   #if defined(_DEBUG)
     #define _CRTDBG_MAP_ALLOC
@@ -79,7 +79,7 @@ using namespace mup;
 #if defined(CREATE_LEAKAGE_REPORT)
 
 // Dumping memory leaks in the destructor of the static guard
-// guarantees i won't get false positives from the ParserErrorMsg 
+// guarantees i won't get false positives from the ParserErrorMsg
 // class wich is a singleton with a static instance.
 struct DumpLeaks
 {
@@ -177,8 +177,8 @@ void Calc()
  each time we parse an equation to this program
 */
 
-//  for(;;)
-//  {
+  for(;;)
+  {
     try
     {
       console() << sPrompt;
@@ -186,12 +186,12 @@ void Calc()
       string_type sLine;
       std::getline(mup::console_in(), sLine);
 
-      switch(CheckKeywords(sLine.c_str(), parser)) 
+      switch(CheckKeywords(sLine.c_str(), parser))
       {
       case  0: break;
       case -1: return;
       }
-    
+
       parser.SetExpr(sLine);
 
       // The returned result is of type Value, value is a Variant like
@@ -216,7 +216,7 @@ void Calc()
 
       console() << e.GetMsg() << _T(" (Errc: ") << std::dec << e.GetCode() << _T(")") << _T("\n\n");
     } // try / catch
-//  } // for (;;)
+  } // for (;;)
 } // Calc
 
 //---------------------------------------------------------------------------
@@ -231,7 +231,7 @@ int main(int /*argc*/, char** /*argv*/)
       throw std::runtime_error("Can't set \"stdout\" to UTF-8");
   #endif
 
-  //// Internationalization requires UNICODE as translations do contain non ASCII 
+  //// Internationalization requires UNICODE as translations do contain non ASCII
   //// Characters.
   //ParserX::ResetErrorMessageProvider(new mup::ParserMessageProviderGerman);
 #endif
@@ -250,9 +250,9 @@ int main(int /*argc*/, char** /*argv*/)
   {
     console() << _T("aborting...") << endl;
   }
-  
-#ifdef MUP_LEAKAGE_REPORT  
-  IToken::LeakageReport();  
+
+#ifdef MUP_LEAKAGE_REPORT
+  IToken::LeakageReport();
 #endif
 
   return 0;

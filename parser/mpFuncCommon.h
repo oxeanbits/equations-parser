@@ -1,8 +1,8 @@
 /*
                __________                                 ____  ___
     _____  __ _\______   \_____ _______  ______ __________\   \/  /
-   /     \|  |  \     ___/\__  \\_  __ \/  ___// __ \_  __ \     / 
-  |  Y Y  \  |  /    |     / __ \|  | \/\___ \\  ___/|  | \/     \ 
+   /     \|  |  \     ___/\__  \\_  __ \/  ___// __ \_  __ \     /
+  |  Y Y  \  |  /    |     / __ \|  | \/\___ \\  ___/|  | \/     \
   |__|_|  /____/|____|    (____  /__|  /____  >\___  >__| /___/\  \
         \/                     \/           \/     \/           \_/
                                        Copyright (C) 2016 Ingo Berg
@@ -12,24 +12,24 @@
   Copyright (c) 2016, Ingo Berg
   All rights reserved.
 
-  Redistribution and use in source and binary forms, with or without 
+  Redistribution and use in source and binary forms, with or without
   modification, are permitted provided that the following conditions are met:
 
-   * Redistributions of source code must retain the above copyright notice, 
+   * Redistributions of source code must retain the above copyright notice,
      this list of conditions and the following disclaimer.
-   * Redistributions in binary form must reproduce the above copyright notice, 
-     this list of conditions and the following disclaimer in the documentation 
+   * Redistributions in binary form must reproduce the above copyright notice,
+     this list of conditions and the following disclaimer in the documentation
      and/or other materials provided with the distribution.
 
-  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
-  ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED 
-  WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. 
-  IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, 
-  INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT 
-  NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR 
-  PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, 
-  WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) 
-  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE 
+  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+  ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+  WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+  IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+  INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+  NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+  PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+  WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
   POSSIBILITY OF SUCH DAMAGE.
 */
 #ifndef MUP_FUNC_COMMON_H
@@ -41,7 +41,7 @@
 MUP_NAMESPACE_START
 
   //------------------------------------------------------------------------------
-  /** \brief Parser function callback for determining the size of an array. 
+  /** \brief Parser function callback for determining the size of an array.
       \ingroup functions
   */
   class FunParserID : public ICallback
@@ -54,7 +54,7 @@ MUP_NAMESPACE_START
   }; // class FunParserID
 
   //------------------------------------------------------------------------------
-  /** \brief Determine maximal value from the parameter list. 
+  /** \brief Determine maximal value from the parameter list.
       \ingroup functions
   */
   class FunMax : public ICallback
@@ -67,7 +67,7 @@ MUP_NAMESPACE_START
   }; // class FunMax
 
   //------------------------------------------------------------------------------
-  /** \brief Determine minimal value from the parameter list. 
+  /** \brief Determine minimal value from the parameter list.
       \ingroup functions
   */
   class FunMin : public ICallback
@@ -80,9 +80,9 @@ MUP_NAMESPACE_START
   }; // class FunMin
 
   //------------------------------------------------------------------------------
-  /** \brief Parser callback for summing up all function arguments. 
+  /** \brief Parser callback for summing up all function arguments.
       \ingroup functions
-  */  
+  */
   class FunSum : public ICallback
   {
   public:
@@ -106,7 +106,7 @@ MUP_NAMESPACE_START
   }; // class FunAvg
 
   //------------------------------------------------------------------------------
-  /** \brief Parser function callback for determining the size of an array. 
+  /** \brief Parser function callback for determining the size of an array.
       \ingroup functions
   */
   class FunSizeOf : public ICallback
@@ -118,6 +118,45 @@ MUP_NAMESPACE_START
     virtual const char_type* GetDesc() const override;
     virtual IToken* Clone() const override;
   }; // class FunSizeOf
+
+  //------------------------------------------------------------------------------
+  /** \brief Determine the difference in days between two dates.
+      \ingroup functions
+  */
+  class FunDateDiff : public ICallback
+  {
+  public:
+    FunDateDiff();
+    virtual void Eval(ptr_val_type &ret, const ptr_val_type *a_pArg, int a_iArgc) override;
+    virtual const char_type* GetDesc() const override;
+    virtual IToken* Clone() const override;
+  }; // class FunDateDiff
+
+  //------------------------------------------------------------------------------
+  /** \brief Return the current date in the yyyy-mm-dd format.
+      \ingroup functions
+  */
+  class FunCurrentDate : public ICallback
+  {
+  public:
+    FunCurrentDate();
+    virtual void Eval(ptr_val_type &ret, const ptr_val_type *a_pArg, int a_iArgc) override;
+    virtual const char_type* GetDesc() const override;
+    virtual IToken* Clone() const override;
+  }; // class FunCurrentDate
+
+  //------------------------------------------------------------------------------
+  /** \brief Determine the difference in days between two time.
+      \ingroup functions
+  */
+  //class FunTimeDiff : public ICallback
+  //{
+  //public:
+  //  FunTimeDiff();
+  //  virtual void Eval(ptr_val_type &ret, const ptr_val_type *a_pArg, int a_iArgc) override;
+  //  virtual const char_type* GetDesc() const override;
+  //  virtual IToken* Clone() const override;
+  //}; // class FunDateDiff
 
 MUP_NAMESPACE_END
 
