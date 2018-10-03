@@ -405,7 +405,7 @@ MUP_NAMESPACE_START
     :ICallback(cmFUNC, _T("current_date"), -1)
   {}
   //------------------------------------------------------------------------------
-  /** \brief Returns the minimum value of all values.
+  /** \brief Returns the current date with format yyyy-mm-dd.
       \param a_pArg Pointer to an array of Values
       \param a_iArgc Number of values stored in a_pArg
   */
@@ -423,7 +423,7 @@ MUP_NAMESPACE_START
   //------------------------------------------------------------------------------
   const char_type* FunCurrentDate::GetDesc() const
   {
-    return _T("current_date()(a,b) - Returns the difference in days between two dates.");
+    return _T("current_date()() - Returns the current date with format yyyy-mm-dd.");
   }
 
   //------------------------------------------------------------------------------
