@@ -379,8 +379,8 @@ MUP_NAMESPACE_START
       throw ParserError(err);
     }
 
-    int total_days1 = rata_die(tm.tm_year + 1900, tm.tm_mon, tm.tm_mday);
-    int total_days2 = rata_die(tm2.tm_year + 1900, tm2.tm_mon, tm2.tm_mday);
+    int total_days1 = rata_die(tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday);
+    int total_days2 = rata_die(tm2.tm_year + 1900, tm2.tm_mon + 1, tm2.tm_mday);
 
     *ret = abs(total_days1 - total_days2);
   }
