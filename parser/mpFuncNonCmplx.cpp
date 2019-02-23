@@ -48,30 +48,49 @@
 
 MUP_NAMESPACE_START
 
+//------------------------------------------------------------------------------
+//
 // Auxiliary Functions
+//
+//------------------------------------------------------------------------------
 double round(long_double_type number, int_type precision) {
   int_type decimals = std::pow(10, precision);
   return (std::round(number * decimals)) / decimals;
 }
 
-#define MUP_UNARY_FUNC(CLASS, IDENT, FUNC, DESC)                     \
-    CLASS::CLASS()                                                   \
-    :ICallback(cmFUNC, _T(IDENT), 1)                                 \
-    {}                                                               \
-                                                                     \
-    void CLASS::Eval(ptr_val_type &ret, const ptr_val_type *a_pArg, int)        \
-    {                                                                \
-      *ret = FUNC(a_pArg[0]->GetFloat());                            \
-    }                                                                \
-                                                                     \
-    const char_type* CLASS::GetDesc() const                          \
-    {                                                                \
-      return _T(DESC);                                               \
-    }                                                                \
-                                                                     \
-    IToken* CLASS::Clone() const                                     \
-    {                                                                \
-      return new CLASS(*this);                                       \
+string_type to_string(long_double_type number) {
+  std::string string_number = std::to_string (number);
+  int offset = 1;
+  if (string_number.find_last_not_of('0') == string_number.find('.')) {
+    offset = 0;
+  }
+  string_number.erase(string_number.find_last_not_of('0') + offset, std::string::npos);
+  return string_number;
+}
+//------------------------------------------------------------------------------
+//
+//
+//
+//------------------------------------------------------------------------------
+
+#define MUP_UNARY_FUNC(CLASS, IDENT, FUNC, DESC)                           \
+    CLASS::CLASS()                                                         \
+    :ICallback(cmFUNC, _T(IDENT), 1)                                       \
+    {}                                                                     \
+                                                                           \
+    void CLASS::Eval(ptr_val_type &ret, const ptr_val_type *a_pArg, int)   \
+    {                                                                      \
+      *ret = FUNC(a_pArg[0]->GetFloat());                                  \
+    }                                                                      \
+                                                                           \
+    const char_type* CLASS::GetDesc() const                                \
+    {                                                                      \
+      return _T(DESC);                                                     \
+    }                                                                      \
+                                                                           \
+    IToken* CLASS::Clone() const                                           \
+    {                                                                      \
+      return new CLASS(*this);                                             \
     }
 
     // trigonometric functions
@@ -102,7 +121,7 @@ double round(long_double_type number, int_type precision) {
     // number functions
     MUP_UNARY_FUNC(FunAbs,   "abs",    std::fabs,  "abs(x) - absolute value of x")
     MUP_UNARY_FUNC(FunRound, "round",  std::round, "round(x) - round the value of x to its nearest integer")
-    MUP_UNARY_FUNC(FunString,"string", std::to_string, "string(x) - converts the number from decimal to string")
+    MUP_UNARY_FUNC(FunString,"string", to_string,  "string(x) - converts the number from decimal to string")
 #undef MUP_UNARY_FUNC
 
 #define MUP_BINARY_FUNC(CLASS, IDENT, FUNC, DESC) \
