@@ -59,7 +59,7 @@ By default the parser supports the following mathematical constants:
   <li>Unlimited number of arguments:<br/>
   <b>min, max, sum, avg</b><br/>&nbsp;</li>
   <li>String functions:<br/>
-  <b>str2dbl, length, toupper</b><br/>&nbsp;</li>
+  <b>str2dbl, number, length, toupper</b><br/>&nbsp;</li>
   <li>Complex functions:<br/>
   <b>real, imag, conj, arg, norm</b><br/>&nbsp;</li>  
   <li>Array functions:<br/>

@@ -235,7 +235,7 @@ MUP_NAMESPACE_START
 
   //------------------------------------------------------------------------------
   //
-  // String to double conversion
+  // String to double conversion => str2number()
   //
   //------------------------------------------------------------------------------
 
@@ -274,5 +274,47 @@ MUP_NAMESPACE_START
   IToken* FunStrToNumber::Clone() const
   {
     return new FunStrToNumber(*this);
+  }
+
+  //------------------------------------------------------------------------------
+  //
+  // String to double conversion => number()
+  //
+  //------------------------------------------------------------------------------
+
+  FunStrNumber::FunStrNumber()
+    :ICallback(cmFUNC, _T("number"), 1)
+  {}
+
+  //------------------------------------------------------------------------------
+  void FunStrNumber::Eval(ptr_val_type &ret, const ptr_val_type *a_pArg, int a_iArgc)
+  {
+    assert(a_iArgc==1);
+    _unused(a_iArgc);
+
+    string_type in;
+    double out;
+
+    in = a_pArg[0]->GetString();
+
+#ifndef _UNICODE
+    sscanf(in.c_str(), "%lf", &out);
+#else
+    swscanf(in.c_str(), _T("%lf"), &out);
+#endif
+
+    *ret = (float_type)out;
+  }
+
+  //------------------------------------------------------------------------------
+  const char_type* FunStrNumber::GetDesc() const
+  {
+    return _T("number(s) - Converts the string stored in s into a floating foint value.");
+  }
+
+  //------------------------------------------------------------------------------
+  IToken* FunStrNumber::Clone() const
+  {
+    return new FunStrNumber(*this);
   }
 MUP_NAMESPACE_END

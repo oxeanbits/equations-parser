@@ -127,6 +127,19 @@ MUP_NAMESPACE_START
     virtual const char_type* GetDesc() const override;
     virtual IToken* Clone() const override;
   }; // class FunStrToNumber
+
+  //------------------------------------------------------------------------------
+  /** \brief Parse string to a floating point value.
+      \ingroup functions
+  */
+  class FunStrNumber : public ICallback
+  {
+  public:
+    FunStrNumber ();
+    virtual void Eval(ptr_val_type& ret, const ptr_val_type *a_pArg, int a_iArgc) override;
+    virtual const char_type* GetDesc() const override;
+    virtual IToken* Clone() const override;
+  }; // class FunStrNumber
 MUP_NAMESPACE_END
 
 #endif
