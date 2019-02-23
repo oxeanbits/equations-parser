@@ -100,8 +100,9 @@ double round(long_double_type number, int_type precision) {
     MUP_UNARY_FUNC(FunCbrt,  "cbrt",  std::cbrt,  "cbrt(x) - cubic root of x")
     MUP_UNARY_FUNC(FunExp,   "exp",   std::exp,   "exp(x) - e to the power of x")
     // number functions
-    MUP_UNARY_FUNC(FunAbs,   "abs",   std::fabs,  "abs(x) - absolute value of x")
-    MUP_UNARY_FUNC(FunRound, "round", std::round, "round(x) - round the value of x to its nearest integer")
+    MUP_UNARY_FUNC(FunAbs,   "abs",    std::fabs,  "abs(x) - absolute value of x")
+    MUP_UNARY_FUNC(FunRound, "round",  std::round, "round(x) - round the value of x to its nearest integer")
+    MUP_UNARY_FUNC(FunString,"string", std::to_string, "string(x) - converts the number from decimal to string")
 #undef MUP_UNARY_FUNC
 
 #define MUP_BINARY_FUNC(CLASS, IDENT, FUNC, DESC) \
