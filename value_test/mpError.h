@@ -97,6 +97,9 @@ MUP_NAMESPACE_START
       // internal errors
       ecINTERNAL_ERROR         = 43, ///< Internal error of any kind.
 
+      // date related errors
+      ecINVALID_DATE_FORMAT    = 52, ///< Invalid date format
+
       // The last two are special entries 
       ecCOUNT,                    ///< This is no error code, It just stores just the total number of error codes
       ecUNDEFINED              = -1, ///< Undefined message, placeholder to detect unassigned error messages
