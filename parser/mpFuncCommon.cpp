@@ -498,7 +498,7 @@ MUP_NAMESPACE_START
   //------------------------------------------------------------------------------
   const char_type* FunCurrentDate::GetDesc() const
   {
-    return _T("current_date()() - Returns the current date with format yyyy-mm-dd.");
+    return _T("current_date() - Returns the current date with format yyyy-mm-dd.");
   }
 
   //------------------------------------------------------------------------------
