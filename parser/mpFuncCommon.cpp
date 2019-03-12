@@ -421,6 +421,7 @@ MUP_NAMESPACE_START
 
     // Matches exactly: "yyyy-mm-dd"
     std::regex basic_date ("^\\d{4}-\\d{2}-\\d{2}$");
+
     if (std::regex_match (date_a, basic_date)) {
       date_a = date_a + "T00:00";
     }

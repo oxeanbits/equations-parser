@@ -175,6 +175,7 @@ MUP_NAMESPACE_START
     m_vErrMsg[ecVARIABLE_DEFINED]             = _T("Die Variable \"$IDENT$\" is bereits definiert.");
     m_vErrMsg[ecCONSTANT_DEFINED]             = _T("Die Konstante \"$IDENT$\" is bereits definiert.");
     m_vErrMsg[ecFUNOPRT_DEFINED]              = _T("Ein Element mit der Bezeichnung \"$IDENT$\" ist bereits definiert.");
+    m_vErrMsg[ecINVALID_DATETIME_FORMAT]      = _T("Invalid date format on \"$IDENT$\" parameter(s). Please use one of the following formats: 1) \"yyyy-mm-dd\" 2) \"yyyy-mm-ddThh:mm\"");
   }
 #endif // _UNICODE
 
