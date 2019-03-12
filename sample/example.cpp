@@ -195,7 +195,7 @@ int main(int /*argc*/, char** /*argv*/)
   }
   catch(ParserError &e)
   {
-    // Only erros raised during the initialization will end up here
+    // Only errors raised during the initialization will end up here
     // expression related errors are treated in Calc()
     console() << _T("Initialization error:  ") << e.GetMsg() << endl;
   }
