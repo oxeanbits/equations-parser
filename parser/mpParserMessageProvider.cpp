@@ -104,6 +104,7 @@ MUP_NAMESPACE_START
     m_vErrMsg[ecVARIABLE_DEFINED]             = _T("Variable \"$IDENT$\" is already defined.");
     m_vErrMsg[ecCONSTANT_DEFINED]             = _T("Constant \"$IDENT$\" is already defined.");
     m_vErrMsg[ecFUNOPRT_DEFINED]              = _T("Function/operator \"$IDENT$\" is already defined.");
+    m_vErrMsg[ecINVALID_DATE_FORMAT]          = _T("Invalid date format on \"$IDENT$\" parameter(s). Please use the \"yyyy-mm-dd\" format.");
   }
 
 #if defined(_UNICODE)
@@ -161,11 +162,11 @@ MUP_NAMESPACE_START
     m_vErrMsg[ecARRAY_SIZE_MISMATCH]      = _T("Feldgrößen stimmen nicht überein.");
     m_vErrMsg[ecNOT_AN_ARRAY]             = _T("Der Indexoperator kann nicht auf die Skalarvariable \"$IDENT$\" angewandt werden.");
     m_vErrMsg[ecUNEXPECTED_SQR_BRACKET]   = _T("Eckige Klammern sind an dieser Position nicht erlaubt.");
-	m_vErrMsg[ecUNEXPECTED_CURLY_BRACKET] = _T("Geschweifte Klammern sind an dieser Position nicht erlaubt.");
+	  m_vErrMsg[ecUNEXPECTED_CURLY_BRACKET] = _T("Geschweifte Klammern sind an dieser Position nicht erlaubt.");
     m_vErrMsg[ecINDEX_OUT_OF_BOUNDS]      = _T("Indexüberschreitung bei Variablenzugriff auf \"$IDENT$\".");
     m_vErrMsg[ecINDEX_DIMENSION]          = _T("Die Operation kann nicht auf Felder angewandt werden, deren Größe unterschiedlich ist.");
     m_vErrMsg[ecMISSING_SQR_BRACKET]      = _T("Fehlendes \"]\".");
-	m_vErrMsg[ecMISSING_CURLY_BRACKET]    = _T("Fehlendes \"}\".");
+	  m_vErrMsg[ecMISSING_CURLY_BRACKET]    = _T("Fehlendes \"}\".");
     m_vErrMsg[ecASSIGNEMENT_TO_VALUE]     = _T("Der Zuweisungsoperator \"$IDENT$\" kann in diesem Zusammenhang nicht verwendet werden.");
     m_vErrMsg[ecEVAL]                     = _T("Die Funktion bzw. der Operator \"$IDENT$\" kann nicht berechnet werden: $HINT$");
     m_vErrMsg[ecINVALID_PARAMETER]        = _T("Der Parameter $ARG$ der Funktion \"$IDENT$\" is ungültig.");
