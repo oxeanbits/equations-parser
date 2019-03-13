@@ -433,7 +433,7 @@ MUP_NAMESPACE_START
     struct tm tm, tm2;
     if (!strptime(date_a.c_str(), "%Y-%m-%dT%H:%M", &tm)) {
       ErrorContext err;
-      err.Errc = ecINVALID_DATE_FORMAT;
+      err.Errc = ecINVALID_DATETIME_FORMAT;
       err.Arg = 1;
       err.Type1 = a_pArg[0]->GetType();
       err.Type2 = 's';
@@ -442,7 +442,7 @@ MUP_NAMESPACE_START
 
     if (!strptime(date_b.c_str(), "%Y-%m-%dT%H:%M", &tm2)) {
       ErrorContext err;
-      err.Errc = ecINVALID_DATE_FORMAT;
+      err.Errc = ecINVALID_DATETIME_FORMAT;
       err.Arg = 2;
       err.Type1 = a_pArg[1]->GetType();
       err.Type2 = 's';
