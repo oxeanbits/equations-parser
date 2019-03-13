@@ -38,6 +38,7 @@
 #include <string>
 #include <iostream>
 #include <ctime>
+#include <regex>
 
 #include "mpValue.h"
 #include "mpParserBase.h"
@@ -397,6 +398,81 @@ MUP_NAMESPACE_START
 
   //------------------------------------------------------------------------------
   //
+  // class FunHoursDiff
+  //
+  //------------------------------------------------------------------------------
+
+  FunHoursDiff::FunHoursDiff()
+    :ICallback(cmFUNC, _T("hoursdiff"), -1)
+  {}
+
+  //------------------------------------------------------------------------------
+  /** \brief Returns the number of hours between two dates.
+      \param a_pArg Pointer to an array of Values
+      \param a_iArgc Number of values stored in a_pArg
+  */
+  void FunHoursDiff::Eval(ptr_val_type &ret, const ptr_val_type *a_pArg, int a_iArgc)
+  {
+    if (a_iArgc != 2)
+        throw ParserError(ErrorContext(ecTOO_FEW_PARAMS, GetExprPos(), GetIdent()));
+
+    string_type date_a = a_pArg[0]->GetString();
+    string_type date_b = a_pArg[1]->GetString();
+
+    // Matches exactly: "yyyy-mm-dd"
+    std::regex basic_date ("^\\d{4}-\\d{2}-\\d{2}$");
+
+    if (std::regex_match (date_a, basic_date)) {
+      date_a = date_a + "T00:00";
+    }
+    if (std::regex_match (date_b, basic_date)) {
+      date_b = date_b + "T00:00";
+    }
+
+    // http://man7.org/linux/man-pages/man3/strptime.3.html
+    struct tm tm, tm2;
+    if (!strptime(date_a.c_str(), "%Y-%m-%dT%H:%M", &tm)) {
+      ErrorContext err;
+      err.Errc = ecINVALID_DATETIME_FORMAT;
+      err.Arg = 1;
+      err.Type1 = a_pArg[0]->GetType();
+      err.Type2 = 's';
+      throw ParserError(err);
+    }
+
+    if (!strptime(date_b.c_str(), "%Y-%m-%dT%H:%M", &tm2)) {
+      ErrorContext err;
+      err.Errc = ecINVALID_DATETIME_FORMAT;
+      err.Arg = 2;
+      err.Type1 = a_pArg[1]->GetType();
+      err.Type2 = 's';
+      throw ParserError(err);
+    }
+
+    int total_days1 = rata_die(tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday);
+    int total_days2 = rata_die(tm2.tm_year + 1900, tm2.tm_mon + 1, tm2.tm_mday);
+    int daysdiff = total_days2 - total_days1;
+
+    float_type initial_hours = tm.tm_hour + tm.tm_min/60.0;
+    float_type final_hours = tm2.tm_hour + tm2.tm_min/60.0;
+    float_type hoursdiff = daysdiff * 24 + (final_hours - initial_hours);
+
+    // Should be rounded with precision 2. (Ex: 3.67)
+    *ret = (std::round(hoursdiff * 100)) / 100;
+  }
+
+  const char_type* FunHoursDiff::GetDesc() const
+  {
+    return _T("hoursdiff(a,b) - Returns the difference in hours between two dates.");
+  }
+
+  IToken* FunHoursDiff::Clone() const
+  {
+    return new FunHoursDiff(*this);
+  }
+
+  //------------------------------------------------------------------------------
+  //
   // class FunCurrentDate
   //
   //------------------------------------------------------------------------------
@@ -423,7 +499,7 @@ MUP_NAMESPACE_START
   //------------------------------------------------------------------------------
   const char_type* FunCurrentDate::GetDesc() const
   {
-    return _T("current_date()() - Returns the current date with format yyyy-mm-dd.");
+    return _T("current_date() - Returns the current date with format yyyy-mm-dd.");
   }
 
   //------------------------------------------------------------------------------

@@ -89,6 +89,7 @@ void PackageCommon::AddToParser(ParserXBase *pParser)
 
   // Date functions
   pParser->DefineFun(new FunDateDiff());
+  pParser->DefineFun(new FunHoursDiff());
   pParser->DefineFun(new FunCurrentDate());
 
   // misc

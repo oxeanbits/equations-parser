@@ -133,6 +133,19 @@ MUP_NAMESPACE_START
   }; // class FunDateDiff
 
   //------------------------------------------------------------------------------
+  /** \brief Determine the difference in hours between two dates.
+      \ingroup functions
+  */
+  class FunHoursDiff : public ICallback
+  {
+  public:
+    FunHoursDiff();
+    virtual void Eval(ptr_val_type &ret, const ptr_val_type *a_pArg, int a_iArgc) override;
+    virtual const char_type* GetDesc() const override;
+    virtual IToken* Clone() const override;
+  }; // class FunHoursDiff
+
+  //------------------------------------------------------------------------------
   /** \brief Return the current date in the yyyy-mm-dd format.
       \ingroup functions
   */

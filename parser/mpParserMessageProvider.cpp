@@ -105,6 +105,7 @@ MUP_NAMESPACE_START
     m_vErrMsg[ecCONSTANT_DEFINED]             = _T("Constant \"$IDENT$\" is already defined.");
     m_vErrMsg[ecFUNOPRT_DEFINED]              = _T("Function/operator \"$IDENT$\" is already defined.");
     m_vErrMsg[ecINVALID_DATE_FORMAT]          = _T("Invalid date format on \"$IDENT$\" parameter(s). Please use the \"yyyy-mm-dd\" format.");
+    m_vErrMsg[ecINVALID_DATETIME_FORMAT]      = _T("Invalid datetime format on \"$IDENT$\" parameter(s). Please use one of the following formats: 1) \"yyyy-mm-dd\" 2) \"yyyy-mm-ddTHH:MM\"");
   }
 
 #if defined(_UNICODE)
