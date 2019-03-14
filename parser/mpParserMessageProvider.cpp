@@ -135,7 +135,7 @@ MUP_NAMESPACE_START
     m_vErrMsg[ecUNEXPECTED_OPERATOR]      = _T("Unerwarteter Operator \"$IDENT$\" an Position $POS$.");
     m_vErrMsg[ecUNEXPECTED_EOF]           = _T("Unerwartetes Formelende an Position $POS$.");
     m_vErrMsg[ecUNEXPECTED_COMMA]         = _T("Unerwartetes Komma an Position $POS$.");
-    m_vErrMsg[ecUNEXPECTED_PARENS  ]      = _T("Unerwartete Klammer \"$IDENT$\" an Position $POS$ gefunden.");
+    m_vErrMsg[ecUNEXPECTED_PARENS]        = _T("Unerwartete Klammer \"$IDENT$\" an Position $POS$ gefunden.");
     m_vErrMsg[ecUNEXPECTED_FUN]           = _T("Unerwartete Funktion \"$IDENT$\" an Position $POS$ gefunden.");
     m_vErrMsg[ecUNEXPECTED_VAL]           = _T("Unerwarteter Wert \"$IDENT$\" an Position $POS$ gefunden.");
     m_vErrMsg[ecUNEXPECTED_VAR]           = _T("Unerwartete Variable \"$IDENT$\" an Position $POS$ gefunden.");
