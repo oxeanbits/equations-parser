@@ -497,7 +497,14 @@ MUP_NAMESPACE_START
     std::time_t t = std::time(0);   // get time now
     std::tm* now = std::localtime(&t);
 
-    *ret = std::to_string(now->tm_year + 1900) + "-" + std::to_string(now->tm_mon + 1) + "-" + std::to_string(now->tm_mday);
+    string_type year  = std::to_string(now->tm_year + 1900);
+    string_type month = std::to_string(now->tm_mon + 1);
+    string_type day   = std::to_string(now->tm_mday);
+
+    month = month.length() > 1 ? month : '0' + month;
+    day = day.length() > 1 ? day : '0' + day;
+
+    *ret = year + "-" + month + "-" + day;
   }
 
   //------------------------------------------------------------------------------
