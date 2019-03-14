@@ -110,8 +110,9 @@ MUP_NAMESPACE_START
     m_vErrMsg[ecMISSING_SQR_BRACKET]     = _T("Missing \"]\"");
     m_vErrMsg[ecASSIGNEMENT_TO_VALUE]    = _T("Assignment operator \"$IDENT$\" can't be used in this context");
     m_vErrMsg[ecEVAL]                    = _T("Can't evaluate function/operator \"$IDENT$\": $HINT$");
-    m_vErrMsg[ecINVALID_DATE_FORMAT]     = _T("Invalid date format on \"$IDENT$\" parameter(s). Please use the \"yyyy-mm-dd\" format.");
-    m_vErrMsg[ecINVALID_DATETIME_FORMAT] = _T("Invalid datetime format on \"$IDENT$\" parameter(s). Please use one of the following formats: 1) \"yyyy-mm-dd\" 2) \"yyyy-mm-ddTHH:MM\"");
+    m_vErrMsg[ecINVALID_DATE_FORMAT]     = _T("Invalid date format on parameter(s). Please use the \"yyyy-mm-dd\" format.");
+    m_vErrMsg[ecINVALID_DATETIME_FORMAT] = _T("Invalid format on the parameter(s). Please use two \"yyyy-mm-dd\" for dates OR two \"yyyy-mm-ddTHH:MM\" for date_times.");
+    m_vErrMsg[ecDATE_AND_DATETIME]       = _T("Invalid parameters. You should use exactly two dates \"yyyy-mm-dd\" or two date_times \"yyyy-mm-ddTHH:MM\", but not a mix of them.");
 
     #if defined(_DEBUG)
       for (int i=0; i<ecCOUNT; ++i)

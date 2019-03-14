@@ -421,12 +421,16 @@ MUP_NAMESPACE_START
 
     // Matches exactly: "yyyy-mm-dd"
     std::regex basic_date ("^\\d{4}-\\d{2}-\\d{2}$");
-
-    if (std::regex_match (date_a, basic_date)) {
+    if (std::regex_match (date_a, basic_date) && std::regex_match (date_b, basic_date)) {
       date_a = date_a + "T00:00";
-    }
-    if (std::regex_match (date_b, basic_date)) {
       date_b = date_b + "T00:00";
+    } else if (std::regex_match (date_a, basic_date) || std::regex_match (date_b, basic_date)) {
+      ErrorContext err;
+      err.Errc = ecDATE_AND_DATETIME;
+      err.Arg = 1;
+      err.Type1 = a_pArg[0]->GetType();
+      err.Type2 = 's';
+      throw ParserError(err);
     }
 
     // http://man7.org/linux/man-pages/man3/strptime.3.html

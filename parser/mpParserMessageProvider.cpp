@@ -90,11 +90,11 @@ MUP_NAMESPACE_START
     m_vErrMsg[ecARRAY_SIZE_MISMATCH]      = _T("Array size mismatch.");
     m_vErrMsg[ecNOT_AN_ARRAY]             = _T("Using the index operator on the scalar variable \"$IDENT$\" is not allowed.");
     m_vErrMsg[ecUNEXPECTED_SQR_BRACKET]   = _T("Unexpected \"[]\".");
-	m_vErrMsg[ecUNEXPECTED_CURLY_BRACKET] = _T("Unexpected \"{}\".");
+	  m_vErrMsg[ecUNEXPECTED_CURLY_BRACKET] = _T("Unexpected \"{}\".");
     m_vErrMsg[ecINDEX_OUT_OF_BOUNDS]      = _T("Index to variable \"$IDENT$\" is out of bounds.");
     m_vErrMsg[ecINDEX_DIMENSION]          = _T("Index operator dimension error.");
     m_vErrMsg[ecMISSING_SQR_BRACKET]      = _T("Missing \"]\".");
-	m_vErrMsg[ecMISSING_CURLY_BRACKET]    = _T("Missing \"}\".");
+	  m_vErrMsg[ecMISSING_CURLY_BRACKET]    = _T("Missing \"}\".");
     m_vErrMsg[ecASSIGNEMENT_TO_VALUE]     = _T("Assignment operator \"$IDENT$\" can't be used in this context.");
     m_vErrMsg[ecEVAL]                     = _T("Can't evaluate function/operator \"$IDENT$\": $HINT$");
     m_vErrMsg[ecINVALID_PARAMETER]        = _T("Parameter $ARG$ of function \"$IDENT$\" is invalid.");
@@ -104,8 +104,9 @@ MUP_NAMESPACE_START
     m_vErrMsg[ecVARIABLE_DEFINED]             = _T("Variable \"$IDENT$\" is already defined.");
     m_vErrMsg[ecCONSTANT_DEFINED]             = _T("Constant \"$IDENT$\" is already defined.");
     m_vErrMsg[ecFUNOPRT_DEFINED]              = _T("Function/operator \"$IDENT$\" is already defined.");
-    m_vErrMsg[ecINVALID_DATE_FORMAT]          = _T("Invalid date format on \"$IDENT$\" parameter(s). Please use the \"yyyy-mm-dd\" format.");
-    m_vErrMsg[ecINVALID_DATETIME_FORMAT]      = _T("Invalid datetime format on \"$IDENT$\" parameter(s). Please use one of the following formats: 1) \"yyyy-mm-dd\" 2) \"yyyy-mm-ddTHH:MM\"");
+    m_vErrMsg[ecINVALID_DATE_FORMAT]          = _T("Invalid date format on parameter(s). Please use the \"yyyy-mm-dd\" format.");
+    m_vErrMsg[ecINVALID_DATETIME_FORMAT]      = _T("Invalid format on the parameter(s). Please use two \"yyyy-mm-dd\" for dates OR two \"yyyy-mm-ddTHH:MM\" for date_times.");
+    m_vErrMsg[ecDATE_AND_DATETIME]            = _T("Invalid parameters. You should use exactly two dates \"yyyy-mm-dd\" or two date_times \"yyyy-mm-ddTHH:MM\", but not a mix of them.");
   }
 
 #if defined(_UNICODE)
