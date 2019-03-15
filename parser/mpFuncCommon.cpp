@@ -420,7 +420,7 @@ MUP_NAMESPACE_START
     string_type date_b = a_pArg[1]->GetString();
 
     // Matches exactly: "yyyy-mm-dd"
-    std::regex basic_date ("^\\d{4}-\\d{2}-\\d{2}$");
+    std::regex basic_date ("^\\d{4}-\\d{1,2}-\\d{1,2}$");
     if (std::regex_match (date_a, basic_date) && std::regex_match (date_b, basic_date)) {
       date_a += "T00:00";
       date_b += "T00:00";
