@@ -101,6 +101,9 @@ MUP_NAMESPACE_START
       ecINVALID_DATE_FORMAT       = 52, ///< Invalid date format
       ecINVALID_DATETIME_FORMAT   = 53, ///< Invalid datetime format
       ecDATE_AND_DATETIME         = 54, ///< Invalid hoursdiff() parameters
+      ecADD_HOURS                 = 55, ///< Invalid add_hours() parameters
+      ecADD_HOURS_DATE            = 56, ///< Invalid date format for add_hours() first parameter
+      ecADD_HOURS_DATETIME        = 57, ///< Invalid date time format for add_hours() first parameter
 
       // The last two are special entries 
       ecCOUNT,                    ///< This is no error code, It just stores just the total number of error codes
