@@ -39,6 +39,7 @@
 #include <iostream>
 #include <ctime>
 #include <regex>
+#include <time.h>
 
 #include "mpValue.h"
 #include "mpParserBase.h"
@@ -517,6 +518,109 @@ MUP_NAMESPACE_START
   IToken* FunCurrentDate::Clone() const
   {
     return new FunCurrentDate(*this);
+  }
+
+  //------------------------------------------------------------------------------
+  //
+  // class FunAddDays
+  //
+  //------------------------------------------------------------------------------
+
+  void addDays(struct tm* date, int days) {
+    const time_t ONE_HOUR = 60 * 60;
+    const time_t ONE_DAY = 24 * ONE_HOUR;
+
+    // Seconds since start of epoch
+    time_t new_day = mktime(date) + (days * ONE_DAY) - ONE_HOUR; // Why we need to reduce one hour?
+
+    // Update caller's date
+    // localtime is used because mktime converts from localtime to UTC and we need to convert it back
+    *date = *localtime(&new_day);
+  }
+
+  // struct tm* tm = localtime(&base);
+  // tm->tm_mday += i;
+  // time_t next = mktime(tm);
+  // std::cout << ctime(&next);
+
+  FunAddDays::FunAddDays()
+    :ICallback(cmFUNC, _T("add_days"), -1)
+  {}
+  //------------------------------------------------------------------------------
+  /** \brief Returns the sum of a date/date_time with with an integer value representing the days.
+      \param a_pArg Pointer to an array of Values
+      \param a_iArgc Number of values stored in a_pArg
+  */
+  void FunAddDays::Eval(ptr_val_type &ret, const ptr_val_type *a_pArg, int a_iArgc)
+  {
+    if (a_iArgc != 2)
+      throw ParserError(ErrorContext(ecTOO_FEW_PARAMS, GetExprPos(), GetIdent()));
+
+    string_type date = a_pArg[0]->GetString();
+    int_type days = a_pArg[1]->GetInteger();
+
+    std::regex date_regex ("^\\d{4}-\\d{1,2}-\\d{1,2}$"); // "yyyy-mm-dd"
+    std::regex date_time_regex ("^\\d{4}-\\d{1,2}-\\d{1,2}T\\d{1,2}:\\d{1,2}$"); // "yyyy-mm-ddTHH:MM"
+
+    // http://man7.org/linux/man-pages/man3/strptime.3.html
+    struct tm time = {0};
+    if (std::regex_match (date, date_regex)) {
+      if (!strptime(date.c_str(), "%Y-%m-%d", &time)) {
+        ErrorContext err;
+        err.Errc = ecADD_HOURS_DATE;
+        err.Arg = 1;
+        err.Type1 = a_pArg[0]->GetType();
+        err.Type2 = 's';
+        throw ParserError(err);
+      }
+    } else if (std::regex_match (date, date_time_regex)) {
+      if (!strptime(date.c_str(), "%Y-%m-%dT%H:%M", &time)) {
+        ErrorContext err;
+        err.Errc = ecADD_HOURS_DATETIME;
+        err.Arg = 1;
+        err.Type1 = a_pArg[0]->GetType();
+        err.Type2 = 's';
+        throw ParserError(err);
+      }
+    } else {
+      ErrorContext err;
+      err.Errc = ecADD_HOURS;
+      err.Arg = 1;
+      err.Type1 = a_pArg[0]->GetType();
+      err.Type2 = 's';
+      throw ParserError(err);
+    }
+
+    addDays(&time, days); // The magic is here
+
+    string_type year  = std::to_string(time.tm_year + 1900);
+    string_type month = std::to_string(time.tm_mon + 1);
+    string_type day   = std::to_string(time.tm_mday);
+    string_type hours = std::to_string(time.tm_hour);
+    string_type min   = std::to_string(time.tm_min);
+
+    // Section responsible to format properlly the date/date_time output...
+    //
+    // month = month.length() > 1 ? month : '0' + month;
+    // day = day.length() > 1 ? day : '0' + day;
+
+    if (time.tm_hour == 0 && time.tm_min == 0) {
+      *ret = year + "-" + month + "-" + day;
+    } else {
+      *ret = year + "-" + month + "-" + day + "T" + hours + ":" + min;
+    }
+  }
+
+  //------------------------------------------------------------------------------
+  const char_type* FunAddDays::GetDesc() const
+  {
+    return _T("add_days() - Returns sum of a date/date_time with a days quantity.");
+  }
+
+  //------------------------------------------------------------------------------
+  IToken* FunAddDays::Clone() const
+  {
+    return new FunAddDays(*this);
   }
 
   //------------------------------------------------------------------------------

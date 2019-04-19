@@ -159,6 +159,19 @@ MUP_NAMESPACE_START
   }; // class FunCurrentDate
 
   //------------------------------------------------------------------------------
+  /** \brief Return sum of a date/date_time with a days quantity
+      \ingroup functions
+  */
+  class FunAddDays : public ICallback
+  {
+  public:
+    FunAddDays();
+    virtual void Eval(ptr_val_type &ret, const ptr_val_type *a_pArg, int a_iArgc) override;
+    virtual const char_type* GetDesc() const override;
+    virtual IToken* Clone() const override;
+  }; // class FunAddDays
+
+  //------------------------------------------------------------------------------
   /** \brief Determine the difference in days between two time.
       \ingroup functions
   */
