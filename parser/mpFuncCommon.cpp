@@ -332,19 +332,74 @@ MUP_NAMESPACE_START
   }
 
   //------------------------------------------------------------------------------
-  //
-  // class FunDateDiff
-  //
+  //                                                                             |
+  //            Below we have the section related to Date functions              |
+  //                                                                             |
   //------------------------------------------------------------------------------
 
-  //https://en.wikipedia.org/wiki/Rata_Die
-  int rata_die(int y, int m, int d) { /* Rata Die day one is 0001-01-01 */
+  //------------------------------------------------------------------------------
+  //                                                                             |
+  //                         Date auxiliar functions!                            |
+  //                                                                             |
+  //------------------------------------------------------------------------------
+
+  // https://en.wikipedia.org/wiki/Rata_Die
+  int rata_die (int y, int m, int d) { /* Rata Die day one is 0001-01-01 */
     if (m < 3)
       y--, m += 12;
     return 365*y + y/4 - y/100 + y/400 + (153*m - 457)/5 + d - 306;
   }
 
-  FunDateDiff::FunDateDiff()
+  string_type format_date (struct tm time, bool is_date_time) {
+    string_type year  = std::to_string(time.tm_year + 1900);
+    string_type month = std::to_string(time.tm_mon + 1);
+    string_type day   = std::to_string(time.tm_mday);
+    string_type hours = std::to_string(time.tm_hour);
+    string_type min   = std::to_string(time.tm_min);
+
+    month = month.length() > 1 ? month : '0' + month;
+    day = day.length() > 1 ? day : '0' + day;
+    hours = hours.length() > 1 ? hours : '0' + hours;
+    min = min.length() > 1 ? min : '0' + min;
+
+    if (is_date_time) {
+      return(year + "-" + month + "-" + day + "T" + hours + ":" + min);
+    } else {
+      return(year + "-" + month + "-" + day);
+    }
+  }
+
+  void add_days (struct tm* date, float_type days) {
+    const time_t ONE_HOUR = 60 * 60;
+    const time_t ONE_DAY = 24 * ONE_HOUR;
+
+    // Avoid mismatch between winter and summer time
+    date->tm_isdst = -1;
+
+    // Seconds since start of epoch
+    time_t new_day = mktime(date) + (days * ONE_DAY);
+
+    // Update caller's date
+    // localtime is used because mktime converts from localtime to UTC and we need to convert it back
+    *date = *localtime(&new_day);
+  }
+
+  void raise_error (EErrorCodes error, int position, const ptr_val_type *arguments) {
+    ErrorContext err;
+    err.Errc = error;
+    err.Arg = position;
+    err.Type1 = arguments[position - 1]->GetType();
+    err.Type2 = 's';
+    throw ParserError(err);
+  }
+
+  //------------------------------------------------------------------------------
+  //
+  // class FunDaysDiff
+  //
+  //------------------------------------------------------------------------------
+
+  FunDaysDiff::FunDaysDiff()
     :ICallback(cmFUNC, _T("daysdiff"), -1)
   {}
 
@@ -353,10 +408,13 @@ MUP_NAMESPACE_START
       \param a_pArg Pointer to an array of Values
       \param a_iArgc Number of values stored in a_pArg
   */
-  void FunDateDiff::Eval(ptr_val_type &ret, const ptr_val_type *a_pArg, int a_iArgc)
+  void FunDaysDiff::Eval(ptr_val_type &ret, const ptr_val_type *a_pArg, int a_iArgc)
   {
-    if (a_iArgc != 2)
-        throw ParserError(ErrorContext(ecTOO_FEW_PARAMS, GetExprPos(), GetIdent()));
+    if (a_iArgc < 2) {
+      throw ParserError(ErrorContext(ecTOO_FEW_PARAMS, GetExprPos(), GetIdent()));
+    } else if (a_iArgc > 2) {
+      throw ParserError(ErrorContext(ecTOO_MANY_PARAMS, GetExprPos(), GetIdent()));
+    }
 
     string_type date_a = a_pArg[0]->GetString();
     string_type date_b = a_pArg[1]->GetString();
@@ -364,21 +422,10 @@ MUP_NAMESPACE_START
     struct tm tm, tm2;
     //http://man7.org/linux/man-pages/man3/strptime.3.html
     if (!strptime(date_a.c_str(), "%Y-%m-%d", &tm)) {
-      ErrorContext err;
-      err.Errc = ecINVALID_DATE_FORMAT;
-      err.Arg = 1;
-      err.Type1 = a_pArg[0]->GetType();
-      err.Type2 = 's';
-      throw ParserError(err);
+      raise_error(ecINVALID_DATE_FORMAT, 1, a_pArg);
     }
-
     if (!strptime(date_b.c_str(), "%Y-%m-%d", &tm2)) {
-      ErrorContext err;
-      err.Errc = ecINVALID_DATE_FORMAT;
-      err.Arg = 2;
-      err.Type1 = a_pArg[1]->GetType();
-      err.Type2 = 's';
-      throw ParserError(err);
+      raise_error(ecINVALID_DATE_FORMAT, 2, a_pArg);
     }
 
     int total_days1 = rata_die(tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday);
@@ -387,14 +434,14 @@ MUP_NAMESPACE_START
     *ret = abs(total_days1 - total_days2);
   }
 
-  const char_type* FunDateDiff::GetDesc() const
+  const char_type* FunDaysDiff::GetDesc() const
   {
     return _T("daysdiff(a,b) - Returns the difference in days between two dates.");
   }
 
-  IToken* FunDateDiff::Clone() const
+  IToken* FunDaysDiff::Clone() const
   {
-    return new FunDateDiff(*this);
+    return new FunDaysDiff(*this);
   }
 
   //------------------------------------------------------------------------------
@@ -414,8 +461,11 @@ MUP_NAMESPACE_START
   */
   void FunHoursDiff::Eval(ptr_val_type &ret, const ptr_val_type *a_pArg, int a_iArgc)
   {
-    if (a_iArgc != 2)
-        throw ParserError(ErrorContext(ecTOO_FEW_PARAMS, GetExprPos(), GetIdent()));
+    if (a_iArgc < 2) {
+      throw ParserError(ErrorContext(ecTOO_FEW_PARAMS, GetExprPos(), GetIdent()));
+    } else if (a_iArgc > 2) {
+      throw ParserError(ErrorContext(ecTOO_MANY_PARAMS, GetExprPos(), GetIdent()));
+    }
 
     string_type date_a = a_pArg[0]->GetString();
     string_type date_b = a_pArg[1]->GetString();
@@ -426,32 +476,16 @@ MUP_NAMESPACE_START
       date_a += "T00:00";
       date_b += "T00:00";
     } else if (std::regex_match (date_a, basic_date) || std::regex_match (date_b, basic_date)) {
-      ErrorContext err;
-      err.Errc = ecDATE_AND_DATETIME;
-      err.Arg = 1;
-      err.Type1 = a_pArg[0]->GetType();
-      err.Type2 = 's';
-      throw ParserError(err);
+      raise_error(ecDATE_AND_DATETIME, 1, a_pArg);
     }
 
     // http://man7.org/linux/man-pages/man3/strptime.3.html
     struct tm tm, tm2;
     if (!strptime(date_a.c_str(), "%Y-%m-%dT%H:%M", &tm)) {
-      ErrorContext err;
-      err.Errc = ecINVALID_DATETIME_FORMAT;
-      err.Arg = 1;
-      err.Type1 = a_pArg[0]->GetType();
-      err.Type2 = 's';
-      throw ParserError(err);
+      raise_error(ecINVALID_DATETIME_FORMAT, 1, a_pArg);
     }
-
     if (!strptime(date_b.c_str(), "%Y-%m-%dT%H:%M", &tm2)) {
-      ErrorContext err;
-      err.Errc = ecINVALID_DATETIME_FORMAT;
-      err.Arg = 2;
-      err.Type1 = a_pArg[1]->GetType();
-      err.Type2 = 's';
-      throw ParserError(err);
+      raise_error(ecINVALID_DATETIME_FORMAT, 2, a_pArg);
     }
 
     int total_days1 = rata_die(tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday);
@@ -493,19 +527,12 @@ MUP_NAMESPACE_START
   void FunCurrentDate::Eval(ptr_val_type &ret, const ptr_val_type *a_pArg, int a_iArgc)
   {
     if (a_iArgc != 0)
-        throw ParserError(ErrorContext(ecTOO_MANY_PARAMS, GetExprPos(), GetIdent()));
+      throw ParserError(ErrorContext(ecTOO_MANY_PARAMS, GetExprPos(), GetIdent()));
 
-    std::time_t t = std::time(0);   // get time now
-    std::tm* now = std::localtime(&t);
+    std::time_t t = std::time(0); // get time now
+    std::tm now = *std::localtime(&t);
 
-    string_type year  = std::to_string(now->tm_year + 1900);
-    string_type month = std::to_string(now->tm_mon + 1);
-    string_type day   = std::to_string(now->tm_mday);
-
-    month = month.length() > 1 ? month : '0' + month;
-    day = day.length() > 1 ? day : '0' + day;
-
-    *ret = year + "-" + month + "-" + day;
+    *ret = format_date(now, true);
   }
 
   //------------------------------------------------------------------------------
@@ -526,23 +553,6 @@ MUP_NAMESPACE_START
   //
   //------------------------------------------------------------------------------
 
-  void addDays(struct tm* date, int days) {
-    const time_t ONE_HOUR = 60 * 60;
-    const time_t ONE_DAY = 24 * ONE_HOUR;
-
-    // Seconds since start of epoch
-    time_t new_day = mktime(date) + (days * ONE_DAY) - ONE_HOUR; // Why we need to reduce one hour?
-
-    // Update caller's date
-    // localtime is used because mktime converts from localtime to UTC and we need to convert it back
-    *date = *localtime(&new_day);
-  }
-
-  // struct tm* tm = localtime(&base);
-  // tm->tm_mday += i;
-  // time_t next = mktime(tm);
-  // std::cout << ctime(&next);
-
   FunAddDays::FunAddDays()
     :ICallback(cmFUNC, _T("add_days"), -1)
   {}
@@ -553,62 +563,38 @@ MUP_NAMESPACE_START
   */
   void FunAddDays::Eval(ptr_val_type &ret, const ptr_val_type *a_pArg, int a_iArgc)
   {
-    if (a_iArgc != 2)
+    if (a_iArgc < 2) {
       throw ParserError(ErrorContext(ecTOO_FEW_PARAMS, GetExprPos(), GetIdent()));
+    } else if (a_iArgc > 2) {
+      throw ParserError(ErrorContext(ecTOO_MANY_PARAMS, GetExprPos(), GetIdent()));
+    }
 
     string_type date = a_pArg[0]->GetString();
-    int_type days = a_pArg[1]->GetInteger();
+    float_type days = a_pArg[1]->GetFloat(); // Accept both integer or float numbers! :D
 
     std::regex date_regex ("^\\d{4}-\\d{1,2}-\\d{1,2}$"); // "yyyy-mm-dd"
     std::regex date_time_regex ("^\\d{4}-\\d{1,2}-\\d{1,2}T\\d{1,2}:\\d{1,2}$"); // "yyyy-mm-ddTHH:MM"
+    bool is_date_time = false;
 
     // http://man7.org/linux/man-pages/man3/strptime.3.html
     struct tm time = {0};
     if (std::regex_match (date, date_regex)) {
       if (!strptime(date.c_str(), "%Y-%m-%d", &time)) {
-        ErrorContext err;
-        err.Errc = ecADD_HOURS_DATE;
-        err.Arg = 1;
-        err.Type1 = a_pArg[0]->GetType();
-        err.Type2 = 's';
-        throw ParserError(err);
+        raise_error(ecADD_HOURS_DATE, 1, a_pArg);
       }
+      is_date_time = false;
     } else if (std::regex_match (date, date_time_regex)) {
       if (!strptime(date.c_str(), "%Y-%m-%dT%H:%M", &time)) {
-        ErrorContext err;
-        err.Errc = ecADD_HOURS_DATETIME;
-        err.Arg = 1;
-        err.Type1 = a_pArg[0]->GetType();
-        err.Type2 = 's';
-        throw ParserError(err);
+        raise_error(ecADD_HOURS_DATETIME, 1, a_pArg);
       }
+      is_date_time = true;
     } else {
-      ErrorContext err;
-      err.Errc = ecADD_HOURS;
-      err.Arg = 1;
-      err.Type1 = a_pArg[0]->GetType();
-      err.Type2 = 's';
-      throw ParserError(err);
+      raise_error(ecADD_HOURS, 1, a_pArg);
     }
 
-    addDays(&time, days); // The magic is here
+    add_days(&time, days);
 
-    string_type year  = std::to_string(time.tm_year + 1900);
-    string_type month = std::to_string(time.tm_mon + 1);
-    string_type day   = std::to_string(time.tm_mday);
-    string_type hours = std::to_string(time.tm_hour);
-    string_type min   = std::to_string(time.tm_min);
-
-    // Section responsible to format properlly the date/date_time output...
-    //
-    // month = month.length() > 1 ? month : '0' + month;
-    // day = day.length() > 1 ? day : '0' + day;
-
-    if (time.tm_hour == 0 && time.tm_min == 0) {
-      *ret = year + "-" + month + "-" + day;
-    } else {
-      *ret = year + "-" + month + "-" + day + "T" + hours + ":" + min;
-    }
+    *ret = format_date(time, is_date_time);
   }
 
   //------------------------------------------------------------------------------
