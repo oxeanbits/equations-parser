@@ -113,6 +113,9 @@ MUP_NAMESPACE_START
     m_vErrMsg[ecINVALID_DATE_FORMAT]     = _T("Invalid date format on parameter(s). Please use the \"yyyy-mm-dd\" format.");
     m_vErrMsg[ecINVALID_DATETIME_FORMAT] = _T("Invalid format on the parameter(s). Please use two \"yyyy-mm-dd\" for dates OR two \"yyyy-mm-ddTHH:MM\" for date_times.");
     m_vErrMsg[ecDATE_AND_DATETIME]       = _T("Invalid parameters. You should use exactly two dates \"yyyy-mm-dd\" or two date_times \"yyyy-mm-ddTHH:MM\", but not a mix of them.");
+    m_vErrMsg[ecADD_HOURS]               = _T("Invalid parameters. You should use a date/date_time on the first parameter and a number on the second parameter");
+    m_vErrMsg[ecADD_HOURS_DATE]          = _T("The first parameter could not be converted to a date. Please use the format: \"yyyy-mm-dd\"");
+    m_vErrMsg[ecADD_HOURS_DATETIME]      = _T("The first parameter could not be converted to a date time. Please use the format: \"yyyy-mm-ddTHH:MM\"");
 
     #if defined(_DEBUG)
       for (int i=0; i<ecCOUNT; ++i)
