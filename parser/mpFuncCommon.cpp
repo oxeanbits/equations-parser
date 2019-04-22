@@ -44,6 +44,7 @@
 #include "mpValue.h"
 #include "mpParserBase.h"
 
+#define ONE_DAY (24 * 60 * 60)
 
 MUP_NAMESPACE_START
 
@@ -370,8 +371,6 @@ MUP_NAMESPACE_START
   }
 
   void add_days (struct tm* date, float_type days) {
-    const time_t ONE_DAY = 24 * 60 * 60;
-
     // Avoid mismatch between winter and summer time on mktime() conversion
     date->tm_isdst = -1;
 
