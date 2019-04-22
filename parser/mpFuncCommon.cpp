@@ -370,8 +370,7 @@ MUP_NAMESPACE_START
   }
 
   void add_days (struct tm* date, float_type days) {
-    const time_t ONE_HOUR = 60 * 60;
-    const time_t ONE_DAY = 24 * ONE_HOUR;
+    const time_t ONE_DAY = 24 * 60 * 60;
 
     // Avoid mismatch between winter and summer time
     date->tm_isdst = -1;
