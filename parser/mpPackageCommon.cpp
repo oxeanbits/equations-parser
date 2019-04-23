@@ -86,6 +86,8 @@ void PackageCommon::AddToParser(ParserXBase *pParser)
   pParser->DefineFun(new FunSum());
   pParser->DefineFun(new FunAvg());
 
+  // Special functions
+  pParser->DefineFun(new FunMask());
 
   // Date functions
   pParser->DefineFun(new FunDaysDiff());

@@ -333,6 +333,63 @@ MUP_NAMESPACE_START
   }
 
   //------------------------------------------------------------------------------
+  //
+  // Mask
+  //
+  //------------------------------------------------------------------------------
+
+  string_type apply_mask(string_type mask, string_type number_string) {
+    for (int i = mask.length() - 1; i >= 0; i--) {
+      if (mask[i] == '0' && number_string.length() > 0) {
+        mask[i] = number_string.back();
+        number_string.pop_back();
+      }
+    }
+
+    if (number_string.length() > 0) {
+      mask.insert(0, number_string);
+    }
+
+    return mask;
+  }
+
+  FunMask::FunMask()
+    :ICallback(cmFUNC, _T("mask"), -1)
+  {}
+
+  //------------------------------------------------------------------------------
+  FunMask::~FunMask()
+  {}
+
+  //------------------------------------------------------------------------------
+  /** \brief Returns the application of a mask into a integer. */
+  void FunMask::Eval(ptr_val_type &ret, const ptr_val_type *a_pArg, int a_iArgc)
+  {
+    if (a_iArgc < 2) {
+      throw ParserError(ErrorContext(ecTOO_FEW_PARAMS, GetExprPos(), GetIdent()));
+    } else if (a_iArgc > 2) {
+      throw ParserError(ErrorContext(ecTOO_MANY_PARAMS, GetExprPos(), GetIdent()));
+    }
+
+    string_type mask = a_pArg[0]->GetString();
+    int_type number = a_pArg[1]->GetInteger();
+
+    *ret = apply_mask(mask, std::to_string(number));
+  }
+
+  //------------------------------------------------------------------------------
+  const char_type* FunMask::GetDesc() const
+  {
+    return _T("mask(a, b) - Returns the application of the a mask into the b integer.");
+  }
+
+  //------------------------------------------------------------------------------
+  IToken* FunMask::Clone() const
+  {
+    return new FunMask(*this);
+  }
+
+  //------------------------------------------------------------------------------
   //                                                                             |
   //            Below we have the section related to Date functions              |
   //                                                                             |
