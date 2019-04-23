@@ -584,10 +584,11 @@ MUP_NAMESPACE_START
     if (a_iArgc != 0)
       throw ParserError(ErrorContext(ecTOO_MANY_PARAMS, GetExprPos(), GetIdent()));
 
+    (void)*a_pArg;
     std::time_t t = std::time(0); // get time now
     std::tm now = *std::localtime(&t);
 
-    *ret = format_date(now, true);
+    *ret = format_date(now, false);
   }
 
   //------------------------------------------------------------------------------
