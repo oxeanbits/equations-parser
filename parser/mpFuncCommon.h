@@ -120,6 +120,20 @@ MUP_NAMESPACE_START
   }; // class FunSizeOf
 
   //------------------------------------------------------------------------------
+  /** \brief Returns the application of a mask into a integer.
+      \ingroup functions
+  */
+  class FunMask : public ICallback
+  {
+  public:
+    FunMask();
+    virtual ~FunMask();
+    virtual void Eval(ptr_val_type &ret, const ptr_val_type *a_pArg, int a_iArgc) override;
+    virtual const char_type* GetDesc() const override;
+    virtual IToken* Clone() const override;
+  }; // class FunMask
+
+  //------------------------------------------------------------------------------
   /** \brief Determine the difference in days between two dates.
       \ingroup functions
   */
