@@ -622,7 +622,7 @@ MUP_NAMESPACE_START
   //-----------------------------------------------------------------------
   const char_type* FunCmplxPow::GetDesc() const
   {
-    return _T("pox(x, y) - Raise x to the power of y.");
+    return _T("pow(x, y) - Raise x to the power of y.");
   }
 
   //-----------------------------------------------------------------------

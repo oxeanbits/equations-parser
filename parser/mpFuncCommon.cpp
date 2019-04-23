@@ -250,7 +250,7 @@ MUP_NAMESPACE_START
   {}
 
   //------------------------------------------------------------------------------
-  /** \brief Returns the minimum value of all values.
+  /** \brief Returns the average value of all values.
       \param a_pArg Pointer to an array of Values
       \param a_iArgc Number of values stored in a_pArg
   */

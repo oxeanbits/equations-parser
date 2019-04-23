@@ -104,7 +104,7 @@ void PackageCommon::AddToParser(ParserXBase *pParser)
   pParser->DefineOprt(new OprtShr);
   pParser->DefineOprt(new OprtShl);
 
-  // booloean package
+  // boolean package
   pParser->DefineOprt(new OprtLE);
   pParser->DefineOprt(new OprtGE);
   pParser->DefineOprt(new OprtLT);
