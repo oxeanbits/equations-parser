@@ -338,7 +338,17 @@ MUP_NAMESPACE_START
   //
   //------------------------------------------------------------------------------
 
-  string_type apply_mask(string_type mask, string_type number_string) {
+  static string_type to_string(long_double_type number) {
+    std::string string_number = std::to_string (number);
+    int offset = 1;
+    if (string_number.find_last_not_of('0') == string_number.find('.')) {
+      offset = 0;
+    }
+    string_number.erase(string_number.find_last_not_of('0') + offset, std::string::npos);
+    return string_number;
+  }
+
+  static string_type apply_mask(string_type mask, string_type number_string) {
     for (int i = mask.length() - 1; i >= 0; i--) {
       if (mask[i] == '0' && number_string.length() > 0) {
         mask[i] = number_string.back();
@@ -372,9 +382,9 @@ MUP_NAMESPACE_START
     }
 
     string_type mask = a_pArg[0]->GetString();
-    int_type number = a_pArg[1]->GetInteger();
+    long_double_type number = a_pArg[1]->GetFloat();
 
-    *ret = apply_mask(mask, std::to_string(number));
+    *ret = apply_mask(mask, to_string(std::round(number)));
   }
 
   //------------------------------------------------------------------------------
