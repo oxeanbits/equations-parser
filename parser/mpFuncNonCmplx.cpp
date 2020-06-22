@@ -67,6 +67,16 @@ string_type to_string(long_double_type number) {
   string_number.erase(string_number.find_last_not_of('0') + offset, std::string::npos);
   return string_number;
 }
+
+int_type default_value(int_type value, int_type standard) {
+  if (value == NULL) return standard;
+  return value;
+}
+
+double default_value(double value, double standard) {
+  if (value == NULL) return standard;
+  return value;
+}
 //------------------------------------------------------------------------------
 //
 //
@@ -150,6 +160,7 @@ string_type to_string(long_double_type number) {
     MUP_BINARY_FUNC(FunFmod,   "fmod",   std::fmod,  "fmod(x, y) - floating point remainder of x / y")
     MUP_BINARY_FUNC(FunRoundDecimal, "round_decimal", round, "round_decimal(x, y) - round the x number considering y precision")
     MUP_BINARY_FUNC(FunRemainder,    "remainder", std::remainder,  "remainder(x, y) - IEEE remainder of x / y")
+    MUP_BINARY_FUNC(FunDefaultValue, "default_value", default_value,  "default_value(x, y) - Use y as default value if x is NULL")
 #undef MUP_BINARY_FUNC
 
 MUP_NAMESPACE_END
