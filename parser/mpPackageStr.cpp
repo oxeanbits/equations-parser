@@ -65,6 +65,7 @@ void PackageStr::AddToParser(ParserXBase *pParser)
   pParser->DefineFun(new FunStrConcat());
   pParser->DefineFun(new FunStrLeft());
   pParser->DefineFun(new FunStrRight());
+  pParser->DefineFun(new FunStrDefaultValue());
 
   // Operators
   pParser->DefineOprt(new OprtStrAdd);

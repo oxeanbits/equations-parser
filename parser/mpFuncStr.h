@@ -77,6 +77,19 @@ MUP_NAMESPACE_START
   };
 
   //------------------------------------------------------------------------------
+  /** \brief Callback object for determining the default value for a string.
+      \ingroup functions
+  */
+  class FunStrDefaultValue : public ICallback
+  {
+  public:
+    FunStrDefaultValue();
+    virtual void Eval(ptr_val_type& ret, const ptr_val_type *a_pArg, int a_iArgc) override;
+    virtual const char_type* GetDesc() const override;
+    virtual IToken* Clone() const override;
+  };
+
+  //------------------------------------------------------------------------------
   /** \brief Callback object for determining the length of a string. 
       \ingroup functions
   */
