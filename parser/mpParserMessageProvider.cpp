@@ -110,7 +110,6 @@ MUP_NAMESPACE_START
     m_vErrMsg[ecADD_HOURS]                    = _T("Invalid parameters. You should use a date \"yyyy-mm-dd\" or date_time \"yyyy-mm-ddTHH:MM\" on the first parameter and a number on the second parameter.");
     m_vErrMsg[ecADD_HOURS_DATE]               = _T("The first parameter could not be converted to a date. Please use the format: \"yyyy-mm-dd\"");
     m_vErrMsg[ecADD_HOURS_DATETIME]           = _T("The first parameter could not be converted to a date time. Please use the format: \"yyyy-mm-ddTHH:MM\"");
-    m_vErrMsg[ecINVALID_DEFAULT_VALUE_PARAM]  = _T("The first parameter of default_value() must be a string or NULL if the second parameter is a string");
   }
 
 #if defined(_UNICODE)

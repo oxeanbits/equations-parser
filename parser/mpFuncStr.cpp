@@ -156,12 +156,12 @@ MUP_NAMESPACE_START
   }
 
   string_type default_value(int_type value, string_type standard) {
-    return value == NULL ? standard : "";
+    return value == NULL ? standard : (string_type) value;
   }
 
   //------------------------------------------------------------------------------
   //
-  // Default Value function (With two strings)
+  // Default Value function
   //
   //------------------------------------------------------------------------------
 
@@ -201,9 +201,6 @@ MUP_NAMESPACE_START
 
       if (a_pArg[0]->GetType() == 'i') {
         integer_value = a_pArg[0]->GetInteger();
-
-        if (integer_value != NULL) throw ParserError(ErrorContext(ecINVALID_DEFAULT_VALUE_PARAM, GetExprPos(), GetIdent()));
-
         *ret = (string_type) default_value(integer_value, string_standard);
       } else if (a_pArg[0]->GetType() == 's') {
         string_value = a_pArg[0]->GetString();
