@@ -85,7 +85,6 @@ void PackageNonCmplx::AddToParser(ParserXBase *pParser)
   pParser->DefineFun(new FunFmod());
   pParser->DefineFun(new FunRoundDecimal());
   pParser->DefineFun(new FunRemainder());
-  pParser->DefineFun(new FunDefaultValue());
 
   // Operator callbacks
   pParser->DefineInfixOprt(new OprtSign());
