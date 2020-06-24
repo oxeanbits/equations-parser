@@ -156,7 +156,15 @@ MUP_NAMESPACE_START
   }
 
   string_type default_value(int_type value, string_type standard) {
-    return value == NULL ? standard : (string_type) value;
+    return standard;
+  }
+
+  bool_type default_value(bool_type value, bool_type standard) {
+    return value;
+  }
+
+  bool_type default_value(int_type value, bool_type standard) {
+    return standard;
   }
 
   //------------------------------------------------------------------------------
@@ -179,6 +187,14 @@ MUP_NAMESPACE_START
     float_type float_standard;
     string_type string_value;
     string_type string_standard;
+    bool_type bool_value;
+    bool_type bool_standard;
+
+    if (a_pArg[0]->GetType() != a_pArg[1]->GetType()) {
+      if (a_pArg[0]->GetInteger() != NULL) {
+        throw ParserError(ErrorContext(ecINVALID_TYPES_MATCH, GetExprPos(), GetIdent()));
+      }
+    }
 
     if (a_pArg[1]->GetType() == 'i') {
       integer_standard = a_pArg[1]->GetInteger();
@@ -196,12 +212,26 @@ MUP_NAMESPACE_START
       return;
     }
 
+    if (a_pArg[1]->GetType() == 'b') {
+      bool_standard = a_pArg[1]->GetBool();
+
+      if (a_pArg[0]->GetType() == 'i') {
+        integer_value = a_pArg[0]->GetInteger();
+        *ret = default_value(integer_value, bool_standard);
+      } else if (a_pArg[0]->GetType() == 'b') {
+        bool_value = a_pArg[0]->GetBool();
+        *ret = (bool_type) default_value(bool_value, bool_standard);
+      }
+
+      return;
+    }
+
     if (a_pArg[1]->GetType() == 's') {
       string_standard = a_pArg[1]->GetString();
 
       if (a_pArg[0]->GetType() == 'i') {
         integer_value = a_pArg[0]->GetInteger();
-        *ret = (string_type) default_value(integer_value, string_standard);
+        *ret = default_value(integer_value, string_standard);
       } else if (a_pArg[0]->GetType() == 's') {
         string_value = a_pArg[0]->GetString();
         *ret = (string_type) default_value(string_value, string_standard);
