@@ -105,6 +105,8 @@ MUP_NAMESPACE_START
       ecADD_HOURS_DATE            = 56, ///< Invalid date format for add_hours() first parameter
       ecADD_HOURS_DATETIME        = 57, ///< Invalid date time format for add_hours() first parameter
 
+      ecINVALID_TYPES_MATCH       = 58, ///< Both values of the default(x, y) function should have the same type
+
       // The last two are special entries 
       ecCOUNT,                    ///< This is no error code, It just stores just the total number of error codes
       ecUNDEFINED              = -1, ///< Undefined message, placeholder to detect unassigned error messages
