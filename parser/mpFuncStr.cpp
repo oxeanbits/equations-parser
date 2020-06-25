@@ -155,6 +155,7 @@ MUP_NAMESPACE_START
     return value.empty() ? standard : value;
   }
 
+  // If the value is an integer, it is NULL, therefore return standard
   string_type default_value(int_type value, string_type standard) {
     return standard;
   }
@@ -163,6 +164,7 @@ MUP_NAMESPACE_START
     return value;
   }
 
+  // If the value is an integer, it is NULL, therefore return standard
   bool_type default_value(int_type value, bool_type standard) {
     return standard;
   }
