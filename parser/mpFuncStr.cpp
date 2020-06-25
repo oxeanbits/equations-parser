@@ -140,6 +140,123 @@ MUP_NAMESPACE_START
 
   //------------------------------------------------------------------------------
   //
+  // default_value() auxiliary overloading functions
+  //
+  //------------------------------------------------------------------------------
+  int_type default_value(int_type value, int_type standard) {
+    return value == NULL ? standard : value;
+  }
+
+  float_type default_value(float_type value, float_type standard) {
+    return value == NULL ? standard : value;
+  }
+
+  string_type default_value(string_type value, string_type standard) {
+    return value.empty() ? standard : value;
+  }
+
+  // If the value is an integer, it is NULL, therefore return standard
+  string_type default_value(int_type value, string_type standard) {
+    return standard;
+  }
+
+  bool_type default_value(bool_type value, bool_type standard) {
+    return value;
+  }
+
+  // If the value is an integer, it is NULL, therefore return standard
+  bool_type default_value(int_type value, bool_type standard) {
+    return standard;
+  }
+
+  //------------------------------------------------------------------------------
+  //
+  // Default Value function
+  //
+  //------------------------------------------------------------------------------
+
+  FunStrDefaultValue::FunStrDefaultValue()
+    :ICallback(cmFUNC, _T("default_value"), 2)
+  {}
+
+  //------------------------------------------------------------------------------
+  void FunStrDefaultValue::Eval(ptr_val_type &ret, const ptr_val_type *a_pArg, int)
+  {
+
+    int_type integer_value;
+    int_type integer_standard;
+    float_type float_value;
+    float_type float_standard;
+    string_type string_value;
+    string_type string_standard;
+    bool_type bool_value;
+    bool_type bool_standard;
+
+    if (a_pArg[0]->GetType() != a_pArg[1]->GetType()) {
+      if (a_pArg[0]->GetInteger() != NULL) {
+        throw ParserError(ErrorContext(ecINVALID_TYPES_MATCH, GetExprPos(), GetIdent()));
+      }
+    }
+
+    if (a_pArg[1]->GetType() == 'i') {
+      integer_standard = a_pArg[1]->GetInteger();
+      integer_value = a_pArg[0]->GetInteger();
+      *ret = (int_type) default_value(integer_value, integer_standard);
+
+      return;
+    }
+
+    if (a_pArg[1]->GetType() == 'f') {
+      float_standard = a_pArg[1]->GetFloat();
+      float_value = a_pArg[0]->GetFloat();
+      *ret = (float_type) default_value(float_value, float_standard);
+
+      return;
+    }
+
+    if (a_pArg[1]->GetType() == 'b') {
+      bool_standard = a_pArg[1]->GetBool();
+
+      if (a_pArg[0]->GetType() == 'i') {
+        integer_value = a_pArg[0]->GetInteger();
+        *ret = default_value(integer_value, bool_standard);
+      } else if (a_pArg[0]->GetType() == 'b') {
+        bool_value = a_pArg[0]->GetBool();
+        *ret = (bool_type) default_value(bool_value, bool_standard);
+      }
+
+      return;
+    }
+
+    if (a_pArg[1]->GetType() == 's') {
+      string_standard = a_pArg[1]->GetString();
+
+      if (a_pArg[0]->GetType() == 'i') {
+        integer_value = a_pArg[0]->GetInteger();
+        *ret = default_value(integer_value, string_standard);
+      } else if (a_pArg[0]->GetType() == 's') {
+        string_value = a_pArg[0]->GetString();
+        *ret = (string_type) default_value(string_value, string_standard);
+      }
+
+      return;
+    }
+  }
+
+  //------------------------------------------------------------------------------
+  const char_type* FunStrDefaultValue::GetDesc() const
+  {
+    return _T("default_value(value, standard) - If value is NULL return standard, otherwise return value");
+  }
+
+  //------------------------------------------------------------------------------
+  IToken* FunStrDefaultValue::Clone() const
+  {
+    return new FunStrDefaultValue(*this);
+  }
+
+  //------------------------------------------------------------------------------
+  //
   // Length function
   //
   //------------------------------------------------------------------------------

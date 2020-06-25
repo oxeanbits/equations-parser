@@ -45,6 +45,9 @@
 /** \brief The eulerian number. */
 #define MUP_CONST_E   2.718281828459045235360287
 
+/** \brief Allow NULL constant to be used inside lib. */
+#define MUP_CONST_NULL   NULL
+
 
 MUP_NAMESPACE_START
 
@@ -76,6 +79,7 @@ void PackageCommon::AddToParser(ParserXBase *pParser)
   // Constants
   pParser->DefineConst( _T("pi"), (float_type)MUP_CONST_PI );
   pParser->DefineConst( _T("e"),  (float_type)MUP_CONST_E );
+  pParser->DefineConst( _T("NULL"), (int_type)MUP_CONST_NULL );
 
   // Vector
   pParser->DefineFun(new FunSizeOf());

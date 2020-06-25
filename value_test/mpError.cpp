@@ -116,6 +116,7 @@ MUP_NAMESPACE_START
     m_vErrMsg[ecADD_HOURS]               = _T("Invalid parameters. You should use a date/date_time on the first parameter and a number on the second parameter");
     m_vErrMsg[ecADD_HOURS_DATE]          = _T("The first parameter could not be converted to a date. Please use the format: \"yyyy-mm-dd\"");
     m_vErrMsg[ecADD_HOURS_DATETIME]      = _T("The first parameter could not be converted to a date time. Please use the format: \"yyyy-mm-ddTHH:MM\"");
+    m_vErrMsg[ecINVALID_TYPES_MATCH]     = _T("Both values of the default(x, y) function should have the same type");
 
     #if defined(_DEBUG)
       for (int i=0; i<ecCOUNT; ++i)
