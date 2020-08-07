@@ -80,6 +80,7 @@ void PackageCommon::AddToParser(ParserXBase *pParser)
   pParser->DefineConst( _T("pi"), (float_type)MUP_CONST_PI );
   pParser->DefineConst( _T("e"),  (float_type)MUP_CONST_E );
   pParser->DefineConst( _T("NULL"), (int_type)MUP_CONST_NULL );
+  pParser->DefineConst( _T("null"), (int_type)MUP_CONST_NULL );
 
   // Vector
   pParser->DefineFun(new FunSizeOf());
