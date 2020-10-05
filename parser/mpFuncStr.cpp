@@ -143,10 +143,6 @@ MUP_NAMESPACE_START
   // default_value() auxiliary overloading functions
   //
   //------------------------------------------------------------------------------
-  int_type default_value(int_type value, int_type standard) {
-    return value == NULL ? standard : value;
-  }
-
   float_type default_value(float_type value, float_type standard) {
     return value == NULL ? standard : value;
   }
@@ -182,7 +178,6 @@ MUP_NAMESPACE_START
   //------------------------------------------------------------------------------
   void FunStrDefaultValue::Eval(ptr_val_type &ret, const ptr_val_type *a_pArg, int)
   {
-
     int_type integer_value;
     int_type integer_standard;
     float_type float_value;
@@ -192,21 +187,19 @@ MUP_NAMESPACE_START
     bool_type bool_value;
     bool_type bool_standard;
 
-    if (a_pArg[0]->GetType() != a_pArg[1]->GetType()) {
+    char first_param_type = a_pArg[0]->GetType();
+    char second_param_type = a_pArg[1]->GetType();
+
+    first_param_type = first_param_type == 'i' ? 'f' : first_param_type;
+    second_param_type = second_param_type == 'i' ? 'f' : second_param_type;
+
+    if (first_param_type != second_param_type) {
       if (a_pArg[0]->GetInteger() != NULL) {
         throw ParserError(ErrorContext(ecINVALID_TYPES_MATCH, GetExprPos(), GetIdent()));
       }
     }
 
-    if (a_pArg[1]->GetType() == 'i') {
-      integer_standard = a_pArg[1]->GetInteger();
-      integer_value = a_pArg[0]->GetInteger();
-      *ret = (int_type) default_value(integer_value, integer_standard);
-
-      return;
-    }
-
-    if (a_pArg[1]->GetType() == 'f') {
+    if (second_param_type == 'f') {
       float_standard = a_pArg[1]->GetFloat();
       float_value = a_pArg[0]->GetFloat();
       *ret = (float_type) default_value(float_value, float_standard);
@@ -214,13 +207,13 @@ MUP_NAMESPACE_START
       return;
     }
 
-    if (a_pArg[1]->GetType() == 'b') {
+    if (second_param_type == 'b') {
       bool_standard = a_pArg[1]->GetBool();
 
-      if (a_pArg[0]->GetType() == 'i') {
+      if (a_pArg[0]->GetType() == 'i') { // NULL first parameter
         integer_value = a_pArg[0]->GetInteger();
         *ret = default_value(integer_value, bool_standard);
-      } else if (a_pArg[0]->GetType() == 'b') {
+      } else if (a_pArg[0]->GetType() == 'b') { // NOT NULL first parameter
         bool_value = a_pArg[0]->GetBool();
         *ret = (bool_type) default_value(bool_value, bool_standard);
       }
@@ -228,13 +221,13 @@ MUP_NAMESPACE_START
       return;
     }
 
-    if (a_pArg[1]->GetType() == 's') {
+    if (second_param_type == 's') {
       string_standard = a_pArg[1]->GetString();
 
-      if (a_pArg[0]->GetType() == 'i') {
+      if (a_pArg[0]->GetType() == 'i') { // NULL first parameter
         integer_value = a_pArg[0]->GetInteger();
         *ret = default_value(integer_value, string_standard);
-      } else if (a_pArg[0]->GetType() == 's') {
+      } else if (a_pArg[0]->GetType() == 's') { // NOT NULL first parameter
         string_value = a_pArg[0]->GetString();
         *ret = (string_type) default_value(string_value, string_standard);
       }
