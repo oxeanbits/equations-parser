@@ -74,6 +74,36 @@ MUP_NAMESPACE_START
 
   //------------------------------------------------------------------------------
   //
+  // Link function
+  //
+  //------------------------------------------------------------------------------
+
+  FunStrLink::FunStrLink()
+    :ICallback(cmFUNC, _T("link"), 2)
+  {}
+
+  //------------------------------------------------------------------------------
+  void FunStrLink::Eval(ptr_val_type &ret, const ptr_val_type *a_pArg, int)
+  {
+    string_type str1 = a_pArg[0]->GetString();
+    string_type str2 = a_pArg[1]->GetString();
+    *ret = (string_type) "<a href='" + str2 +"'>" + str1 + "</a>";
+  }
+
+  //------------------------------------------------------------------------------
+  const char_type* FunStrLink::GetDesc() const
+  {
+    return _T("link(s1, s2) - Returns the <a href='s2'>s1</a> tag with param values.");
+  }
+
+  //------------------------------------------------------------------------------
+  IToken* FunStrLink::Clone() const
+  {
+    return new FunStrLink(*this);
+  }
+
+  //------------------------------------------------------------------------------
+  //
   // Left function
   //
   //------------------------------------------------------------------------------
