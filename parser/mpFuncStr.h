@@ -51,6 +51,19 @@ MUP_NAMESPACE_START
   };
 
   //------------------------------------------------------------------------------
+  /** \brief Callback object for determining the anchor tag <a> using two strings.
+      \ingroup functions
+  */
+  class FunStrLink : public ICallback
+  {
+  public:
+    FunStrLink();
+    virtual void Eval(ptr_val_type& ret, const ptr_val_type *a_pArg, int a_iArgc) override;
+    virtual const char_type* GetDesc() const override;
+    virtual IToken* Clone() const override;
+  };
+
+  //------------------------------------------------------------------------------
   /** \brief Callback object for determining the left part of a string.
       \ingroup functions
   */
