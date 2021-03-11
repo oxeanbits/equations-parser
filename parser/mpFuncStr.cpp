@@ -87,13 +87,13 @@ MUP_NAMESPACE_START
   {
     string_type str1 = a_pArg[0]->GetString();
     string_type str2 = a_pArg[1]->GetString();
-    *ret = (string_type) "<a href=\\\"" + str2 +"\\\">" + str1 + "</a>";
+    *ret = (string_type) "<a href=\"" + str2 +"\">" + str1 + "</a>";
   }
 
   //------------------------------------------------------------------------------
   const char_type* FunStrLink::GetDesc() const
   {
-    return _T("link(s1, s2) - Returns the <a href=\\\"s2\\\">s1</a> tag with param values.");
+    return _T("link(s1, s2) - Returns the <a href=\"s2\">s1</a> tag with param values.");
   }
 
   //------------------------------------------------------------------------------
