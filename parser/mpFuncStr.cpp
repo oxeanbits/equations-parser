@@ -487,7 +487,7 @@ MUP_NAMESPACE_START
     _unused(a_iArgc);
 
     int_type    integer_value;
-    float_type float_value;
+    float_type  float_value;
     string_type string_value;
 
     if (a_pArg[0]->GetType() == 'i') {
