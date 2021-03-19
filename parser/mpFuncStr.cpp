@@ -486,12 +486,18 @@ MUP_NAMESPACE_START
     assert(a_iArgc==1);
     _unused(a_iArgc);
 
-    int_type integer_value;
+    int_type    integer_value;
+    float_type float_value;
     string_type string_value;
 
     if (a_pArg[0]->GetType() == 'i') {
       integer_value = a_pArg[0]->GetInteger();
       *ret = (string_type) to_string(integer_value);
+    }
+
+    if (a_pArg[0]->GetType() == 'f') {
+      float_value = a_pArg[0]->GetFloat();
+      *ret = (string_type) to_string(float_value);
     }
 
     if (a_pArg[0]->GetType() == 's') {
