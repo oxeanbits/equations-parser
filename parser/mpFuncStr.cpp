@@ -488,6 +488,7 @@ MUP_NAMESPACE_START
 
     int_type    integer_value;
     float_type  float_value;
+    bool_type   bool_value;
     string_type string_value;
 
     if (a_pArg[0]->GetType() == 'i') {
@@ -498,6 +499,11 @@ MUP_NAMESPACE_START
     if (a_pArg[0]->GetType() == 'f') {
       float_value = a_pArg[0]->GetFloat();
       *ret = (string_type) to_string(float_value);
+    }
+
+    if (a_pArg[0]->GetType() == 'b') {
+      bool_value = a_pArg[0]->GetBool();
+      *ret = (string_type) (bool_value ? "true" : "false");
     }
 
     if (a_pArg[0]->GetType() == 's') {
