@@ -166,6 +166,19 @@ MUP_NAMESPACE_START
     virtual const char_type* GetDesc() const override;
     virtual IToken* Clone() const override;
   }; // class FunStrNumber
+
+//------------------------------------------------------------------------------
+  /** \brief Parse number/string to a string value.
+      \ingroup functions
+  */
+  class FunString : public ICallback
+  {
+  public:
+    FunString ();
+    virtual void Eval(ptr_val_type& ret, const ptr_val_type *a_pArg, int a_iArgc) override;
+    virtual const char_type* GetDesc() const override;
+    virtual IToken* Clone() const override;
+  }; // class FunString
 MUP_NAMESPACE_END
 
 #endif

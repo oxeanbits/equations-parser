@@ -457,4 +457,72 @@ MUP_NAMESPACE_START
   {
     return new FunStrNumber(*this);
   }
+
+  //------------------------------------------------------------------------------
+  //
+  // String cast => string()
+  //
+  //------------------------------------------------------------------------------
+
+  // auxiliary string() functions
+  string_type to_string(long_double_type number) {
+    std::string string_number = std::to_string (number);
+    int offset = 1;
+    if (string_number.find_last_not_of('0') == string_number.find('.')) {
+      offset = 0;
+    }
+    string_number.erase(string_number.find_last_not_of('0') + offset, std::string::npos);
+    return string_number;
+  }
+
+  // string() defines
+  FunString::FunString()
+    :ICallback(cmFUNC, _T("string"), 1)
+  {}
+
+  //------------------------------------------------------------------------------
+  void FunString::Eval(ptr_val_type &ret, const ptr_val_type *a_pArg, int a_iArgc)
+  {
+    assert(a_iArgc==1);
+    _unused(a_iArgc);
+
+    int_type    integer_value;
+    float_type  float_value;
+    bool_type   bool_value;
+    string_type string_value;
+
+    if (a_pArg[0]->GetType() == 'i') {
+      integer_value = a_pArg[0]->GetInteger();
+      *ret = (string_type) to_string(integer_value);
+    }
+
+    if (a_pArg[0]->GetType() == 'f') {
+      float_value = a_pArg[0]->GetFloat();
+      *ret = (string_type) to_string(float_value);
+    }
+
+    if (a_pArg[0]->GetType() == 'b') {
+      bool_value = a_pArg[0]->GetBool();
+      *ret = (string_type) (bool_value ? "true" : "false");
+    }
+
+    if (a_pArg[0]->GetType() == 's') {
+      string_value = a_pArg[0]->GetString();
+      *ret = (string_type) string_value;
+    }
+
+    return;
+  }
+
+  //------------------------------------------------------------------------------
+  const char_type* FunString::GetDesc() const
+  {
+    return _T("string(x) - converts the value to string.");
+  }
+
+  //------------------------------------------------------------------------------
+  IToken* FunString::Clone() const
+  {
+    return new FunString(*this);
+  }
 MUP_NAMESPACE_END

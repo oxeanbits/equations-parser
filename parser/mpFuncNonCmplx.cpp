@@ -58,15 +58,6 @@ double round(long_double_type number, int_type precision) {
   return (std::round(number * decimals)) / decimals;
 }
 
-string_type to_string(long_double_type number) {
-  std::string string_number = std::to_string (number);
-  int offset = 1;
-  if (string_number.find_last_not_of('0') == string_number.find('.')) {
-    offset = 0;
-  }
-  string_number.erase(string_number.find_last_not_of('0') + offset, std::string::npos);
-  return string_number;
-}
 //------------------------------------------------------------------------------
 //
 //
@@ -121,7 +112,6 @@ string_type to_string(long_double_type number) {
     // number functions
     MUP_UNARY_FUNC(FunAbs,   "abs",    std::fabs,  "abs(x) - absolute value of x")
     MUP_UNARY_FUNC(FunRound, "round",  std::round, "round(x) - round the value of x to its nearest integer")
-    MUP_UNARY_FUNC(FunString,"string", to_string,  "string(x) - converts the number from decimal to string")
 #undef MUP_UNARY_FUNC
 
 #define MUP_BINARY_FUNC(CLASS, IDENT, FUNC, DESC) \
