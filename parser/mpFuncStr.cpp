@@ -418,7 +418,7 @@ MUP_NAMESPACE_START
 
   //------------------------------------------------------------------------------
   //
-  // String to double conversion => number()
+  // Number cast => number()
   //
   //------------------------------------------------------------------------------
 
@@ -432,24 +432,47 @@ MUP_NAMESPACE_START
     assert(a_iArgc==1);
     _unused(a_iArgc);
 
-    string_type in;
+    string_type string_value;
+    int_type    integer_value;
+    float_type  float_value;
+    bool_type   bool_value;
+
     double out;
 
-    in = a_pArg[0]->GetString();
+    if (a_pArg[0]->GetType() == 's') {
+      string_value = a_pArg[0]->GetString();
 
-#ifndef _UNICODE
-    sscanf(in.c_str(), "%lf", &out);
-#else
-    swscanf(in.c_str(), _T("%lf"), &out);
-#endif
+      #ifndef _UNICODE
+          sscanf(string_value.c_str(), "%lf", &out);
+      #else
+          swscanf(string_value.c_str(), _T("%lf"), &out);
+      #endif
 
-    *ret = (float_type)out;
+      *ret = (float_type) out;
+    }
+
+    if (a_pArg[0]->GetType() == 'i') {
+      integer_value = a_pArg[0]->GetInteger();
+      *ret = (float_type) integer_value;
+    }
+
+    if (a_pArg[0]->GetType() == 'f') {
+      float_value = a_pArg[0]->GetFloat();
+      *ret = (float_type) float_value;
+    }
+
+    if (a_pArg[0]->GetType() == 'b') {
+      bool_value = a_pArg[0]->GetBool();
+      *ret = (float_type) (bool_value ? 1 : 0);
+    }
+
+    return;
   }
 
   //------------------------------------------------------------------------------
   const char_type* FunStrNumber::GetDesc() const
   {
-    return _T("number(s) - Converts the string stored in s into a floating foint value.");
+    return _T("number(s) - converts the value to number.");
   }
 
   //------------------------------------------------------------------------------
