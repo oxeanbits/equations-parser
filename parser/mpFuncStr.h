@@ -36,6 +36,18 @@
 
 MUP_NAMESPACE_START
 
+  //-----------------------------------------------------------------------------------
+  /** \brief Callback object for determining if one string is a sub string of another
+      \ingroup functions
+  */
+  class FunStrContains final : public ICallback
+  {
+  public:
+    FunStrContains();
+    virtual void Eval(ptr_val_type& ret, const ptr_val_type *a_pArg, int a_iArgc) override;
+    virtual const char_type* GetDesc() const override;
+    virtual IToken* Clone() const override;
+  };
 
   //------------------------------------------------------------------------------
   /** \brief Callback object for determining the concatenation of two strings.
