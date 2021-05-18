@@ -58,9 +58,7 @@ MUP_NAMESPACE_START
     const string_type & str1 = a_pArg[0]->GetString();
     const string_type & str2 = a_pArg[1]->GetString();
 
-    const std::size_t index = str1.find(str2);
-
-    *ret = index != string_type::npos ? true : false;
+    *ret = str1.find(str2) != string_type::npos ? true : false;
   }
 
   //------------------------------------------------------------------------------
