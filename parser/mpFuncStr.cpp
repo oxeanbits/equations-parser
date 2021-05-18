@@ -44,6 +44,39 @@ MUP_NAMESPACE_START
 
   //------------------------------------------------------------------------------
   //
+  // Contains function
+  //
+  //------------------------------------------------------------------------------
+
+  FunStrContains::FunStrContains()
+    :ICallback(cmFUNC, _T("contains"), 2)
+  {}
+
+  //------------------------------------------------------------------------------
+  void FunStrContains::Eval(ptr_val_type &ret, const ptr_val_type *a_pArg, int)
+  {
+    const string_type & str1 = a_pArg[0]->GetString();
+    const string_type & str2 = a_pArg[1]->GetString();
+
+    const std::size_t index = str1.find(str2);
+
+    *ret = index != string_type::npos ? true : false;
+  }
+
+  //------------------------------------------------------------------------------
+  const char_type* FunStrContains::GetDesc() const
+  {
+    return _T("contains(str1, str2) - Returns if the str2 string is a sub string of str1.");
+  }
+
+  //------------------------------------------------------------------------------
+  IToken* FunStrContains::Clone() const
+  {
+    return new FunStrContains(*this);
+  }
+
+  //------------------------------------------------------------------------------
+  //
   // Concat function
   //
   //------------------------------------------------------------------------------
