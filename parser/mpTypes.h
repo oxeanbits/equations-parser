@@ -371,6 +371,9 @@ enum EErrorCodes
 
     ecINVALID_TYPES_MATCH       = 58,
 
+    // time related errors
+    ecINVALID_TIME_FORMAT       = 59, ///< Invalid time format
+
     // The last two are special entries
     ecCOUNT,                          ///< This is no error code, It just stores the total number of error codes
     ecUNDEFINED                 = -1  ///< Undefined message, placeholder to detect unassigned error messages
