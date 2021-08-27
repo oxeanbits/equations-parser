@@ -369,10 +369,10 @@ enum EErrorCodes
     ecADD_HOURS_DATE            = 56, ///< Invalid date format for add_hours() first parameter
     ecADD_HOURS_DATETIME        = 57, ///< Invalid date time format for add_hours() first parameter
 
-    // time related errors
-    ecINVALID_TIME_FORMAT       = 58, ///< Invalid time format
+    ecINVALID_TYPES_MATCH       = 58,
 
-    ecINVALID_TYPES_MATCH       = 59,
+    // time related errors
+    ecINVALID_TIME_FORMAT       = 59, ///< Invalid time format
 
     // The last two are special entries
     ecCOUNT,                          ///< This is no error code, It just stores the total number of error codes
