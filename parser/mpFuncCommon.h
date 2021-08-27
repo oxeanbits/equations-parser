@@ -186,17 +186,17 @@ MUP_NAMESPACE_START
   }; // class FunAddDays
 
   //------------------------------------------------------------------------------
-  /** \brief Determine the difference in days between two time.
+  /** \brief Determine the difference in hours between two times.
       \ingroup functions
   */
-  //class FunTimeDiff : public ICallback
-  //{
-  //public:
-  //  FunTimeDiff();
-  //  virtual void Eval(ptr_val_type &ret, const ptr_val_type *a_pArg, int a_iArgc) override;
-  //  virtual const char_type* GetDesc() const override;
-  //  virtual IToken* Clone() const override;
-  //}; // class FunDaysDiff
+  class FunTimeDiff : public ICallback
+  {
+  public:
+    FunTimeDiff();
+    virtual void Eval(ptr_val_type &ret, const ptr_val_type *a_pArg, int a_iArgc) override;
+    virtual const char_type* GetDesc() const override;
+    virtual IToken* Clone() const override;
+  }; // class FunTimeDiff
 
 MUP_NAMESPACE_END
 

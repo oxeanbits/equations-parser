@@ -774,4 +774,58 @@ MUP_NAMESPACE_START
   //  return new FunTimeDiff(*this);
   //}
 
+  //------------------------------------------------------------------------------
+  //                                                                             |
+  //            Below we have the section related to Time functions              |
+  //                                                                             |
+  //------------------------------------------------------------------------------
+
+  FunTimeDiff::FunTimeDiff()
+    :ICallback(cmFUNC, _T("timediff"), -1)
+  {}
+
+  void FunTimeDiff::Eval(ptr_val_type &ret, const ptr_val_type *a_pArg, int a_iArgc)
+  {
+    if (a_iArgc < 2) {
+      throw ParserError(ErrorContext(ecTOO_FEW_PARAMS, GetExprPos(), GetIdent()));
+    } else if (a_iArgc > 2) {
+      throw ParserError(ErrorContext(ecTOO_MANY_PARAMS, GetExprPos(), GetIdent()));
+    }
+
+    string_type time_a = a_pArg[0]->GetString();
+    string_type time_b = a_pArg[1]->GetString();
+
+    // http://man7.org/linux/man-pages/man3/strptime.3.html
+    struct tm tm, tm2;
+    if (!strptime(time_a.c_str(), "%T", &tm)) {
+      raise_error(ecINVALID_TIME_FORMAT, 1, a_pArg);
+    }
+    if (!strptime(time_b.c_str(), "%T", &tm2)) {
+      raise_error(ecINVALID_TIME_FORMAT, 2, a_pArg);
+    }
+
+    float_type startx = tm.tm_sec / 60.0 / 60.0 + tm.tm_min / 60.0 + tm.tm_hour;
+    float_type endx = tm2.tm_sec / 60.0 / 60.0 + tm2.tm_min / 60.0 + tm2.tm_hour;
+
+    float_type timediff = endx - startx;
+
+    if (timediff < 0)
+      timediff = timediff + 24;
+
+    // Should be rounded with precision 2. (Ex: 3.67)
+    *ret = (std::round(timediff * 100)) / 100;
+  }
+
+  ////------------------------------------------------------------------------------
+  const char_type* FunTimeDiff::GetDesc() const
+  {
+    return _T("timediff(a,b) - Returns the difference in hours between two times.");
+  }
+
+  ////------------------------------------------------------------------------------
+  IToken* FunTimeDiff::Clone() const
+  {
+    return new FunTimeDiff(*this);
+  }
+
 MUP_NAMESPACE_END
