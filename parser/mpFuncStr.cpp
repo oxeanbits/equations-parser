@@ -182,6 +182,8 @@ MUP_NAMESPACE_START
     string_type str = a_pArg[0]->GetString();
     int cut = a_pArg[1]->GetInteger();
 
+    cut = std::min(cut, (int)str.size());
+
     str = str.substr(str.size() - cut, str.size());
 
     *ret = (string_type) str;
