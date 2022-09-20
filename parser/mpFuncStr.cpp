@@ -35,7 +35,6 @@
 #include <cstdio>
 #include <cwchar>
 #include <algorithm>
-#include <iostream>
 
 #include "mpValue.h"
 #include "mpError.h"
