@@ -116,6 +116,9 @@ MUP_NAMESPACE_START
   //------------------------------------------------------------------------------
   void FunStrLink::Eval(ptr_val_type &ret, const ptr_val_type *a_pArg, int a_iArgc)
   {
+    if (a_iArgc < 2)
+      throw ParserError(ErrorContext(ecTOO_FEW_PARAMS, GetExprPos(), GetIdent()));
+
     string_type str1 = a_pArg[0]->GetString();
     string_type str2 = a_pArg[1]->GetString();
     string_type opAttr = a_iArgc > 2 ? "download=\"" + a_pArg[2]->GetString() + "\">" : ">";
