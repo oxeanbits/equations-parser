@@ -35,6 +35,7 @@
 #include <cstdio>
 #include <cwchar>
 #include <algorithm>
+#include <iostream>
 
 #include "mpValue.h"
 #include "mpError.h"
@@ -110,21 +111,23 @@ MUP_NAMESPACE_START
   //------------------------------------------------------------------------------
 
   FunStrLink::FunStrLink()
-    :ICallback(cmFUNC, _T("link"), 2)
+    :ICallback(cmFUNC, _T("link"), -1)
   {}
 
   //------------------------------------------------------------------------------
-  void FunStrLink::Eval(ptr_val_type &ret, const ptr_val_type *a_pArg, int)
+  void FunStrLink::Eval(ptr_val_type &ret, const ptr_val_type *a_pArg, int a_iArgc)
   {
     string_type str1 = a_pArg[0]->GetString();
     string_type str2 = a_pArg[1]->GetString();
-    *ret = (string_type) "<a href=\"" + str2 +"\">" + str1 + "</a>";
+    string_type opAttr = a_iArgc > 2 ? "download=\"" + a_pArg[2]->GetString() + "\">" : ">";
+    *ret = (string_type) "<a href=\"" + str2 +"\"" + opAttr + str1 + "</a>";
   }
 
   //------------------------------------------------------------------------------
   const char_type* FunStrLink::GetDesc() const
   {
-    return _T("link(s1, s2) - Returns the <a href=\"s2\">s1</a> tag with param values.");
+    return _T("link(s1, s2) - Returns the <a href=\"s2\">s1</a> tag with param values.")
+           _T("link(s1, s2, s3) - Returns the <a href=\"s2\" download=\"s3\">s1</a> tag with param values.");
   }
 
   //------------------------------------------------------------------------------
