@@ -118,11 +118,13 @@ MUP_NAMESPACE_START
   {
     if (a_iArgc < 2)
       throw ParserError(ErrorContext(ecTOO_FEW_PARAMS, GetExprPos(), GetIdent()));
+    if (a_iArgc > 3)
+      throw ParserError(ErrorContext(ecTOO_MANY_PARAMS, GetExprPos(), GetIdent()));
 
     string_type str1 = a_pArg[0]->GetString();
     string_type str2 = a_pArg[1]->GetString();
-    string_type opAttr = a_iArgc > 2 ? "download=\"" + a_pArg[2]->GetString() + "\">" : ">";
-    *ret = (string_type) "<a href=\"" + str2 +"\"" + opAttr + str1 + "</a>";
+    string_type opAttr = a_iArgc == 3 ? "download=\"" + a_pArg[2]->GetString() + "\">" : ">";
+    *ret = (string_type) "<a href=\"" + str2 +"\" " + opAttr + str1 + "</a>";
   }
 
   //------------------------------------------------------------------------------
