@@ -33,6 +33,7 @@ POSSIBILITY OF SUCH DAMAGE.
 #include "mpValue.h"
 #include "mpError.h"
 #include "mpValueCache.h"
+#include <iomanip>
 
 
 MUP_NAMESPACE_START
@@ -764,7 +765,7 @@ string_type Value::AsString() const
     switch (m_cType)
     {
     case 'i': ss << (int_type)m_val.real(); break;
-    case 'f': ss << m_val.real(); break;
+    case 'f': ss << std::setprecision(std::numeric_limits<float_type>::digits10) << GetFloat(); break;
     case 'm': ss << _T("(matrix)"); break;
     case 's':
         assert(m_psVal != nullptr);
