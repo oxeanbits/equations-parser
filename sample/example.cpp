@@ -173,6 +173,18 @@ void Calc()
   } // for (;;)
 } // Calc
 
+void EquationsParserSample() {
+  console() << _T(EquationsParser::CalcJson("sin(0.57) * 33")) << endl;
+  console() << _T(EquationsParser::Calc("sin(0.57) * 33")) << endl;
+
+  vector<string> equations = {"5*7", "40+2"};
+  vector<string> results;
+  EquationsParser::CalcArray(equations, results);
+  for (string r : results) {
+    console() << _T(r) << endl;
+  }
+}
+
 //---------------------------------------------------------------------------
 int main(int /*argc*/, char** /*argv*/)
 {
@@ -189,14 +201,8 @@ int main(int /*argc*/, char** /*argv*/)
   //// Characters.
   //ParserX::ResetErrorMessageProvider(new mup::ParserMessageProviderGerman);
 #endif
-  console() << _T(EquationsParserCalcJson("sin(0.57) * 33")) << endl;
-  console() << _T(EquationsParserCalc("sin(0.57) * 33")) << endl;
-  vector<string> equations = {"5*7", "40+2"};
-  vector<string> results;
-  EquationsParserCalcArray(equations, results);
-  for (string r : results) {
-    console() << _T(r) << endl;
-  }
+
+  EquationsParserSample();
 
   try
   {

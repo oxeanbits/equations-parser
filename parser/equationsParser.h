@@ -6,13 +6,16 @@
 #include "mpParser.h"
 #include "mpDefines.h"
 
-MUP_NAMESPACE_START
+#define EQUATIONS_PARSER_START namespace EquationsParser {
+#define EQUATIONS_PARSER_END }
 
-void EquationsParserReplaceAll(std::string& source, const std::string& from, const std::string& to);
-std::string EquationsParserCalc(std::string input);
-std::string EquationsParserCalcJson(std::string input);
-void EquationsParserCalcArray(std::vector<std::string> in, std::vector<std::string> &out);
+EQUATIONS_PARSER_START
 
-MUP_NAMESPACE_END
+void ReplaceAll(std::string& source, const std::string& from, const std::string& to);
+std::string Calc(std::string input);
+std::string CalcJson(std::string input);
+void CalcArray(std::vector<std::string> in, std::vector<std::string> &out);
+
+EQUATIONS_PARSER_END
 
 #endif

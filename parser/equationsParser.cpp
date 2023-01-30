@@ -8,9 +8,13 @@
 using namespace std;
 using namespace mup;
 
-MUP_NAMESPACE_START
+EQUATIONS_PARSER_START
 
-string EquationsParserCalc(string input) {
+/**
+ * @brief Evaluates an input string as a mathematical expression and returns the result
+ * @param input The string to be evaluated as a mathematical expression
+ */
+string Calc(string input) {
   ParserX parser(pckALL_NON_COMPLEX);
 
   Value ans;
@@ -47,7 +51,7 @@ string EquationsParserCalc(string input) {
  * @param from The substring to be replaced
  * @param to The substring that will replace 'from'
  */
-void EquationsParserReplaceAll(std::string& source, const std::string& from, const std::string& to) {
+void ReplaceAll(std::string& source, const std::string& from, const std::string& to) {
   std::string newString;
   newString.reserve(source.length());  // avoids a few memory allocations
 
@@ -80,7 +84,7 @@ void EquationsParserReplaceAll(std::string& source, const std::string& from, con
  *    "error": "error_message"
  * }
  */
-string EquationsParserCalcJson(string input) {
+string CalcJson(string input) {
   ParserX parser(pckALL_NON_COMPLEX);
 
   Value ans;
@@ -97,7 +101,7 @@ string EquationsParserCalcJson(string input) {
 
     std::string ansString = ans.AsString();
 
-    EquationsParserReplaceAll(ansString, "\"", "\\\"");
+    ReplaceAll(ansString, "\"", "\\\"");
 
     ss << _T("\"val\": \"") << ansString << _T("\"");
     ss << _T(",\"type\": \"") << ans.GetType() << _T("\"");
@@ -121,10 +125,16 @@ string EquationsParserCalcJson(string input) {
   return ss.str();
 }
 
-void EquationsParserCalcArray(vector<string> equations, vector<string> &out) {
+/**
+ * Calculates the result of a list of equations and stores them in the 'out' vector.
+ *
+ * @param equations a vector of strings representing mathematical equations
+ * @param out a vector of strings where the results of the calculations will be stored
+ */
+void CalcArray(vector<string> equations, vector<string> &out) {
   for(string equation : equations) {
-    out.push_back(EquationsParserCalcJson(equation));
+    out.push_back(CalcJson(equation));
   }
 }
 
-MUP_NAMESPACE_END
+EQUATIONS_PARSER_END
