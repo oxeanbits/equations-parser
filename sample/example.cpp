@@ -129,7 +129,7 @@ void Calc()
    Reference: muparserx website (beltoforion)
   */
 
-  // parser.EnableAutoCreateVar(true);
+  parser.EnableAutoCreateVar(true);
 
     for(;;)
     {
