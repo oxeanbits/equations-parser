@@ -828,4 +828,67 @@ MUP_NAMESPACE_START
     return new FunTimeDiff(*this);
   }
 
+  //------------------------------------------------------------------------------
+  //                                                                             |
+  //            Functions for regex matching                                     |
+  //            Usage: regex("string", "regex")                                  |
+  //                                                                             |
+  //------------------------------------------------------------------------------
+
+  FunRegex::FunRegex()
+    :ICallback(cmFUNC, _T("regex"), -1)
+  {}
+
+  std::vector<std::vector<std::string>> capture_regex_groups(const std::string& input, const std::string& pattern) {
+    std::vector<std::vector<std::string>> captured_groups;
+    std::smatch match;
+    std::regex re(pattern);
+    std::string::const_iterator search_start(input.cbegin());
+
+    while (std::regex_search(search_start, input.cend(), match, re)) {
+        std::vector<std::string> groups;
+        for (size_t i = 1; i < match.size(); ++i) {
+            groups.push_back(match[i].str());
+        }
+        captured_groups.push_back(groups);
+        search_start = match.suffix().first;
+    }
+
+    return captured_groups;
+  }
+
+  void FunRegex::Eval(ptr_val_type &ret, const ptr_val_type *a_pArg, int a_iArgc)
+  {
+    if (a_iArgc < 2) {
+      throw ParserError(ErrorContext(ecTOO_FEW_PARAMS, GetExprPos(), GetIdent()));
+    } else if (a_iArgc > 2) {
+      throw ParserError(ErrorContext(ecTOO_MANY_PARAMS, GetExprPos(), GetIdent()));
+    }
+
+     string_type input = a_pArg[0]->GetString();
+     string_type pattern = a_pArg[1]->GetString();
+
+     std::cout << "input: " << input << std::endl;
+     std::cout << "pattern: " << pattern << std::endl;
+     auto captured_groups = capture_regex_groups(input, pattern);
+
+     if (captured_groups.size() == 0 || captured_groups[0].size() == 0) {
+       *ret = (string_type) "";
+     } else {
+       *ret = (string_type) captured_groups[0][0];
+     }
+  }
+
+  ////------------------------------------------------------------------------------
+  const char_type* FunRegex::GetDesc() const
+  {
+    return _T("regex(a,b) - Returns the first match of a regex pattern.");
+  }
+
+  ////------------------------------------------------------------------------------
+  IToken* FunRegex::Clone() const
+  {
+    return new FunRegex(*this);
+  }
+
 MUP_NAMESPACE_END
