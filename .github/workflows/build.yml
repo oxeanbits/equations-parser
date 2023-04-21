@@ -26,3 +26,8 @@ jobs:
         run: |
           cmake CMakeLists.txt
           make
+
+      - name: Tests
+        id: tests
+        run: |
+          ./tests.sh
