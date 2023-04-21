@@ -828,4 +828,50 @@ MUP_NAMESPACE_START
     return new FunTimeDiff(*this);
   }
 
+  //------------------------------------------------------------------------------
+  //
+  // class Weekyear
+  //
+  //------------------------------------------------------------------------------
+
+  FunWeekYear::FunWeekYear()
+    :ICallback(cmFUNC, _T("weekyear"), -1)
+  {}
+
+  void FunWeekYear::Eval(ptr_val_type &ret, const ptr_val_type *a_pArg, int a_iArgc)
+  {
+    if (a_iArgc < 1) {
+      throw ParserError(ErrorContext(ecTOO_FEW_PARAMS, GetExprPos(), GetIdent()));
+    } else if (a_iArgc > 1) {
+      throw ParserError(ErrorContext(ecTOO_MANY_PARAMS, GetExprPos(), GetIdent()));
+    }
+
+    string_type date_time = a_pArg[0]->GetString();
+
+    struct tm tm;
+    if (!strptime(date_time.c_str(), "%Y-%m-%d", &tm)) {
+      raise_error(ecINVALID_DATE_FORMAT, 1, a_pArg);
+    }
+
+    tm.tm_isdst = -1; // set daylight saving time to unknown
+    int yday = tm.tm_yday; // day of the year
+    int wday = tm.tm_wday; // day of the week (Sunday = 0, Monday = 1, etc.)
+
+    int weeknum = (yday + 7 - wday) / 7;
+
+    *ret = weeknum;
+  }
+
+  ////------------------------------------------------------------------------------
+  const char_type* FunWeekYear::GetDesc() const
+  {
+    return _T("weekyear(date) - Returns the week number of the year.");
+  }
+
+  ////------------------------------------------------------------------------------
+  IToken* FunWeekYear::Clone() const
+  {
+    return new FunWeekYear(*this);
+  }
+
 MUP_NAMESPACE_END

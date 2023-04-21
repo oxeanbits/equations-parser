@@ -183,6 +183,8 @@ void EquationsParserSample() {
   for (string r : results) {
     console() << _T(r) << endl;
   }
+
+  console() << _T(EquationsParser::Calc("weekyear(\"2022-04-20\")")) << endl;
 }
 
 //---------------------------------------------------------------------------
