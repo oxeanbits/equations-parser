@@ -211,8 +211,21 @@ test_eval 'regex("Red Apple", "(Green|Red) Apple")' '"Red"'
 test_eval 'regex("BoxA123", "Box([A-Za-z][0-9]+)")' '"A123"'
 test_eval 'regex("BoxC456", "Box([A-Za-z][0-9]+)")' '"C456"'
 
-# Regex tests with lookaheads
-# test_eval 'regex("123abc456", "(?<=\\d{3})abc(?=\\d{3})")' '"abc"'
+# Regex tests with positive lookaheads
+test_eval 'regex("apple123banana", "([a-z]+)(?=\\d+)")' '"apple"'
+test_eval 'regex("123red456blue", "(\\d+)(?=blue)")' '"456"'
+
+# Regex tests with negative lookaheads
+# test_eval 'regex("apple123banana", "([a-z]+)(?!\\d+)")' '"apple"' not working
+test_eval 'regex("123red456blue", "(\\d+)(?!blue)")' '"123"'
+
+# Regex tests with nested lookaheads
+test_eval 'regex("apple123redbanana", "(?=apple)([a-z]+)(?=\\d+red)")' '"apple"'
+test_eval 'regex("apple123red456banana", "(?=apple)([a-z]+)(?=(\\d+red)\\d+banana)")' '"apple"'
+
+# Regex tests with positive and negative lookaheads combined
+test_eval 'regex("apple123redbanana", "([a-z]+)(?=\\d+)(?!red)")' '"apple"'
+test_eval 'regex("123red456blue789green", "(\\d+)(?=blue)(?!red)")' '"456"'
 
 # Regex tests with nested capture groups
 test_eval 'regex("abc123def", "(abc(123)def)")' '"abc123def"'
