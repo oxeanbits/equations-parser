@@ -189,5 +189,47 @@ test_eval 'default_value(1.5, 10.5)' '1.5'
 test_eval '4 / 0' 'inf'
 test_eval '0 / 0' '-nan'
 
+# Regex tests
+test_eval 'regex("Hello World", "Hello (.*)")' '"World"'
+test_eval 'regex("71 123456789", "([0-9]{2}) [0-9]{9}")' '"71"'
+test_eval 'regex("ISSUE-123 Fix bug", "(ISSUE-[0-9]+) (.*)")' '"ISSUE-123"'
+test_eval 'regex("2019-01-01T:08:30", "([0-9]{4}-[0-9]{2}-[0-9]{2})T:[0-9]{2}:[0-9]{2}")' '"2019-01-01"'
+test_eval 'regex("2019-01-01T:08:30", "([0-9]{4}-[0-9]{2})-[0-9]{2}T:[0-9]{2}:[0-9]{2}")' '"2019-01"'
+test_eval 'regex("2019-01-01T:08:30", "([0-9]{4})-[0-9]{2}-[0-9]{2}T:[0-9]{2}:[0-9]{2}")' '"2019"'
+# Regex tests with no capture group
+test_eval 'regex("Hello World", "Hello .*")' '""'
+
+# Regex tests with optional groups
+test_eval 'regex("Product 1234 (color: red)", "Product ([0-9]+)( \\(color: (.*)\\))?")' '"1234"'
+test_eval 'regex("Product 1234", "Product ([0-9]+)( \\(color: (.*)\\))?")' '"1234"'
+
+# Regex tests with alternation
+test_eval 'regex("Green Apple", "(Green|Red) Apple")' '"Green"'
+test_eval 'regex("Red Apple", "(Green|Red) Apple")' '"Red"'
+
+# Regex tests with character classes
+test_eval 'regex("BoxA123", "Box([A-Za-z][0-9]+)")' '"A123"'
+test_eval 'regex("BoxC456", "Box([A-Za-z][0-9]+)")' '"C456"'
+
+# Regex tests with lookaheads
+# test_eval 'regex("123abc456", "(?<=\\d{3})abc(?=\\d{3})")' '"abc"'
+
+# Regex tests with nested capture groups
+test_eval 'regex("abc123def", "(abc(123)def)")' '"abc123def"'
+
+# Regex tests with non-capture groups
+test_eval 'regex("2019-01-01T08:30", "([0-9]{4}(?:-[0-9]{2}){2})T[0-9]{2}:[0-9]{2}")' '"2019-01-01"'
+
+# Regex tests with quantifiers
+test_eval 'regex("aabbcc", "a{2}(b{2}c{2})")' '"bbcc"'
+
+# Regex tests with escaped characters
+test_eval 'regex("a.b.c", "a\\.(b\\.c)")' '"b.c"'
+test_eval 'regex("a[1]b[2]c", "(a\\[1\\]b)\\[2\\]c")' '"a[1]b"'
+
+# Regex tests with no match
+test_eval 'regex("Hello World", "Bye (.*)")' '""'
+
+
 echo "All tests passed!"
 
