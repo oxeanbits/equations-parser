@@ -107,6 +107,16 @@ test_eval "str2number(\"5\")" "5"
 test_eval "number(\"5\")" "5"
 test_eval 'string(5)' '"5"'
 test_eval 'string(5.123)' '"5.123"'
+test_eval 'string(4)' '"4"'
+test_eval 'string(4.5)' '"4.5"'
+test_eval 'string(true)' '"true"'
+test_eval 'string(false)' '"false"'
+test_eval 'string("4")' '"4"'
+test_eval 'number(4)' '4'
+test_eval 'number(4.5)' '4.5'
+test_eval 'number(true)' '1'
+test_eval 'number(false)' '0'
+test_eval 'number("4")' '4'
 
 # Date tests
 test_eval 'current_date()' '"'$(date '+%Y-%m-%d')'"'
@@ -139,6 +149,9 @@ test_eval 'add_days("2019-01-01T12:30", 31)' '"2019-02-01T12:30"'
 test_eval 'add_days("2019-01-01T15:30", 1)' '"2019-01-02T15:30"'
 test_eval 'add_days("2019-01-01T08:30", 1.5)' '"2019-01-02T20:30"'
 test_eval 'add_days("2019-01-01T08:30", -1)' '"2018-12-31T08:30"'
+test_eval 'timediff("02:00:00", "03:30:00")' '1.5'
+test_eval 'timediff("03:30:00", "02:00:00")' '22.5'
+test_eval 'timediff("02:00:00", "02:00:30")' '0.01'
 
 # Mask tests
 test_eval 'mask("000-000", 123456)' '"123-456"'
@@ -147,7 +160,34 @@ test_eval 'mask("000 00", 14)' '"000 14"'
 test_eval 'concat("#", mask("000", 123))' '"#123"'
 test_eval 'mask("0000", 12345)' '"12345"'
 test_eval 'mask("00 00", 12345)' '"123 45"'
+test_eval 'mask("0-0000-0000", 355911801)' '"3-5591-1801"'
+test_eval 'mask("00-0000-0000", 3555911801)' '"35-5591-1801"'
+test_eval 'mask("00-0000-0000-0000", 12123412341234)' '"12-1234-1234-1234"'
+test_eval 'mask("0-0000-0000-0000-0000", 11234123412341234)' '"1-1234-1234-1234-1234"'
+test_eval 'timediff("02:00:30", "02:00:00")' '23.99'
+test_eval 'timediff("02:00:00", "02:00:00")' '0'
 
+# Default value tests
+test_eval 'default_value(10, 1)' '10'
+test_eval 'default_value(NULL, 1)' '1'
+test_eval 'default_value(10.4, 1.01)' '10.4'
+test_eval 'default_value(NULL, 1.01)' '1.01'
+test_eval 'default_value("filled", "default")' '"filled"'
+test_eval 'default_value(NULL, "default")' '"default"'
+test_eval 'default_value(false, true)' 'false'
+test_eval 'default_value(NULL, true)' 'true'
+test_eval 'default_value(1, 4.5)' '1'
+test_eval 'default_value(1, 10)' '1'
+test_eval 'default_value(1, 10.0)' '1'
+test_eval 'default_value(1.0, 10)' '1'
+test_eval 'default_value(1.0, 10.0)' '1'
+test_eval 'default_value(1.5, 10)' '1.5'
+test_eval 'default_value(1.5, 10.0)' '1.5'
+test_eval 'default_value(1.5, 10.5)' '1.5'
+
+# Exceptional cases
+test_eval '4 / 0' 'inf'
+test_eval '0 / 0' '-nan'
 
 echo "All tests passed!"
 
