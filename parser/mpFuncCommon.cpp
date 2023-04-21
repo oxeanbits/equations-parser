@@ -830,7 +830,8 @@ MUP_NAMESPACE_START
 
   //------------------------------------------------------------------------------
   //                                                                             |
-  //            Below we have the section related to Time functions              |
+  //            Functions for regex matching                                     |
+  //            Usage: regex("string", "regex")                                  |
   //                                                                             |
   //------------------------------------------------------------------------------
 
