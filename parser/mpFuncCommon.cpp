@@ -912,18 +912,39 @@ MUP_NAMESPACE_START
 
     string_type date_time = a_pArg[0]->GetString();
 
-    struct tm tm;
-    if (!strptime(date_time.c_str(), "%Y-%m-%d", &tm)) {
+    struct tm date;
+    if (!strptime(date_time.c_str(), "%Y-%m-%d", &date)) {
       raise_error(ecINVALID_DATE_FORMAT, 1, a_pArg);
     }
 
-    tm.tm_isdst = -1; // set daylight saving time to unknown
-    int yday = tm.tm_yday; // day of the year
-    int wday = tm.tm_wday; // day of the week (Sunday = 0, Monday = 1, etc.)
+    int year = date.tm_year + 1900; // tm_year is the number of years since 1900
 
-    int weeknum = (yday + 7 - wday) / 7;
+    // Get ordinal day of the year
+    int day_of_year = date.tm_yday + 1; // tm_yday is the number of days since January 1st
+    
+    // Get weekday number (0 is Sunday)
+    int weekday = date.tm_wday;
+    
+    // Calculate week number
+    int week_number = (day_of_year - weekday + 10) / 7;
 
-    *ret = weeknum;
+    // Check if week belongs to previous year
+    if (week_number == 0) {
+        year--;
+        week_number = 52;
+        if (std::tm{0,0,0,1,0,year-1900}.tm_wday < 4) { // January 1st of the previous year is before Thursday
+            week_number = 53;
+        }
+    }
+    
+    // Check if week belongs to following year
+    if (week_number == 53) {
+        if (std::tm{0,0,0,1,0,year+1-1900}.tm_wday >= 4) { // January 1st of the following year is on or after Thursday
+            week_number = 1;
+        }
+    }
+
+    *ret = week_number;
   }
 
   ////------------------------------------------------------------------------------
