@@ -204,7 +204,7 @@ int main(int /*argc*/, char** /*argv*/)
   //ParserX::ResetErrorMessageProvider(new mup::ParserMessageProviderGerman);
 #endif
 
-  EquationsParserSample();
+  //EquationsParserSample();
 
   try
   {
