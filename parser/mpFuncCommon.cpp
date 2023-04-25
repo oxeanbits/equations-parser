@@ -868,8 +868,6 @@ MUP_NAMESPACE_START
      string_type input = a_pArg[0]->GetString();
      string_type pattern = a_pArg[1]->GetString();
 
-     std::cout << "input: " << input << std::endl;
-     std::cout << "pattern: " << pattern << std::endl;
      auto captured_groups = capture_regex_groups(input, pattern);
 
      if (captured_groups.size() == 0 || captured_groups[0].size() == 0) {
@@ -921,10 +919,10 @@ MUP_NAMESPACE_START
 
     // Get ordinal day of the year
     int day_of_year = date.tm_yday + 1; // tm_yday is the number of days since January 1st
-    
+
     // Get weekday number (0 is Sunday)
     int weekday = date.tm_wday;
-    
+
     // Calculate week number
     int week_number = (day_of_year - weekday + 10) / 7;
 
@@ -936,7 +934,7 @@ MUP_NAMESPACE_START
             week_number = 53;
         }
     }
-    
+
     // Check if week belongs to following year
     if (week_number == 53) {
         if (std::tm{0,0,0,1,0,year+1-1900}.tm_wday >= 4) { // January 1st of the following year is on or after Thursday
