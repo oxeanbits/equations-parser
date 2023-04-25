@@ -243,6 +243,35 @@ test_eval 'regex("a[1]b[2]c", "(a\\[1\\]b)\\[2\\]c")' '"a[1]b"'
 # Regex tests with no match
 test_eval 'regex("Hello World", "Bye (.*)")' '""'
 
+# Week number of the year when 1st of January is a Sunday
+test_eval 'weekyear("2023-01-01")' '1'
+test_eval 'weekyear("2023-01-07")' '1'
+test_eval 'weekyear("2023-01-08")' '2'
+
+test_eval 'weekyear("2023-04-25")' '17'
+test_eval 'weekyear("2023-04-29")' '17'
+test_eval 'weekyear("2023-04-30")' '18'
+test_eval 'weekyear("2023-05-06")' '18'
+
+test_eval 'weekyear("2023-12-24")' '52'
+test_eval 'weekyear("2023-12-31")' '53'
+
+# Week number of the year a leap year
+test_eval 'weekyear("2024-01-01")' '1'
+test_eval 'weekyear("2024-01-06")' '1'
+test_eval 'weekyear("2024-01-07")' '2'
+
+test_eval 'weekyear("2024-12-22")' '52'
+test_eval 'weekyear("2024-12-29")' '53'
+
+# Week number of the year when 1st of January is friday
+test_eval 'weekyear("2027-01-01")' '53'
+test_eval 'weekyear("2027-01-02")' '53'
+test_eval 'weekyear("2027-01-03")' '1'
+
+test_eval 'weekyear("2027-12-27")' '52'
+test_eval 'weekyear("2027-12-31")' '52'
+test_eval 'weekyear("2028-01-01")' '53'
 
 echo "All tests passed!"
 

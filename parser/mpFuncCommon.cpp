@@ -891,4 +891,72 @@ MUP_NAMESPACE_START
     return new FunRegex(*this);
   }
 
+  //------------------------------------------------------------------------------
+  //                                                                             |
+  //            Function return the week of year of a date                       |
+  //            Usage: weekyear("2022-04-20")                                    |
+  //                                                                             |
+  //------------------------------------------------------------------------------
+
+  FunWeekYear::FunWeekYear()
+    :ICallback(cmFUNC, _T("weekyear"), -1)
+  {}
+
+  void FunWeekYear::Eval(ptr_val_type &ret, const ptr_val_type *a_pArg, int a_iArgc)
+  {
+    if (a_iArgc < 1) {
+      throw ParserError(ErrorContext(ecTOO_FEW_PARAMS, GetExprPos(), GetIdent()));
+    } else if (a_iArgc > 1) {
+      throw ParserError(ErrorContext(ecTOO_MANY_PARAMS, GetExprPos(), GetIdent()));
+    }
+
+    string_type date_time = a_pArg[0]->GetString();
+
+    struct tm date;
+    if (!strptime(date_time.c_str(), "%Y-%m-%d", &date)) {
+      raise_error(ecINVALID_DATE_FORMAT, 1, a_pArg);
+    }
+
+    int year = date.tm_year + 1900; // tm_year is the number of years since 1900
+
+    // Get ordinal day of the year
+    int day_of_year = date.tm_yday + 1; // tm_yday is the number of days since January 1st
+    
+    // Get weekday number (0 is Sunday)
+    int weekday = date.tm_wday;
+    
+    // Calculate week number
+    int week_number = (day_of_year - weekday + 10) / 7;
+
+    // Check if week belongs to previous year
+    if (week_number == 0) {
+        year--;
+        week_number = 52;
+        if (std::tm{0,0,0,1,0,year-1900}.tm_wday < 4) { // January 1st of the previous year is before Thursday
+            week_number = 53;
+        }
+    }
+    
+    // Check if week belongs to following year
+    if (week_number == 53) {
+        if (std::tm{0,0,0,1,0,year+1-1900}.tm_wday >= 4) { // January 1st of the following year is on or after Thursday
+            week_number = 1;
+        }
+    }
+
+    *ret = week_number;
+  }
+
+  ////------------------------------------------------------------------------------
+  const char_type* FunWeekYear::GetDesc() const
+  {
+    return _T("weekyear(date) - Returns the week number of the year.");
+  }
+
+  ////------------------------------------------------------------------------------
+  IToken* FunWeekYear::Clone() const
+  {
+    return new FunWeekYear(*this);
+  }
+
 MUP_NAMESPACE_END
