@@ -38,6 +38,7 @@
 
 #include "mpValue.h"
 #include "mpError.h"
+#include "equationsParser.h"
 
 
 MUP_NAMESPACE_START
@@ -605,9 +606,7 @@ MUP_NAMESPACE_START
 
     string_type equation = a_pArg[0]->GetString();
 
-    // TODO: Calculate equation
-
-    *ret = equation;
+    *ret = EquationsParser::Calc(equation);
   }
 
   //------------------------------------------------------------------------------
