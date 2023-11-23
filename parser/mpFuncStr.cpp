@@ -594,12 +594,12 @@ MUP_NAMESPACE_START
   //
   //------------------------------------------------------------------------------
 
-  FunCalculate::FunCalculate()
+  FunStrCalculate::FunStrCalculate()
     :ICallback(cmFUNC, _T("calculate"), 1)
   {}
 
   //------------------------------------------------------------------------------
-  void FunCalculate::Eval(ptr_val_type &ret, const ptr_val_type *a_pArg, int)
+  void FunStrCalculate::Eval(ptr_val_type &ret, const ptr_val_type *a_pArg, int)
   {
     using namespace std;
 
@@ -611,14 +611,14 @@ MUP_NAMESPACE_START
   }
 
   //------------------------------------------------------------------------------
-  const char_type* FunCalculate::GetDesc() const
+  const char_type* FunStrCalculate::GetDesc() const
   {
     return _T("calculate(s) - Calculates an equation (Run equations-parser for the string input).");
   }
 
   //------------------------------------------------------------------------------
-  IToken* FunCalculate::Clone() const
+  IToken* FunStrCalculate::Clone() const
   {
-    return new FunCalculate(*this);
+    return new FunStrCalculate(*this);
   }
 MUP_NAMESPACE_END

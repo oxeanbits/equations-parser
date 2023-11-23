@@ -196,14 +196,14 @@ MUP_NAMESPACE_START
   /** \brief Calculate equation string
       \ingroup functions
   */
-  class FunCalculate : public ICallback
+  class FunStrCalculate : public ICallback
   {
   public:
-    FunCalculate ();
+    FunStrCalculate ();
     virtual void Eval(ptr_val_type& ret, const ptr_val_type *a_pArg, int a_iArgc) override;
     virtual const char_type* GetDesc() const override;
     virtual IToken* Clone() const override;
-  }; // class FunCalculate
+  }; // class FunStrCalculate
 MUP_NAMESPACE_END
 
 #endif
