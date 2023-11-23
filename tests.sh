@@ -10,9 +10,9 @@ function test_eval() {
 exit" | ./example | grep "ans =")
 
   if [[ "$actual_output" == "$expected_output" ]]; then
-    echo -e "\e[32mTest passed for input $input\e[0m"
+    printf "\e[32mTest passed for input $input\e[0m\n"
   else
-    echo -e "\e[31mTest failed for input $input: Expected $expected_output but got $actual_output\e[0m"
+    printf "\e[31mTest failed for input $input: Expected $expected_output but got $actual_output\e[0m\n"
     exit 1
   fi
 }
@@ -85,6 +85,21 @@ test_eval '"Maçã"' '"Maçã"'
 test_eval '"string with quote\""' '"string with quote""'
 test_eval 'toupper(concat("hello ", "world"))' '"HELLO WORLD"'
 test_eval 'tolower("TEST LOWERCASE")' '"test lowercase"'
+
+# Calculate tests
+test_eval 'calculate("2+2+2*4")' '"12"'
+test_eval 'calculate("(2+2)*4")' '"16"'
+test_eval 'calculate("2^4")' '"16"'
+test_eval 'calculate("sqrt(9)")' '"3"'
+test_eval 'calculate("abs(-50)")' '"50"'
+test_eval 'calculate("round(1.123)")' '"1"'
+test_eval 'calculate("add_days(\"2019-01-01\", 3)")' '"2019-01-04"'
+test_eval 'calculate("daysdiff(\"2019-01-01\", \"2019-01-02\")")' '"1"'
+test_eval 'calculate("hoursdiff(\"2019-01-01\", \"2019-01-02\")")' '"24"'
+test_eval 'calculate("3 > 2 ? \"higher\" : \"lower\"")' '"higher"'
+test_eval 'calculate("3 < 2 ? \"higher\" : \"lower\"")' '"lower"'
+test_eval 'calculate("concat(\"One \", concat(\"Two\", \" Three\"))")' '"One Two Three"'
+test_eval 'calculate("\"One\" // \" \" // \"Two\" // \" \" // \"Three\"")' '"One Two Three"'
 
 # Array tests
 test_eval "link(\"Title\", \"http://foo.bar\")" '"<a href="http://foo.bar">Title</a>"'
@@ -187,7 +202,7 @@ test_eval 'default_value(1.5, 10.5)' '1.5'
 
 # Exceptional cases
 test_eval '4 / 0' 'inf'
-test_eval '0 / 0' '-nan'
+test_eval '0 / 0' 'nan'
 
 # Regex tests
 test_eval 'regex("Hello World", "Hello (.*)")' '"World"'
