@@ -100,6 +100,7 @@ test_eval 'calculate("3 > 2 ? \"higher\" : \"lower\"")' '"higher"'
 test_eval 'calculate("3 < 2 ? \"higher\" : \"lower\"")' '"lower"'
 test_eval 'calculate("concat(\"One \", concat(\"Two\", \" Three\"))")' '"One Two Three"'
 test_eval 'calculate("\"One\" // \" \" // \"Two\" // \" \" // \"Three\"")' '"One Two Three"'
+test_eval 'calculate("number(calculate(\"1 + 1\")) + 1")' '"3"'
 
 # Array tests
 test_eval "link(\"Title\", \"http://foo.bar\")" '"<a href="http://foo.bar">Title</a>"'
