@@ -38,41 +38,10 @@
 
 #include "mpValue.h"
 #include "mpError.h"
+#include "equationsParser.h"
 
 
 MUP_NAMESPACE_START
-
-  //------------------------------------------------------------------------------
-  //
-  // Contains function
-  //
-  //------------------------------------------------------------------------------
-
-  FunStrContains::FunStrContains()
-    :ICallback(cmFUNC, _T("contains"), 2)
-  {}
-
-  //------------------------------------------------------------------------------
-  void FunStrContains::Eval(ptr_val_type &ret, const ptr_val_type *a_pArg, int)
-  {
-    const string_type & str1 = a_pArg[0]->GetString();
-    const string_type & str2 = a_pArg[1]->GetString();
-
-    *ret = str1.find(str2) != string_type::npos;
-  }
-
-  //------------------------------------------------------------------------------
-  const char_type* FunStrContains::GetDesc() const
-  {
-    return _T("contains(str1, str2) - Returns if the str2 string is a sub string of str1.");
-  }
-
-  //------------------------------------------------------------------------------
-  IToken* FunStrContains::Clone() const
-  {
-    return new FunStrContains(*this);
-  }
-
   //------------------------------------------------------------------------------
   //
   // Concat function
@@ -587,5 +556,68 @@ MUP_NAMESPACE_START
   IToken* FunString::Clone() const
   {
     return new FunString(*this);
+  }
+
+  //------------------------------------------------------------------------------
+  //
+  // Contains function
+  //
+  //------------------------------------------------------------------------------
+
+  FunStrContains::FunStrContains()
+    :ICallback(cmFUNC, _T("contains"), 2)
+  {}
+
+  //------------------------------------------------------------------------------
+  void FunStrContains::Eval(ptr_val_type &ret, const ptr_val_type *a_pArg, int)
+  {
+    const string_type & str1 = a_pArg[0]->GetString();
+    const string_type & str2 = a_pArg[1]->GetString();
+
+    *ret = str1.find(str2) != string_type::npos;
+  }
+
+  //------------------------------------------------------------------------------
+  const char_type* FunStrContains::GetDesc() const
+  {
+    return _T("contains(str1, str2) - Returns if the str2 string is a sub string of str1.");
+  }
+
+  //------------------------------------------------------------------------------
+  IToken* FunStrContains::Clone() const
+  {
+    return new FunStrContains(*this);
+  }
+
+  //------------------------------------------------------------------------------
+  //
+  // Calculate function
+  //
+  //------------------------------------------------------------------------------
+
+  FunStrCalculate::FunStrCalculate()
+    :ICallback(cmFUNC, _T("calculate"), 1)
+  {}
+
+  //------------------------------------------------------------------------------
+  void FunStrCalculate::Eval(ptr_val_type &ret, const ptr_val_type *a_pArg, int)
+  {
+    using namespace std;
+
+    string_type equation = a_pArg[0]->GetString();
+
+    *ret = EquationsParser::Calc(equation);
+  }
+
+  //------------------------------------------------------------------------------
+  const char_type* FunStrCalculate::GetDesc() const
+  {
+    return _T("calculate(s) - Calculates an equation (Run equations-parser for the string input).");
+  }
+
+  //------------------------------------------------------------------------------
+  IToken* FunStrCalculate::Clone() const
+  {
+    return new FunStrCalculate(*this);
   }
 MUP_NAMESPACE_END
