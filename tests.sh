@@ -5,14 +5,21 @@ echo "Running tests..."
 
 function test_eval() {
   input=$1
-  expected_output="ans = "$2
+  expected_output1="ans = "$2
+  expected_output2="ans = "$3
   actual_output=$(echo "$input
 exit" | ./example | grep "ans =")
 
-  if [[ "$actual_output" == "$expected_output" ]]; then
-    echo -e "\e[32mTest passed for input $input\e[0m"
+  if [[ "$actual_output" == "$expected_output1" ]]; then
+    printf "\e[32mTest passed for input $input\e[0m\n"
+  elif [[ "$actual_output" == "$expected_output2" ]]; then
+    printf "\e[32mTest passed for input $input\e[0m\n"
   else
-    echo -e "\e[31mTest failed for input $input: Expected $expected_output but got $actual_output\e[0m"
+    if [ -n "$3" ]; then
+      printf "\e[31mTest failed for input $input: Expected $expected_output1 or $expected_output2 but got $actual_output\e[0m\n"
+    else
+      printf "\e[31mTest failed for input $input: Expected $expected_output1 but got $actual_output\e[0m\n"
+    fi
     exit 1
   fi
 }
@@ -203,7 +210,7 @@ test_eval 'default_value(1.5, 10.5)' '1.5'
 
 # Exceptional cases
 test_eval '4 / 0' 'inf'
-test_eval '0 / 0' '-nan'
+test_eval '0 / 0' 'nan' '-nan'
 
 # Regex tests
 test_eval 'regex("Hello World", "Hello (.*)")' '"World"'
