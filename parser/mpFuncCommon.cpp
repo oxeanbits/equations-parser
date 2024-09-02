@@ -980,7 +980,7 @@ MUP_NAMESPACE_START
 
     struct tm date;
     if (!strptime(date_time.c_str(), "%Y-%m-%d", &date)) {
-      raise_error(ecINVALID_DATE_FORMAT, 1, a_pArg);
+      raise_error(ecINVALID_DATETIME_FORMAT, 1, a_pArg);
     }
 
     int week_day = date.tm_wday;
