@@ -296,5 +296,16 @@ test_eval 'weekyear("2027-12-27")' '52'
 test_eval 'weekyear("2027-12-31")' '52'
 test_eval 'weekyear("2028-01-01")' '53'
 
+# weekday with date
+test_eval 'weekday("2021-03-21")' '0'
+test_eval 'weekday("2016-03-21")' '1'
+test_eval 'weekday("2017-03-21")' '2'
+test_eval 'weekday("2018-03-21")' '3'
+test_eval 'weekday("2019-03-21")' '4'
+
+# weekday with date_time
+test_eval 'weekday("2014-03-21T21:03")' '5'
+test_eval 'weekday("2015-03-21T21:03")' '6'
+
 echo "All tests passed!"
 
