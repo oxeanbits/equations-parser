@@ -100,6 +100,7 @@ void PackageCommon::AddToParser(ParserXBase *pParser)
   pParser->DefineFun(new FunCurrentDate());
   pParser->DefineFun(new FunAddDays());
   pParser->DefineFun(new FunWeekYear());
+  pParser->DefineFun(new FunWeekDay());
 
   // String functions
   pParser->DefineFun(new FunRegex());
