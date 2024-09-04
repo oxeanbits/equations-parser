@@ -307,5 +307,12 @@ test_eval 'weekday("2019-03-21")' '4'
 test_eval 'weekday("2014-03-21T21:03")' '5'
 test_eval 'weekday("2015-03-21T21:03")' '6'
 
+# weekday with date and locale'
+test_eval 'weekday("2021-03-21", "nb")' '"Søndag"'
+test_eval 'weekday("2016-03-21", "zh-CN")' '"星期一"'
+test_eval 'weekday("2017-03-21", "fr-FR")' '"Mardi"'
+test_eval 'weekday("2018-03-21", "th-TH")' '"วันพุธ"'
+test_eval 'weekday("2019-03-21", "pt-BR")' '"Quinta-feira"'
+
 echo "All tests passed!"
 
