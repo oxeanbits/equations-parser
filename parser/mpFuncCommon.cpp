@@ -995,6 +995,7 @@ MUP_NAMESPACE_START
   //                                                                             |
   //            Function return the week day of a date                           |
   //            Usage: weekday("2022-04-20")                                     |
+  //            Optional locale: weekday("2022-04-20", "en")                     |
   //                                                                             |
   //------------------------------------------------------------------------------
 
