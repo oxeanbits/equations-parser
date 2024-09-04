@@ -460,35 +460,29 @@ MUP_NAMESPACE_START
 
   string_type localized_weekday(int week_day, const ptr_val_type *a_pArg) {
     string_type locale = a_pArg[1]->GetString();
-    string_type ret;
-    string_type en[7] = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
-    string_type nb[7] = {"Søndag", "Mandag", "Tirsdag", "Onsdag", "Torsdag", "Fredag", "Lørdag"};
-    string_type pt[7] = {"Domingo", "Segunda-Feira", "Terça-feira", "Quarta-feira", "Quinta-feira", "Sexta-feira", "Sábado"};
-    string_type es[7] = {"Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sabado"};
-    string_type fr[7] = {"Dimanche", "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi"};
-    string_type de[7] = {"Sonntag", "Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag"};
-    string_type zh[7] = {"星期天", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"};
-    string_type th[7] = {"วันอาทิตย์", "วันจันทร์", "วันอังคาร", "วันพุธ", "วันพฤหัสบดี", "วันศุกร์", "วันเสาร์"};
+    string_type ret = "";
+    string_type localized_weekdays[8][7] = {
+      {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"},
+      {"Søndag", "Mandag", "Tirsdag", "Onsdag", "Torsdag", "Fredag", "Lørdag"},
+      {"Domingo", "Segunda-Feira", "Terça-feira", "Quarta-feira", "Quinta-feira", "Sexta-feira", "Sábado"},
+      {"Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sabado"},
+      {"Dimanche", "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi"},
+      {"Sonntag", "Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag"},
+      {"星期天", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"},
+      {"วันอาทิตย์", "วันจันทร์", "วันอังคาร", "วันพุธ", "วันพฤหัสบดี", "วันศุกร์", "วันเสาร์"}
+    };
+    string_type locales[8] = {"en", "nb", "pt-BR", "es-ES", "fr-FR", "de-DE", "zh-CN", "th-TH"};
 
-    if(locale == "en") {
-      ret = en[week_day];
-    } else if(locale == "nb") {
-      ret = nb[week_day];
-    } else if(locale == "pt-BR") {
-      ret = pt[week_day];
-    } else if(locale == "es-ES") {
-      ret = es[week_day];
-    } else if(locale == "fr-FR") {
-      ret = fr[week_day];
-    } else if(locale == "de-DE") {
-      ret = de[week_day];
-    } else if(locale == "zh-CN") {
-      ret = zh[week_day];
-    } else if(locale == "th-TH") {
-      ret = th[week_day];
-    } else {
+    for (int i = 0; i < 8; i++) {
+      if(locale == locales[i]) {
+        ret = localized_weekdays[i][week_day];
+      }
+    }
+
+    if(ret == ""){
       raise_error(ecUKNOWN_LOCALE, 2, a_pArg);
     }
+
     return ret;
   }
 
