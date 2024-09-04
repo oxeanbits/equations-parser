@@ -111,6 +111,7 @@ MUP_NAMESPACE_START
     m_vErrMsg[ecADD_HOURS_DATE]               = _T("The first parameter could not be converted to a date. Please use the format: \"yyyy-mm-dd\"");
     m_vErrMsg[ecADD_HOURS_DATETIME]           = _T("The first parameter could not be converted to a date time. Please use the format: \"yyyy-mm-ddTHH:MM\"");
     m_vErrMsg[ecINVALID_TYPES_MATCH]          = _T("Both values of the default(x, y) function should have the same type");
+    m_vErrMsg[ecUKNOWN_LOCALE]                = _T("The chosen locale is not supported");
   }
 
 #if defined(_UNICODE)

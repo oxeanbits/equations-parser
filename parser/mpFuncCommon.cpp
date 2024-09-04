@@ -458,6 +458,40 @@ MUP_NAMESPACE_START
     throw ParserError(err);
   }
 
+  string_type localized_weekday(int week_day, const ptr_val_type *a_pArg) {
+    string_type locale = a_pArg[1]->GetString();
+    string_type ret;
+    string_type en[7] = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
+    string_type nb[7] = {"Søndag", "Mandag", "Tirsdag", "Onsdag", "Torsdag", "Fredag", "Lørdag"};
+    string_type pt[7] = {"Domingo", "Segunda-Feira", "Terça-feira", "Quarta-feira", "Quinta-feira", "Sexta-feira", "Sábado"};
+    string_type es[7] = {"Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sabado"};
+    string_type fr[7] = {"Dimanche", "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi"};
+    string_type de[7] = {"Sonntag", "Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag"};
+    string_type zh[7] = {"星期天", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"};
+    string_type th[7] = {"วันอาทิตย์", "วันจันทร์", "วันอังคาร", "วันพุธ", "วันพฤหัสบดี", "วันศุกร์", "วันเสาร์"};
+
+    if(locale == "en") {
+      ret = en[week_day];
+    } else if(locale == "nb") {
+      ret = nb[week_day];
+    } else if(locale == "pt-BR") {
+      ret = pt[week_day];
+    } else if(locale == "es-ES") {
+      ret = es[week_day];
+    } else if(locale == "fr-FR") {
+      ret = fr[week_day];
+    } else if(locale == "de-DE") {
+      ret = de[week_day];
+    } else if(locale == "zh-CN") {
+      ret = zh[week_day];
+    } else if(locale == "th-TH") {
+      ret = th[week_day];
+    } else {
+      raise_error(ecUKNOWN_LOCALE, 2, a_pArg);
+    }
+    return ret;
+  }
+
   //------------------------------------------------------------------------------
   //
   // class FunDaysDiff
@@ -972,7 +1006,7 @@ MUP_NAMESPACE_START
   {
     if (a_iArgc < 1) {
       throw ParserError(ErrorContext(ecTOO_FEW_PARAMS, GetExprPos(), GetIdent()));
-    } else if (a_iArgc > 1) {
+    } else if (a_iArgc > 2) {
       throw ParserError(ErrorContext(ecTOO_MANY_PARAMS, GetExprPos(), GetIdent()));
     }
 
@@ -983,9 +1017,18 @@ MUP_NAMESPACE_START
       raise_error(ecINVALID_DATETIME_FORMAT, 1, a_pArg);
     }
 
+    bool has_locale = false;
+    if (a_iArgc == 2) {
+      has_locale = true;
+    }
+
     int week_day = date.tm_wday;
 
-    *ret = week_day;
+    if(has_locale) {
+      *ret = localized_weekday(week_day, a_pArg);
+    } else {
+      *ret = week_day;
+    }
   }
 
   ////------------------------------------------------------------------------------
