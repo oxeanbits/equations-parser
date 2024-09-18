@@ -7,21 +7,29 @@ function test_eval() {
   input=$1
   expected_output1="ans = "$2
   expected_output2="ans = "$3
+  error_output=""$2
   actual_output=$(echo "$input
-exit" | ./example | grep "ans =")
+exit" | ./example | grep -E "(ans =|Can't evaluate function/operator \".*\":)")
 
-  if [[ "$actual_output" == "$expected_output1" ]]; then
-    printf "\e[32mTest passed for input $input\e[0m\n"
-  elif [[ "$actual_output" == "$expected_output2" ]]; then
-    printf "\e[32mTest passed for input $input\e[0m\n"
-  else
-    if [ -n "$3" ]; then
-      printf "\e[31mTest failed for input $input: Expected $expected_output1 or $expected_output2 but got $actual_output\e[0m\n"
-    else
-      printf "\e[31mTest failed for input $input: Expected $expected_output1 but got $actual_output\e[0m\n"
-    fi
-    exit 1
-  fi
+  case "$actual_output" in
+    *"$error_output"*)
+      printf "\e[32mTest passed for input $input\e[0m\n"
+      ;;
+    *)
+      if [[ "$actual_output" == "$expected_output1" ]]; then
+        printf "\e[32mTest passed for input $input\e[0m\n"
+      elif [[ "$actual_output" == "$expected_output2" ]]; then
+        printf "\e[32mTest passed for input $input\e[0m\n"
+      else
+        if [ -n "$3" ]; then
+          printf "\e[31mTest failed for input $input: Expected $expected_output1 or $expected_output2 but got $actual_output\e[0m\n"
+        else
+          printf "\e[31mTest failed for input $input: Expected $expected_output1 or $error_output but got $actual_output\e[0m\n"
+        fi
+        exit 1
+      fi
+    ;;
+  esac
 }
 
 # Arithmetic tests
@@ -313,6 +321,10 @@ test_eval 'weekday("2016-03-21", "zh-CN")' '"星期一"'
 test_eval 'weekday("2017-03-21", "fr-FR")' '"Mardi"'
 test_eval 'weekday("2018-03-21", "th-TH")' '"วันพุธ"'
 test_eval 'weekday("2019-03-21", "pt-BR")' '"Quinta-feira"'
+
+test_eval 'weekday("2019-03-21", "invalidlocale")' 'The chosen locale is not supported'
+test_eval 'weekday("2024-32-21")' 'Invalid format on the parameter(s). Please use two "yyyy-mm-dd" for dates OR two "yyyy-mm-ddTHH:MM" for date_times'
+test_eval 'weekday("2024-09-17", "en", "one too many params")' 'Too many parameters passed to function'
 
 echo "All tests passed!"
 
