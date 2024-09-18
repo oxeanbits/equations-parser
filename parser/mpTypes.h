@@ -370,9 +370,10 @@ enum EErrorCodes
     ecADD_HOURS_DATETIME        = 57, ///< Invalid date time format for add_hours() first parameter
 
     ecINVALID_TYPES_MATCH       = 58,
+    ecUKNOWN_LOCALE             = 59, ///< The chosen locale is not supported
 
     // time related errors
-    ecINVALID_TIME_FORMAT       = 59, ///< Invalid time format
+    ecINVALID_TIME_FORMAT       = 60, ///< Invalid time format
 
     // The last two are special entries
     ecCOUNT,                          ///< This is no error code, It just stores the total number of error codes

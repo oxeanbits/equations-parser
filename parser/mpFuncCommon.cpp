@@ -458,6 +458,34 @@ MUP_NAMESPACE_START
     throw ParserError(err);
   }
 
+  string_type localized_weekday(int week_day, const ptr_val_type *a_pArg) {
+    string_type locale = a_pArg[1]->GetString();
+    string_type ret = "";
+    string_type localized_weekdays[8][7] = {
+      {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"},
+      {"Søndag", "Mandag", "Tirsdag", "Onsdag", "Torsdag", "Fredag", "Lørdag"},
+      {"Domingo", "Segunda-Feira", "Terça-feira", "Quarta-feira", "Quinta-feira", "Sexta-feira", "Sábado"},
+      {"Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sabado"},
+      {"Dimanche", "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi"},
+      {"Sonntag", "Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag"},
+      {"星期天", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"},
+      {"วันอาทิตย์", "วันจันทร์", "วันอังคาร", "วันพุธ", "วันพฤหัสบดี", "วันศุกร์", "วันเสาร์"}
+    };
+    string_type locales[8] = {"en", "nb", "pt-BR", "es-ES", "fr-FR", "de-DE", "zh-CN", "th-TH"};
+
+    for (int i = 0; i < 8; i++) {
+      if(locale == locales[i]) {
+        ret = localized_weekdays[i][week_day];
+      }
+    }
+
+    if(ret == ""){
+      raise_error(ecUKNOWN_LOCALE, 2, a_pArg);
+    }
+
+    return ret;
+  }
+
   //------------------------------------------------------------------------------
   //
   // class FunDaysDiff
@@ -955,6 +983,59 @@ MUP_NAMESPACE_START
   IToken* FunWeekYear::Clone() const
   {
     return new FunWeekYear(*this);
+  }
+
+  //------------------------------------------------------------------------------
+  //                                                                             |
+  //            Function return the week day of a date                           |
+  //            Usage: weekday("2022-04-20")                                     |
+  //            Optional locale: weekday("2022-04-20", "en")                     |
+  //                                                                             |
+  //------------------------------------------------------------------------------
+
+  FunWeekDay::FunWeekDay()
+    :ICallback(cmFUNC, _T("weekday"), -1)
+  {}
+
+  void FunWeekDay::Eval(ptr_val_type &ret, const ptr_val_type *a_pArg, int a_iArgc)
+  {
+    if (a_iArgc < 1) {
+      throw ParserError(ErrorContext(ecTOO_FEW_PARAMS, GetExprPos(), GetIdent()));
+    } else if (a_iArgc > 2) {
+      throw ParserError(ErrorContext(ecTOO_MANY_PARAMS, GetExprPos(), GetIdent()));
+    }
+
+    string_type date_time = a_pArg[0]->GetString();
+
+    struct tm date;
+    if (!strptime(date_time.c_str(), "%Y-%m-%d", &date)) {
+      raise_error(ecINVALID_DATETIME_FORMAT, 1, a_pArg);
+    }
+
+    bool has_locale = false;
+    if (a_iArgc == 2) {
+      has_locale = true;
+    }
+
+    int week_day = date.tm_wday;
+
+    if(has_locale) {
+      *ret = localized_weekday(week_day, a_pArg);
+    } else {
+      *ret = week_day;
+    }
+  }
+
+  ////------------------------------------------------------------------------------
+  const char_type* FunWeekDay::GetDesc() const
+  {
+    return _T("weekday(date) - Returns the week day of the date.");
+  }
+
+  ////------------------------------------------------------------------------------
+  IToken* FunWeekDay::Clone() const
+  {
+    return new FunWeekDay(*this);
   }
 
 MUP_NAMESPACE_END
