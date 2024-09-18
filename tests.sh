@@ -7,7 +7,7 @@ function test_eval() {
   input=$1
   expected_output1="ans = "$2
   expected_output2="ans = "$3
-  error_output=""$2
+  error_output=$2" (Errc"
   actual_output=$(echo "$input
 exit" | ./example | grep -E "(ans =|Can't evaluate function/operator \".*\":)")
 
@@ -323,8 +323,8 @@ test_eval 'weekday("2018-03-21", "th-TH")' '"วันพุธ"'
 test_eval 'weekday("2019-03-21", "pt-BR")' '"Quinta-feira"'
 
 test_eval 'weekday("2019-03-21", "invalidlocale")' 'The chosen locale is not supported'
-test_eval 'weekday("2024-32-21")' 'Invalid format on the parameter(s). Please use two "yyyy-mm-dd" for dates OR two "yyyy-mm-ddTHH:MM" for date_times'
-test_eval 'weekday("2024-09-17", "en", "one too many params")' 'Too many parameters passed to function'
+test_eval 'weekday("2024-32-21")' 'Invalid format on the parameter(s). Please use two "yyyy-mm-dd" for dates OR two "yyyy-mm-ddTHH:MM" for date_times.'
+test_eval 'weekday("2024-09-17", "en", "one too many params")' 'Too many parameters passed to function "weekday".'
 
 echo "All tests passed!"
 
