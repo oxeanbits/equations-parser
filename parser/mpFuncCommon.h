@@ -225,7 +225,7 @@ MUP_NAMESPACE_START
   }; // class FunWeekYear
 
   //------------------------------------------------------------------------------
-  /** \brief Return the week of year of a date.
+  /** \brief Return the weekday of a date.
       \ingroup functions
   */
   class FunWeekDay: public ICallback
