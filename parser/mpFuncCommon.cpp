@@ -43,6 +43,7 @@
 
 #include "mpValue.h"
 #include "mpParserBase.h"
+#include "equationsParser.h"
 
 #define ONE_DAY (24 * 60 * 60)
 
@@ -399,6 +400,73 @@ MUP_NAMESPACE_START
     return new FunMask(*this);
   }
 
+  //------------------------------------------------------------------------------
+  //
+  // Case
+  //
+  //------------------------------------------------------------------------------
+
+  FunCase::FunCase()
+    :ICallback(cmFUNC, _T("case"), -1)
+  {}
+
+  Value get_case_value(string_type expression) {
+    Value result;
+    if(expression[0] == '@'){
+      result = EquationsParser::PureCalc(expression.substr(1));
+    } else {
+      result = expression;
+    }
+    return result;
+  }
+
+  bool compare_variable_to_operand(string_type variable, string_type operand) {
+    bool comparison_result;
+    if(operand[0] == '@'){
+      Value result = EquationsParser::PureCalc(variable + operand.substr(1));
+      if(result.GetType() != 'b'){
+        //add error here
+      }
+      comparison_result = result.GetBool();
+    } else {
+      comparison_result = (variable.compare(operand) == 0);
+    }
+    return comparison_result;
+  }
+
+  void FunCase::Eval(ptr_val_type &ret, const ptr_val_type *a_pArg, int a_iArgc)
+  {
+    if (a_iArgc < 2) {
+      throw ParserError(ErrorContext(ecTOO_FEW_PARAMS, GetExprPos(), GetIdent()));
+    }
+
+    string_type variable = a_pArg[0]->GetString();
+    string_type operand, result, case_arguments;
+    for(int i=1; i < a_iArgc ; i++) {
+      case_arguments = a_pArg[i]->GetString();
+      size_t pos = case_arguments.find(';');
+      if(pos == std::string::npos || pos == 0 || pos == case_arguments.size()){
+        //add error here
+      }
+      operand = case_arguments.substr(0, pos);
+      result = case_arguments.substr(pos + 1);
+      if(compare_variable_to_operand(variable, operand) || operand.compare("default") == 0){
+        *ret = get_case_value(result);
+        break;
+      }
+    }
+  }
+
+    const char_type* FunCase::GetDesc() const
+  {
+    return _T("case(date) - Returns the week day of the date.");
+  }
+
+  ////------------------------------------------------------------------------------
+  IToken* FunCase::Clone() const
+  {
+    return new FunCase(*this);
+  }
   //------------------------------------------------------------------------------
   //                                                                             |
   //            Below we have the section related to Date functions              |
