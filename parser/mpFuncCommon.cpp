@@ -463,7 +463,7 @@ MUP_NAMESPACE_START
 
     const char_type* FunCase::GetDesc() const
   {
-    return _T("case(date) - Returns the week day of the date.");
+    return _T("case(variable, expression_list) - Returns the result of a switch case on variable.");
   }
 
   ////------------------------------------------------------------------------------
