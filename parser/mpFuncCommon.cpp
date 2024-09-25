@@ -400,11 +400,14 @@ MUP_NAMESPACE_START
     return new FunMask(*this);
   }
 
-  //------------------------------------------------------------------------------
-  //
-  // Case
-  //
-  //------------------------------------------------------------------------------
+  //----------------------------------------------------------------------------------
+  //                                                                                 |
+  //            Function calculate custom switch case                                |
+  //            Usage: case("variable", "exp1;res1", "exp2;res2", "default;defres")  |
+  //            Optional: '@' token in exp = evaluate(variable + exp1)               |
+  //            Optional: '@' token in res = evaluate(res)                           |
+  //                                                                                 |
+  //----------------------------------------------------------------------------------
 
   FunCase::FunCase()
     :ICallback(cmFUNC, _T("case"), -1)
