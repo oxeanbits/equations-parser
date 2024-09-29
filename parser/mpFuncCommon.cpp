@@ -49,6 +49,15 @@
 
 MUP_NAMESPACE_START
 
+  void raise_error (EErrorCodes error, int position, const ptr_val_type *arguments) {
+    ErrorContext err;
+    err.Errc = error;
+    err.Arg = position;
+    err.Type1 = arguments[position - 1]->GetType();
+    err.Type2 = 's';
+    throw ParserError(err);
+  }
+
   //------------------------------------------------------------------------------
   //
   // FunParserID
@@ -519,15 +528,6 @@ MUP_NAMESPACE_START
     // Update caller's date
     // localtime is used because mktime converts from localtime to UTC and we need to convert it back
     *date = *localtime(&new_day);
-  }
-
-  void raise_error (EErrorCodes error, int position, const ptr_val_type *arguments) {
-    ErrorContext err;
-    err.Errc = error;
-    err.Arg = position;
-    err.Type1 = arguments[position - 1]->GetType();
-    err.Type2 = 's';
-    throw ParserError(err);
   }
 
   string_type localized_weekday(int week_day, const ptr_val_type *a_pArg) {
