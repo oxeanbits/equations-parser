@@ -93,6 +93,7 @@ void PackageCommon::AddToParser(ParserXBase *pParser)
 
   // Special functions
   pParser->DefineFun(new FunMask());
+  pParser->DefineFun(new FunCase());
 
   // Date functions
   pParser->DefineFun(new FunDaysDiff());

@@ -119,6 +119,10 @@ MUP_NAMESPACE_START
     m_vErrMsg[ecINVALID_TYPES_MATCH]     = _T("Both values of the default(x, y) function should have the same type");
     m_vErrMsg[ecUKNOWN_LOCALE]           = _T("The chosen locale is not supported");
     m_vErrMsg[ecINVALID_TIME_FORMAT]     = _T("Invalid time format on parameter(s). Please use the \"HH:MM:SS\" format.");
+    m_vErrMsg[ecMISSING_CASE_SEPARATOR]  = _T("Missing \";\" separator. Please separate the comparison from the result with \";\"");
+    m_vErrMsg[ecMISSING_CASE_DEFAULT]    = _T("Missing default in case operator. Please make sure case has a default or that one or more of the conditions are true");
+    m_vErrMsg[ecNOT_BOOL_CASE]           = _T("Case comparison not resulting in true or false");
+
 
     #if defined(_DEBUG)
       for (int i=0; i<ecCOUNT; ++i)
