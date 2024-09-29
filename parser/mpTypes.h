@@ -375,6 +375,10 @@ enum EErrorCodes
     // time related errors
     ecINVALID_TIME_FORMAT       = 60, ///< Invalid time format
 
+    ecMISSING_CASE_SEPARATOR    = 61, ///< Missing ; case separator
+    ecMISSING_CASE_DEFAULT      = 62, ///< Missing default in case operation
+    ecNOT_BOOL_CASE             = 63, ///< Case comparison not resulting in boolean
+
     // The last two are special entries
     ecCOUNT,                          ///< This is no error code, It just stores the total number of error codes
     ecUNDEFINED                 = -1  ///< Undefined message, placeholder to detect unassigned error messages

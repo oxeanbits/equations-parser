@@ -433,12 +433,12 @@ MUP_NAMESPACE_START
     return result;
   }
 
-  bool compare_variable_to_operand(string_type variable, string_type operand) {
+  bool compare_variable_to_operand(string_type variable, string_type operand, int err_pos, const ptr_val_type *a_pArg) {
     bool comparison_result;
     if(operand[0] == '@'){
       Value result = EquationsParser::PureCalc(variable + operand.substr(1));
       if(result.GetType() != 'b'){
-        //add error here
+        raise_error(ecNOT_BOOL_CASE, err_pos, a_pArg);
       }
       comparison_result = result.GetBool();
     } else {
@@ -455,17 +455,33 @@ MUP_NAMESPACE_START
 
     string_type variable = a_pArg[0]->GetString();
     string_type operand, result, case_arguments;
-    for(int i=1; i < a_iArgc ; i++) {
+    bool found_match = false;
+    for(int i=1; i < a_iArgc && !found_match ; i++) {
       case_arguments = a_pArg[i]->GetString();
       size_t pos = case_arguments.find(';');
       if(pos == std::string::npos || pos == 0 || pos == case_arguments.size()){
-        //add error here
+        raise_error(ecMISSING_CASE_SEPARATOR, i, a_pArg);
       }
       operand = case_arguments.substr(0, pos);
       result = case_arguments.substr(pos + 1);
-      if(compare_variable_to_operand(variable, operand) || operand.compare("default") == 0){
+      if(compare_variable_to_operand(variable, operand, i, a_pArg)) {
         *ret = get_case_value(result);
-        break;
+        found_match = true;
+      }
+    }
+
+    if(!found_match){
+      case_arguments = a_pArg[a_iArgc - 1]->GetString();
+      size_t pos = case_arguments.find(';');
+      if(pos == std::string::npos || pos == 0 || pos == case_arguments.size()){
+        raise_error(ecMISSING_CASE_SEPARATOR, a_iArgc - 1, a_pArg);
+      }
+      operand = case_arguments.substr(0, pos);
+      result = case_arguments.substr(pos + 1);
+      if(operand.compare("default") == 0) {
+        *ret = get_case_value(result);
+      } else {
+        raise_error(ecMISSING_CASE_DEFAULT, a_iArgc - 1, a_pArg);
       }
     }
   }
