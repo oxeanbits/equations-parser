@@ -330,6 +330,7 @@ test_eval 'weekday("2024-09-17", "en", "one too many params")' 'Too many paramet
 
 # case textmatch
 test_eval 'case("textmatch", "textmatch;matched")' '"matched"'
+test_eval 'case("textmatch", "textmatch;matched", "default;not matched")' '"matched"'
 test_eval 'case("textmatch", "textmatc;matched", "default;not matched")' '"not matched"'
 test_eval 'case("textmatch", "textmatch;@5*5")' '25'
 test_eval 'case("textmatch", "textmatc;@5*5", "default;@-1")' '-1'
@@ -340,6 +341,14 @@ test_eval 'case("5", "@ > 4;yes it is")' '"yes it is"'
 test_eval 'case("5", "@ < 4;yes it is", "default;no it is not")' '"no it is not"'
 test_eval 'case("5", "@ > 4;@5*6")' '30'
 test_eval 'case("5", "@ < 4;@5*6", "default;@-1")' '-1'
+
+# mix and match
+test_eval 'case("5", "@ < 4;yes it is", "5;we can still text match")' '"we can still text match"'
+test_eval 'case("5", "@ < 4;yes it is", "default;and use normal default")' '"and use normal default"'
+test_eval 'case("5", "@ < 4;yes it is", "5;@5*5")' '25'
+
+# function inside function
+test_eval 'case("textmatch", "textmatch;@sum(1,2,3)")' '6'
 
 # case errors
 test_eval 'case("5", "@ < 4;yes it is")' 'Missing default in case operator. Please make sure case has a default or that one or more of the conditions are true'
