@@ -326,5 +326,27 @@ test_eval 'weekday("2019-03-21", "invalidlocale")' 'The chosen locale is not sup
 test_eval 'weekday("2024-32-21")' 'Invalid format on the parameter(s). Please use two "yyyy-mm-dd" for dates OR two "yyyy-mm-ddTHH:MM" for date_times.'
 test_eval 'weekday("2024-09-17", "en", "one too many params")' 'Too many parameters passed to function "weekday".'
 
+# case operation tests
+
+# case textmatch
+test_eval 'case("textmatch", "textmatch;matched")' '"matched"'
+test_eval 'case("textmatch", "textmatc;matched", "default;not matched")' '"not matched"'
+test_eval 'case("textmatch", "textmatch;@5*5")' '25'
+test_eval 'case("textmatch", "textmatc;@5*5", "default;@-1")' '-1'
+
+# case comparison with variable
+
+test_eval 'case("5", "@ > 4;yes it is")' '"yes it is"'
+test_eval 'case("5", "@ < 4;yes it is", "default;no it is not")' '"no it is not"'
+test_eval 'case("5", "@ > 4;@5*6")' '30'
+test_eval 'case("5", "@ < 4;@5*6", "default;@-1")' '-1'
+
+# case errors
+test_eval 'case("5", "@ < 4;yes it is")' 'Missing default in case operator. Please make sure case has a default or that one or more of the conditions are true'
+test_eval 'case("5", "@ *5;not a boolean")' 'Case comparison not resulting in true or false'
+test_eval 'case("5", "@ *5;not a boolean", "default;should fail even with a default")' 'Case comparison not resulting in true or false'
+test_eval 'case("textmatch", "textmatch")' 'Missing ";" separator. Please separate the comparison from the result with ";"'
+test_eval 'case("textmatch", "textmatch", "default;should fail even with a default")' 'Missing ";" separator. Please separate the comparison from the result with ";"'
+
 echo "All tests passed!"
 
