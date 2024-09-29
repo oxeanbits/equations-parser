@@ -349,6 +349,8 @@ test_eval 'case("5", "@ < 4;yes it is", "5;@5*5")' '25'
 
 # function inside function
 test_eval 'case("textmatch", "textmatch;@sum(1,2,3)")' '6'
+test_eval 'case("textmatch", "textmatch;@case(\"7\", \"@>sum(1,2,3);caseception\")")' '"caseception"'
+test_eval 'case("textmatch", "textmatch;@case(\"5\", \"@>sum(1,2,3);caseception\", \"default;caseceptionpt2\")")' '"caseceptionpt2"'
 
 # case errors
 test_eval 'case("5", "@ < 4;yes it is")' 'Missing default in case operator. Please make sure case has a default or that one or more of the conditions are true'
