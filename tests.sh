@@ -184,6 +184,9 @@ test_eval 'timediff("02:00:00", "03:30:00")' '1.5'
 test_eval 'timediff("03:30:00", "02:00:00")' '22.5'
 test_eval 'timediff("02:00:00", "02:00:30")' '0.01'
 
+current_time=$(echo `date +"%H:%M:%S"`)
+test_eval 'current_time()' "\"$current_time\""
+
 # Mask tests
 test_eval 'mask("000-000", 123456)' '"123-456"'
 test_eval 'mask("00000", 14)' '"00014"'
