@@ -199,6 +199,19 @@ MUP_NAMESPACE_START
   }; // class FunTimeDiff
 
   //------------------------------------------------------------------------------
+  /** \brief Returns the current time in the HH:MM:SS format.
+      \ingroup functions
+  */
+  class FunCurrentTime : public ICallback
+  {
+  public:
+    FunCurrentTime();
+    virtual void Eval(ptr_val_type &ret, const ptr_val_type *a_pArg, int a_iArgc) override;
+    virtual const char_type* GetDesc() const override;
+    virtual IToken* Clone() const override;
+  }; // class FunCurrentTime
+
+  //------------------------------------------------------------------------------
   /** \brief Return the capture group of a regular expression.
       \ingroup functions
   */

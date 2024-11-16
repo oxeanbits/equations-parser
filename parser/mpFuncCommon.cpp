@@ -703,11 +703,6 @@ MUP_NAMESPACE_START
     return new FunAddDays(*this);
   }
 
-  //------------------------------------------------------------------------------
-  //
-  // class FunTimeDiff
-  //
-  //------------------------------------------------------------------------------
 
   //FunTimeDiff::FunTimeDiff()
   //  :ICallback(cmFUNC, _T("timediff"), -1)
@@ -808,6 +803,25 @@ MUP_NAMESPACE_START
   //                                                                             |
   //------------------------------------------------------------------------------
 
+  //------------------------------------------------------------------------------
+  //                                                                             |
+  //                         Time auxiliar functions!                            |
+  //                                                                             |
+  //------------------------------------------------------------------------------
+
+  string_type format_time (struct tm time) {
+    char buffer[9];
+    snprintf(buffer, sizeof(buffer), "%02d:%02d:%02d", time.tm_hour, time.tm_min, time.tm_sec);
+
+    return std::string(buffer);
+  }
+
+  //------------------------------------------------------------------------------
+  //
+  // class FunTimeDiff
+  //
+  //------------------------------------------------------------------------------
+
   FunTimeDiff::FunTimeDiff()
     :ICallback(cmFUNC, _T("timediff"), -1)
   {}
@@ -854,6 +868,39 @@ MUP_NAMESPACE_START
   IToken* FunTimeDiff::Clone() const
   {
     return new FunTimeDiff(*this);
+  }
+
+  //------------------------------------------------------------------------------
+  //
+  // class FunCurrentTime
+  //
+  //------------------------------------------------------------------------------
+
+  FunCurrentTime::FunCurrentTime()
+    :ICallback(cmFUNC, _T("current_time"), -1)
+  {}
+
+  void FunCurrentTime::Eval(ptr_val_type &ret, const ptr_val_type *a_pArg, int a_iArgc)
+  {
+    if (a_iArgc != 0)
+      throw ParserError(ErrorContext(ecTOO_MANY_PARAMS, GetExprPos(), GetIdent()));
+
+    std::time_t t = std::time(0);
+    std::tm now = *std::localtime(&t);
+
+    *ret = format_time(now);
+  }
+
+  ////------------------------------------------------------------------------------
+  const char_type* FunCurrentTime::GetDesc() const
+  {
+    return _T("current_time() - Returns the current time in the HH:MM:SS format.");
+  }
+
+  ////------------------------------------------------------------------------------
+  IToken* FunCurrentTime::Clone() const
+  {
+    return new FunCurrentTime(*this);
   }
 
   //------------------------------------------------------------------------------
