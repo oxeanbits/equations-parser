@@ -901,6 +901,7 @@ MUP_NAMESPACE_START
           err.Arg = 1;
           err.Type1 = a_pArg[0]->GetType();
           err.Type2 = 'i';
+          err.Ident = GetIdent();
           throw ParserError(err);
         }
       }

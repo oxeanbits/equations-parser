@@ -201,6 +201,7 @@ test_eval 'timediff("02:00:00", "02:00:30")' '0.01'
 
 current_time=$(echo `date +"%H:%M:%S"`)
 test_eval 'current_time()' "\"$current_time\""
+test_eval 'current_time("2")' "Argument 1 of function/operator \"current_time\" is of type 's' whereas type 'i' was expected."
 
 # Mask tests
 test_eval 'mask("000-000", 123456)' '"123-456"'
