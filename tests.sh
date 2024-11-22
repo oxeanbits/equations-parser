@@ -347,6 +347,8 @@ test_eval 'weekday("2024-09-17", "en", "one too many params")' 'Too many paramet
 match_regex 'current_time(5)' '\b([01]?[0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]\b'
 match_regex 'current_time()' '\b([01]?[0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]\b'
 match_regex 'current_time(-3)' '\b([01]?[0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]\b'
+match_regex 'current_time(-200)' '\b([01]?[0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]\b'
+
 
 echo "All tests passed!"
 
