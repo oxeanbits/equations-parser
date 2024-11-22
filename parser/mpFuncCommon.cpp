@@ -910,7 +910,7 @@ MUP_NAMESPACE_START
     }
 
     std::time_t t = std::time(0);
-    std::tm now = *std::localtime(&t);
+    std::tm now = *std::gmtime(&t);
 
     *ret = format_time(now, gmt_offset);
   }

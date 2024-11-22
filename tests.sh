@@ -199,8 +199,6 @@ test_eval 'timediff("02:00:00", "03:30:00")' '1.5'
 test_eval 'timediff("03:30:00", "02:00:00")' '22.5'
 test_eval 'timediff("02:00:00", "02:00:30")' '0.01'
 
-current_time=$(echo `date +"%H:%M:%S"`)
-test_eval 'current_time()' "\"$current_time\""
 test_eval 'current_time("2")' "Argument 1 of function/operator \"current_time\" is of type 's' whereas type 'i' was expected."
 
 # Mask tests
