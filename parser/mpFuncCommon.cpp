@@ -809,9 +809,14 @@ MUP_NAMESPACE_START
   //                                                                             |
   //------------------------------------------------------------------------------
 
-  string_type format_time (struct tm time) {
+  int calculate_hour_offset(int original_hour, int gmt_offset) {
+    return ((original_hour + gmt_offset) % 24 + 24) % 24;
+  }
+
+  string_type format_time (struct tm time, int gmt_offset) {
     char buffer[9];
-    snprintf(buffer, sizeof(buffer), "%02d:%02d:%02d", time.tm_hour, time.tm_min, time.tm_sec);
+    int hours = calculate_hour_offset(time.tm_hour, gmt_offset);
+    snprintf(buffer, sizeof(buffer), "%02d:%02d:%02d", hours, time.tm_min, time.tm_sec);
 
     return std::string(buffer);
   }
@@ -882,13 +887,29 @@ MUP_NAMESPACE_START
 
   void FunCurrentTime::Eval(ptr_val_type &ret, const ptr_val_type *a_pArg, int a_iArgc)
   {
-    if (a_iArgc != 0)
+    int gmt_offset = 0;
+    if (a_iArgc > 1) {
       throw ParserError(ErrorContext(ecTOO_MANY_PARAMS, GetExprPos(), GetIdent()));
+    } else if (a_iArgc == 1) {
+      switch(a_pArg[0]->GetType())
+      {
+      case 'i': gmt_offset = a_pArg[0]->GetInteger();   break;
+      default:
+        {
+          ErrorContext err;
+          err.Errc = ecTYPE_CONFLICT_FUN;
+          err.Arg = 1;
+          err.Type1 = a_pArg[0]->GetType();
+          err.Type2 = 'i';
+          throw ParserError(err);
+        }
+      }
+    }
 
     std::time_t t = std::time(0);
     std::tm now = *std::localtime(&t);
 
-    *ret = format_time(now);
+    *ret = format_time(now, gmt_offset);
   }
 
   ////------------------------------------------------------------------------------
