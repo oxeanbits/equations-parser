@@ -876,9 +876,11 @@ MUP_NAMESPACE_START
   }
 
   //------------------------------------------------------------------------------
-  //
-  // class FunCurrentTime
-  //
+  //                                                                             |
+  //            class FunCurrentTime                                             |
+  //            Usage: current_time()                                            |
+  //            Optional offset: current_time(-2)                                |
+  //                                                                             |
   //------------------------------------------------------------------------------
 
   FunCurrentTime::FunCurrentTime()
@@ -913,13 +915,13 @@ MUP_NAMESPACE_START
     *ret = format_time(now, gmt_offset);
   }
 
-  ////------------------------------------------------------------------------------
+  ////---------------------------------------------------------------------------------------------------------
   const char_type* FunCurrentTime::GetDesc() const
   {
-    return _T("current_time() - Returns the current time in the HH:MM:SS format.");
+    return _T("current_time(offset) - Returns the current time in the HH:MM:SS format, applying the offset.");
   }
 
-  ////------------------------------------------------------------------------------
+  ////---------------------------------------------------------------------------------------------------------
   IToken* FunCurrentTime::Clone() const
   {
     return new FunCurrentTime(*this);
