@@ -703,11 +703,6 @@ MUP_NAMESPACE_START
     return new FunAddDays(*this);
   }
 
-  //------------------------------------------------------------------------------
-  //
-  // class FunTimeDiff
-  //
-  //------------------------------------------------------------------------------
 
   //FunTimeDiff::FunTimeDiff()
   //  :ICallback(cmFUNC, _T("timediff"), -1)
@@ -808,6 +803,30 @@ MUP_NAMESPACE_START
   //                                                                             |
   //------------------------------------------------------------------------------
 
+  //------------------------------------------------------------------------------
+  //                                                                             |
+  //                         Time auxiliar functions!                            |
+  //                                                                             |
+  //------------------------------------------------------------------------------
+
+  int calculate_hour_offset(int original_hour, int gmt_offset) {
+    return ((original_hour + gmt_offset) % 24 + 24) % 24;
+  }
+
+  string_type format_time (struct tm time, int gmt_offset) {
+    char buffer[9];
+    int hours = calculate_hour_offset(time.tm_hour, gmt_offset);
+    snprintf(buffer, sizeof(buffer), "%02d:%02d:%02d", hours, time.tm_min, time.tm_sec);
+
+    return std::string(buffer);
+  }
+
+  //------------------------------------------------------------------------------
+  //
+  // class FunTimeDiff
+  //
+  //------------------------------------------------------------------------------
+
   FunTimeDiff::FunTimeDiff()
     :ICallback(cmFUNC, _T("timediff"), -1)
   {}
@@ -854,6 +873,58 @@ MUP_NAMESPACE_START
   IToken* FunTimeDiff::Clone() const
   {
     return new FunTimeDiff(*this);
+  }
+
+  //------------------------------------------------------------------------------
+  //                                                                             |
+  //            class FunCurrentTime                                             |
+  //            Usage: current_time()                                            |
+  //            Optional offset: current_time(-2)                                |
+  //                                                                             |
+  //------------------------------------------------------------------------------
+
+  FunCurrentTime::FunCurrentTime()
+    :ICallback(cmFUNC, _T("current_time"), -1)
+  {}
+
+  void FunCurrentTime::Eval(ptr_val_type &ret, const ptr_val_type *a_pArg, int a_iArgc)
+  {
+    int gmt_offset = 0;
+    if (a_iArgc > 1) {
+      throw ParserError(ErrorContext(ecTOO_MANY_PARAMS, GetExprPos(), GetIdent()));
+    } else if (a_iArgc == 1) {
+      switch(a_pArg[0]->GetType())
+      {
+      case 'i': gmt_offset = a_pArg[0]->GetInteger();   break;
+      default:
+        {
+          ErrorContext err;
+          err.Errc = ecTYPE_CONFLICT_FUN;
+          err.Arg = 1;
+          err.Type1 = a_pArg[0]->GetType();
+          err.Type2 = 'i';
+          err.Ident = GetIdent();
+          throw ParserError(err);
+        }
+      }
+    }
+
+    std::time_t t = std::time(0);
+    std::tm now = *std::gmtime(&t);
+
+    *ret = format_time(now, gmt_offset);
+  }
+
+  ////---------------------------------------------------------------------------------------------------------
+  const char_type* FunCurrentTime::GetDesc() const
+  {
+    return _T("current_time(offset) - Returns the current time in the HH:MM:SS format, applying the offset.");
+  }
+
+  ////---------------------------------------------------------------------------------------------------------
+  IToken* FunCurrentTime::Clone() const
+  {
+    return new FunCurrentTime(*this);
   }
 
   //------------------------------------------------------------------------------

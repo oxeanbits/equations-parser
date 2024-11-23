@@ -107,6 +107,7 @@ void PackageCommon::AddToParser(ParserXBase *pParser)
 
   // Time functions
   pParser->DefineFun(new FunTimeDiff());
+  pParser->DefineFun(new FunCurrentTime());
 
   // misc
   pParser->DefineFun(new FunParserID);
