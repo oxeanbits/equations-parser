@@ -43,10 +43,20 @@
 
 #include "mpValue.h"
 #include "mpParserBase.h"
+#include "equationsParser.h"
 
 #define ONE_DAY (24 * 60 * 60)
 
 MUP_NAMESPACE_START
+
+  void raise_error (EErrorCodes error, int position, const ptr_val_type *arguments) {
+    ErrorContext err;
+    err.Errc = error;
+    err.Arg = position;
+    err.Type1 = arguments[position - 1]->GetType();
+    err.Type2 = 's';
+    throw ParserError(err);
+  }
 
   //------------------------------------------------------------------------------
   //
@@ -399,6 +409,93 @@ MUP_NAMESPACE_START
     return new FunMask(*this);
   }
 
+  //----------------------------------------------------------------------------------
+  //                                                                                 |
+  //            Class FunCase                                                        |
+  //            Function calculate custom switch case                                |
+  //            Usage: case("variable", "exp1;res1", "exp2;res2", "default;defres")  |
+  //            Optional: '@' token in exp = evaluate(variable + exp1)               |
+  //            Optional: '@' token in res = evaluate(res)                           |
+  //                                                                                 |
+  //----------------------------------------------------------------------------------
+
+  FunCase::FunCase()
+    :ICallback(cmFUNC, _T("case"), -1)
+  {}
+
+  Value get_case_value(string_type expression) {
+    Value result;
+    if(expression[0] == '@'){
+      result = EquationsParser::PureCalc(expression.substr(1));
+    } else {
+      result = expression;
+    }
+    return result;
+  }
+
+  bool compare_variable_to_operand(string_type variable, string_type operand, int err_pos, const ptr_val_type *a_pArg) {
+    bool comparison_result;
+    if(operand[0] == '@'){
+      Value result = EquationsParser::PureCalc(variable + operand.substr(1));
+      if(result.GetType() != 'b'){
+        raise_error(ecNOT_BOOL_CASE, err_pos, a_pArg);
+      }
+      comparison_result = result.GetBool();
+    } else {
+      comparison_result = (variable.compare(operand) == 0);
+    }
+    return comparison_result;
+  }
+
+  void FunCase::Eval(ptr_val_type &ret, const ptr_val_type *a_pArg, int a_iArgc)
+  {
+    if (a_iArgc < 2) {
+      throw ParserError(ErrorContext(ecTOO_FEW_PARAMS, GetExprPos(), GetIdent()));
+    }
+
+    string_type variable = a_pArg[0]->GetString();
+    string_type operand, result, case_arguments;
+    bool found_match = false;
+    for(int i=1; i < a_iArgc && !found_match ; i++) {
+      case_arguments = a_pArg[i]->GetString();
+      size_t pos = case_arguments.find(';');
+      if(pos == std::string::npos || pos == 0 || pos == case_arguments.size()){
+        raise_error(ecMISSING_CASE_SEPARATOR, i, a_pArg);
+      }
+      operand = case_arguments.substr(0, pos);
+      result = case_arguments.substr(pos + 1);
+      if(compare_variable_to_operand(variable, operand, i, a_pArg)) {
+        *ret = get_case_value(result);
+        found_match = true;
+      }
+    }
+
+    if(!found_match){
+      case_arguments = a_pArg[a_iArgc - 1]->GetString();
+      size_t pos = case_arguments.find(';');
+      if(pos == std::string::npos || pos == 0 || pos == case_arguments.size()){
+        raise_error(ecMISSING_CASE_SEPARATOR, a_iArgc - 1, a_pArg);
+      }
+      operand = case_arguments.substr(0, pos);
+      result = case_arguments.substr(pos + 1);
+      if(operand.compare("default") == 0) {
+        *ret = get_case_value(result);
+      } else {
+        raise_error(ecMISSING_CASE_DEFAULT, a_iArgc - 1, a_pArg);
+      }
+    }
+  }
+
+    const char_type* FunCase::GetDesc() const
+  {
+    return _T("case(variable, expression_list) - Returns the result of a switch case on variable.");
+  }
+
+  ////------------------------------------------------------------------------------
+  IToken* FunCase::Clone() const
+  {
+    return new FunCase(*this);
+  }
   //------------------------------------------------------------------------------
   //                                                                             |
   //            Below we have the section related to Date functions              |
@@ -447,15 +544,6 @@ MUP_NAMESPACE_START
     // Update caller's date
     // localtime is used because mktime converts from localtime to UTC and we need to convert it back
     *date = *localtime(&new_day);
-  }
-
-  void raise_error (EErrorCodes error, int position, const ptr_val_type *arguments) {
-    ErrorContext err;
-    err.Errc = error;
-    err.Arg = position;
-    err.Type1 = arguments[position - 1]->GetType();
-    err.Type2 = 's';
-    throw ParserError(err);
   }
 
   string_type localized_weekday(int week_day, const ptr_val_type *a_pArg) {
