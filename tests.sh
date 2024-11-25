@@ -32,6 +32,21 @@ exit" | ./example | grep -E "(ans =|Can't evaluate function/operator \".*\":)")
   esac
 }
 
+function match_regex() {
+  input="$1"
+  regex="$2"
+
+  output=$(echo "$input
+exit" | ./example | grep -E "(ans =|Can't evaluate function/operator \".*\":)")
+
+  if echo "$output" | egrep -q "$regex"; then
+    printf "\e[32mTest passed for input $input\e[0m\n"
+  else
+    printf "\e[31mTest failed for input $input: regex did not match\e[0m\n"
+    exit 1
+  fi
+}
+
 # Arithmetic tests
 test_eval "2 + 2" "4"
 test_eval "55 * 33" "1815"
@@ -183,6 +198,8 @@ test_eval 'add_days("2019-01-01T08:30", -1)' '"2018-12-31T08:30"'
 test_eval 'timediff("02:00:00", "03:30:00")' '1.5'
 test_eval 'timediff("03:30:00", "02:00:00")' '22.5'
 test_eval 'timediff("02:00:00", "02:00:30")' '0.01'
+
+test_eval 'current_time("2")' "Argument 1 of function/operator \"current_time\" is of type 's' whereas type 'i' was expected."
 
 # Mask tests
 test_eval 'mask("000-000", 123456)' '"123-456"'
@@ -358,6 +375,12 @@ test_eval 'case("5", "@ *5;not a boolean")' 'Case comparison not resulting in tr
 test_eval 'case("5", "@ *5;not a boolean", "default;should fail even with a default")' 'Case comparison not resulting in true or false'
 test_eval 'case("textmatch", "textmatch")' 'Missing ";" separator. Please separate the comparison from the result with ";"'
 test_eval 'case("textmatch", "textmatch", "default;should fail even with a default")' 'Missing ";" separator. Please separate the comparison from the result with ";"'
+# Regex match test
+match_regex 'current_time(5)' '\b([01]?[0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]\b'
+match_regex 'current_time()' '\b([01]?[0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]\b'
+match_regex 'current_time(-3)' '\b([01]?[0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]\b'
+match_regex 'current_time(-200)' '\b([01]?[0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]\b'
+
 
 echo "All tests passed!"
 
