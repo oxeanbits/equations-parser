@@ -1,31 +1,31 @@
 /*
                __________                                 ____  ___
     _____  __ _\______   \_____ _______  ______ __________\   \/  /
-   /     \|  |  \     ___/\__  \\_  __ \/  ___// __ \_  __ \     /
-  |  Y Y  \  |  /    |     / __ \|  | \/\___ \\  ___/|  | \/     \
+   /     \|  |  \     ___/\__  \\_  __ \/  ___// __ \_  __ \     / 
+  |  Y Y  \  |  /    |     / __ \|  | \/\___ \\  ___/|  | \/     \ 
   |__|_|  /____/|____|    (____  /__|  /____  >\___  >__| /___/\  \
         \/                     \/           \/     \/           \_/
                                        Copyright (C) 2016, Ingo Berg
                                        All rights reserved.
 
-  Redistribution and use in source and binary forms, with or without
+  Redistribution and use in source and binary forms, with or without 
   modification, are permitted provided that the following conditions are met:
 
-   * Redistributions of source code must retain the above copyright notice,
+   * Redistributions of source code must retain the above copyright notice, 
      this list of conditions and the following disclaimer.
-   * Redistributions in binary form must reproduce the above copyright notice,
-     this list of conditions and the following disclaimer in the documentation
+   * Redistributions in binary form must reproduce the above copyright notice, 
+     this list of conditions and the following disclaimer in the documentation 
      and/or other materials provided with the distribution.
 
-  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
-  ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
-  WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
-  IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
-  INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
-  NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
-  PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
-  WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
-  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
+  ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED 
+  WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. 
+  IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, 
+  INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT 
+  NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR 
+  PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, 
+  WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) 
+  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE 
   POSSIBILITY OF SUCH DAMAGE.
 */
 #include "mpFuncStr.h"
@@ -92,8 +92,8 @@ MUP_NAMESPACE_START
 
     string_type str1 = a_pArg[0]->GetString();
     string_type str2 = a_pArg[1]->GetString();
-    string_type opAttr = a_iArgc == 3 ? " download=\"" + a_pArg[2]->GetString() + "\">" : ">";
-    *ret = (string_type) "<a href=\"" + str2 +"\"" + opAttr + str1 + "</a>";
+    string_type opAttr = a_iArgc == 3 ? L" download=\"" + a_pArg[2]->GetString() + L"\">" : L">";
+    *ret = (string_type) L"<a href=\"" + str2 + L"\"" + opAttr + str1 + L"</a>";
   }
 
   //------------------------------------------------------------------------------
@@ -403,8 +403,8 @@ MUP_NAMESPACE_START
                   // ist. sscanf und long double geht nicht mit GCC!
 
     in = a_pArg[0]->GetString();
-
-#ifndef _UNICODE
+    
+#ifndef _UNICODE    
     sscanf(in.c_str(), "%lf", &out);
 #else
     swscanf(in.c_str(), _T("%lf"), &out);
@@ -498,7 +498,7 @@ MUP_NAMESPACE_START
 
   // auxiliary string() functions
   string_type to_string(long_double_type number) {
-    std::string string_number = std::to_string (number);
+    string_type string_number = std::to_wstring (number);
     int offset = 1;
     if (string_number.find_last_not_of('0') == string_number.find('.')) {
       offset = 0;
@@ -535,7 +535,7 @@ MUP_NAMESPACE_START
 
     if (a_pArg[0]->GetType() == 'b') {
       bool_value = a_pArg[0]->GetBool();
-      *ret = (string_type) (bool_value ? "true" : "false");
+      *ret = (string_type) (bool_value ? L"true" : L"false");
     }
 
     if (a_pArg[0]->GetType() == 's') {

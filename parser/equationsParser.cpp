@@ -14,7 +14,7 @@ EQUATIONS_PARSER_START
  * @brief Evaluates an input string as a mathematical expression and returns the result
  * @param input The string to be evaluated as a mathematical expression
  */
-string Calc(string input) {
+string_type Calc(string_type input) {
   ParserX parser(pckALL_NON_COMPLEX);
 
   Value ans;
@@ -30,15 +30,20 @@ string Calc(string input) {
   catch(ParserError &e)
   {
     if (e.GetPos() != -1) {
-      string_type error = "Error: ";
+      string_type error = L"Error: ";
       error.append(e.GetMsg());
       return error;
     }
   }
   catch(std::runtime_error & ex)
   {
-    string_type error = "Error: Runtime error - ";
-    error.append(ex.what());
+    string_type error = L"Error: Runtime error - ";
+    const char* msg = ex.what();
+    size_t len = strlen(msg) + 1;
+    std::vector<wchar_t> buffer(len);
+    std::mbstowcs(buffer.data(), msg, len);
+
+    error.append(buffer.data());
     return error;
   }
   return ans.AsString();
@@ -51,14 +56,14 @@ string Calc(string input) {
  * @param from The substring to be replaced
  * @param to The substring that will replace 'from'
  */
-void ReplaceAll(std::string& source, const std::string& from, const std::string& to) {
-  std::string newString;
+void ReplaceAll(string_type& source, const string_type& from, const string_type& to) {
+  string_type newString;
   newString.reserve(source.length());  // avoids a few memory allocations
 
-  std::string::size_type lastPos = 0;
-  std::string::size_type findPos;
+  string_type::size_type lastPos = 0;
+  string_type::size_type findPos;
 
-  while(std::string::npos != (findPos = source.find(from, lastPos)))
+  while(string_type::npos != (findPos = source.find(from, lastPos)))
   {
     newString.append(source, lastPos, findPos - lastPos);
     newString += to;
@@ -84,7 +89,7 @@ void ReplaceAll(std::string& source, const std::string& from, const std::string&
  *    "error": "error_message"
  * }
  */
-string CalcJson(string input) {
+string_type CalcJson(string_type input) {
   ParserX parser(pckALL_NON_COMPLEX);
 
   Value ans;
@@ -99,9 +104,9 @@ string CalcJson(string input) {
     parser.SetExpr(input);
     ans = parser.Eval();
 
-    std::string ansString = ans.AsString();
+    string_type ansString = ans.AsString();
 
-    ReplaceAll(ansString, "\"", "\\\"");
+    ReplaceAll(ansString, L"\"", L"\\\"");
 
     ss << _T("\"val\": \"") << ansString << _T("\"");
     ss << _T(",\"type\": \"") << ans.GetType() << _T("\"");
@@ -115,8 +120,13 @@ string CalcJson(string input) {
   }
   catch(std::runtime_error & ex)
   {
-    string_type error = "Error: Runtime error - ";
-    error.append(ex.what());
+    string_type error = L"Error: Runtime error - ";
+    const char* msg = ex.what();
+    size_t len = strlen(msg) + 1;
+    std::vector<wchar_t> buffer(len);
+    std::mbstowcs(buffer.data(), msg, len);
+
+    error.append(buffer.data());
     ss << _T("\"error\": \"") << error << _T("\"");
   }
 
@@ -131,8 +141,8 @@ string CalcJson(string input) {
  * @param equations a vector of strings representing mathematical equations
  * @param out a vector of strings where the results of the calculations will be stored
  */
-void CalcArray(vector<string> equations, vector<string> &out) {
-  for(string equation : equations) {
+void CalcArray(vector<string_type> equations, vector<string_type> &out) {
+  for(string_type equation : equations) {
     out.push_back(CalcJson(equation));
   }
 }

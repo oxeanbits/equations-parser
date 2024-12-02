@@ -66,10 +66,13 @@ if(M_LIBRARY)
     target_link_libraries(muparserx ${M_LIBRARY})
 endif(M_LIBRARY)
 
+set(CMAKE_INSTALL_PREFIX "${CMAKE_BINARY_DIR}/install")
+set(LIB_SUFFIX "") # Define if not set
+
 install(TARGETS muparserx
-    LIBRARY DESTINATION lib${LIB_SUFFIX} # .so file
-    ARCHIVE DESTINATION lib${LIB_SUFFIX} # .lib file
-    RUNTIME DESTINATION bin              # .dll file
+    LIBRARY DESTINATION "${CMAKE_INSTALL_PREFIX}/lib"
+    ARCHIVE DESTINATION "${CMAKE_INSTALL_PREFIX}/lib"
+    RUNTIME DESTINATION "${CMAKE_INSTALL_PREFIX}/bin"
 )
 
 ########################################################################
@@ -82,7 +85,7 @@ configure_file(
 
 install(
     FILES ${CMAKE_CURRENT_BINARY_DIR}/muparserx.pc
-    DESTINATION lib${LIB_SUFFIX}/pkgconfig
+    DESTINATION "${CMAKE_INSTALL_PREFIX}/lib${LIB_SUFFIX}/pkgconfig"
 )
 
 ########################################################################
@@ -96,9 +99,15 @@ set(cmake_files
     ${PROJECT_SOURCE_DIR}/cmake/muparserxConfig.cmake
     ${PROJECT_BINARY_DIR}/muparserxConfigVersion.cmake)
 if (UNIX)
-    install(FILES ${cmake_files} DESTINATION share/cmake/muparserx)
+    install(
+        FILES ${cmake_files}
+        DESTINATION "${CMAKE_INSTALL_PREFIX}/share/cmake/muparserx"
+    )
 elseif (WIN32)
-    install(FILES ${cmake_files} DESTINATION cmake)
+    install(
+        FILES ${cmake_files}
+        DESTINATION "${CMAKE_INSTALL_PREFIX}/cmake"
+    )
 endif ()
 
 ########################################################################
@@ -107,7 +116,7 @@ endif ()
 file(GLOB MUPARSERX_HEADERS "${MUPARSERX_SOURCE_DIR}/*.h")
 install(
     FILES ${MUPARSERX_HEADERS}
-    DESTINATION include/muparserx
+    DESTINATION "${CMAKE_INSTALL_PREFIX}/include/muparserx"
 )
 
 ########################################################################

@@ -11,10 +11,10 @@
 
 EQUATIONS_PARSER_START
 
-void ReplaceAll(std::string& source, const std::string& from, const std::string& to);
-std::string Calc(std::string input);
-std::string CalcJson(std::string input);
-void CalcArray(std::vector<std::string> in, std::vector<std::string> &out);
+void ReplaceAll(mup::string_type& source, const mup::string_type& from, const mup::string_type& to);
+mup::string_type Calc(mup::string_type input);
+mup::string_type CalcJson(mup::string_type input);
+void CalcArray(std::vector<mup::string_type> in, std::vector<mup::string_type> &out);
 
 EQUATIONS_PARSER_END
 

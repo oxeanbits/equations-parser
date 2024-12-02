@@ -44,9 +44,24 @@
 #include "mpValue.h"
 #include "mpParserBase.h"
 
+#include <iomanip>
+#include <sstream>
+#include <codecvt>
+
 #define ONE_DAY (24 * 60 * 60)
 
 MUP_NAMESPACE_START
+  extern "C" char* strptime(const char_type* s, const char* f, struct tm* tm) {
+    std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t> converter;
+    std::string date(converter.to_bytes(s));
+
+    std::istringstream input(date);
+    input >> std::get_time(tm, f);
+    if (input.fail()) {
+        return nullptr;
+    }
+    return (char*)(s + input.tellg());
+  }
 
   //------------------------------------------------------------------------------
   //
@@ -339,12 +354,12 @@ MUP_NAMESPACE_START
   //------------------------------------------------------------------------------
 
   static string_type to_string(long_double_type number) {
-    std::string string_number = std::to_string (number);
+    string_type string_number = std::to_wstring (number);
     int offset = 1;
     if (string_number.find_last_not_of('0') == string_number.find('.')) {
       offset = 0;
     }
-    string_number.erase(string_number.find_last_not_of('0') + offset, std::string::npos);
+    string_number.erase(string_number.find_last_not_of('0') + offset, string_type::npos);
     return string_number;
   }
 
@@ -419,21 +434,21 @@ MUP_NAMESPACE_START
   }
 
   string_type format_date (struct tm time, bool is_date_time) {
-    string_type year  = std::to_string(time.tm_year + 1900);
-    string_type month = std::to_string(time.tm_mon + 1);
-    string_type day   = std::to_string(time.tm_mday);
-    string_type hours = std::to_string(time.tm_hour);
-    string_type min   = std::to_string(time.tm_min);
+    string_type year  = std::to_wstring(time.tm_year + 1900);
+    string_type month = std::to_wstring(time.tm_mon + 1);
+    string_type day   = std::to_wstring(time.tm_mday);
+    string_type hours = std::to_wstring(time.tm_hour);
+    string_type min   = std::to_wstring(time.tm_min);
 
-    month = month.length() > 1 ? month : '0' + month;
-    day = day.length() > 1 ? day : '0' + day;
-    hours = hours.length() > 1 ? hours : '0' + hours;
-    min = min.length() > 1 ? min : '0' + min;
+    month = month.length() > 1 ? month : L"0" + month;
+    day = day.length() > 1 ? day : L"0" + day;
+    hours = hours.length() > 1 ? hours : L"0" + hours;
+    min = min.length() > 1 ? min : L"0" + min;
 
     if (is_date_time) {
-      return(year + "-" + month + "-" + day + "T" + hours + ":" + min);
+      return(year + L"-" + month + L"-" + day + L"T" + hours + L":" + min);
     } else {
-      return(year + "-" + month + "-" + day);
+      return(year + L"-" + month + L"-" + day);
     }
   }
 
@@ -460,18 +475,18 @@ MUP_NAMESPACE_START
 
   string_type localized_weekday(int week_day, const ptr_val_type *a_pArg) {
     string_type locale = a_pArg[1]->GetString();
-    string_type ret = "";
+    string_type ret = L"";
     string_type localized_weekdays[8][7] = {
-      {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"},
-      {"Søndag", "Mandag", "Tirsdag", "Onsdag", "Torsdag", "Fredag", "Lørdag"},
-      {"Domingo", "Segunda-Feira", "Terça-feira", "Quarta-feira", "Quinta-feira", "Sexta-feira", "Sábado"},
-      {"Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sabado"},
-      {"Dimanche", "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi"},
-      {"Sonntag", "Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag"},
-      {"星期天", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"},
-      {"วันอาทิตย์", "วันจันทร์", "วันอังคาร", "วันพุธ", "วันพฤหัสบดี", "วันศุกร์", "วันเสาร์"}
+      {L"Sunday", L"Monday", L"Tuesday", L"Wednesday", L"Thursday", L"Friday", L"Saturday"},
+      {L"Søndag", L"Mandag", L"Tirsdag", L"Onsdag", L"Torsdag", L"Fredag", L"Lørdag"},
+      {L"Domingo", L"Segunda-Feira", L"Terça-feira", L"Quarta-feira", L"Quinta-feira", L"Sexta-feira", L"Sábado"},
+      {L"Domingo", L"Lunes", L"Martes", L"Miércoles", L"Jueves", L"Viernes", L"Sabado"},
+      {L"Dimanche", L"Lundi", L"Mardi", L"Mercredi", L"Jeudi", L"Vendredi", L"Samedi"},
+      {L"Sonntag", L"Montag", L"Dienstag", L"Mittwoch", L"Donnerstag", L"Freitag", L"Samstag"},
+      {L"星期天", L"星期一", L"星期二", L"星期三", L"星期四", L"星期五", L"星期六"},
+      {L"วันอาทิตย์", L"วันจันทร์", L"วันอังคาร", L"วันพุธ", L"วันพฤหัสบดี", L"วันศุกร์", L"วันเสาร์"}
     };
-    string_type locales[8] = {"en", "nb", "pt-BR", "es-ES", "fr-FR", "de-DE", "zh-CN", "th-TH"};
+    string_type locales[8] = {L"en", L"nb", L"pt-BR", L"es-ES", L"fr-FR", L"de-DE", L"zh-CN", L"th-TH"};
 
     for (int i = 0; i < 8; i++) {
       if(locale == locales[i]) {
@@ -479,7 +494,7 @@ MUP_NAMESPACE_START
       }
     }
 
-    if(ret == ""){
+    if(ret == L""){
       raise_error(ecUKNOWN_LOCALE, 2, a_pArg);
     }
 
@@ -564,10 +579,10 @@ MUP_NAMESPACE_START
     string_type date_b = a_pArg[1]->GetString();
 
     // Matches exactly: "yyyy-mm-dd"
-    std::regex basic_date ("^\\d{4}-\\d{1,2}-\\d{1,2}$");
+    std::wregex basic_date (L"^\\d{4}-\\d{1,2}-\\d{1,2}$");
     if (std::regex_match (date_a, basic_date) && std::regex_match (date_b, basic_date)) {
-      date_a += "T00:00";
-      date_b += "T00:00";
+      date_a += L"T00:00";
+      date_b += L"T00:00";
     } else if (std::regex_match (date_a, basic_date) || std::regex_match (date_b, basic_date)) {
       raise_error(ecDATE_AND_DATETIME, 1, a_pArg);
     }
@@ -666,8 +681,8 @@ MUP_NAMESPACE_START
     string_type date = a_pArg[0]->GetString();
     float_type days = a_pArg[1]->GetFloat(); // Accept both integer or float numbers! :D
 
-    std::regex date_regex ("^\\d{4}-\\d{1,2}-\\d{1,2}$"); // "yyyy-mm-dd"
-    std::regex date_time_regex ("^\\d{4}-\\d{1,2}-\\d{1,2}T\\d{1,2}:\\d{1,2}$"); // "yyyy-mm-ddTHH:MM"
+    std::wregex date_regex (L"^\\d{4}-\\d{1,2}-\\d{1,2}$"); // "yyyy-mm-dd"
+    std::wregex date_time_regex (L"^\\d{4}-\\d{1,2}-\\d{1,2}T\\d{1,2}:\\d{1,2}$"); // "yyyy-mm-ddTHH:MM"
     bool is_date_time = false;
 
     // http://man7.org/linux/man-pages/man3/strptime.3.html
@@ -814,11 +829,11 @@ MUP_NAMESPACE_START
   }
 
   string_type format_time (struct tm time, int gmt_offset) {
-    char buffer[9];
+    char_type buffer[9];
     int hours = calculate_hour_offset(time.tm_hour, gmt_offset);
-    snprintf(buffer, sizeof(buffer), "%02d:%02d:%02d", hours, time.tm_min, time.tm_sec);
+    _snwprintf(buffer, sizeof(buffer), L"%02d:%02d:%02d", hours, time.tm_min, time.tm_sec);
 
-    return std::string(buffer);
+    return string_type(buffer);
   }
 
   //------------------------------------------------------------------------------
@@ -938,14 +953,14 @@ MUP_NAMESPACE_START
     :ICallback(cmFUNC, _T("regex"), -1)
   {}
 
-  std::vector<std::vector<std::string>> capture_regex_groups(const std::string& input, const std::string& pattern) {
-    std::vector<std::vector<std::string>> captured_groups;
-    std::smatch match;
-    std::regex re(pattern);
-    std::string::const_iterator search_start(input.cbegin());
+  std::vector<std::vector<string_type>> capture_regex_groups(const string_type& input, const string_type& pattern) {
+    std::vector<std::vector<string_type>> captured_groups;
+    std::wsmatch match;
+    std::wregex re(pattern);
+    string_type::const_iterator search_start(input.cbegin());
 
     while (std::regex_search(search_start, input.cend(), match, re)) {
-        std::vector<std::string> groups;
+        std::vector<string_type> groups;
         for (size_t i = 1; i < match.size(); ++i) {
             groups.push_back(match[i].str());
         }
@@ -970,7 +985,7 @@ MUP_NAMESPACE_START
      auto captured_groups = capture_regex_groups(input, pattern);
 
      if (captured_groups.size() == 0 || captured_groups[0].size() == 0) {
-       *ret = (string_type) "";
+       *ret = (string_type) L"";
      } else {
        *ret = (string_type) captured_groups[0][0];
      }
