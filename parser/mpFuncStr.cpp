@@ -92,8 +92,8 @@ MUP_NAMESPACE_START
 
     string_type str1 = a_pArg[0]->GetString();
     string_type str2 = a_pArg[1]->GetString();
-    string_type opAttr = a_iArgc == 3 ? L" download=\"" + a_pArg[2]->GetString() + L"\">" : L">";
-    *ret = (string_type) L"<a href=\"" + str2 + L"\"" + opAttr + str1 + L"</a>";
+    string_type opAttr = a_iArgc == 3 ? _T(" download=\"") + a_pArg[2]->GetString() + _T("\">") : _T(">");
+    *ret = (string_type) _T("<a href=\"") + str2 + _T("\"") + opAttr + str1 + _T("</a>");
   }
 
   //------------------------------------------------------------------------------
@@ -535,7 +535,7 @@ MUP_NAMESPACE_START
 
     if (a_pArg[0]->GetType() == 'b') {
       bool_value = a_pArg[0]->GetBool();
-      *ret = (string_type) (bool_value ? L"true" : L"false");
+      *ret = (string_type) (bool_value ? _T("true") : _T("false"));
     }
 
     if (a_pArg[0]->GetType() == 's') {

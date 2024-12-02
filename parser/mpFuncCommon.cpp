@@ -440,15 +440,15 @@ MUP_NAMESPACE_START
     string_type hours = std::to_wstring(time.tm_hour);
     string_type min   = std::to_wstring(time.tm_min);
 
-    month = month.length() > 1 ? month : L"0" + month;
-    day = day.length() > 1 ? day : L"0" + day;
-    hours = hours.length() > 1 ? hours : L"0" + hours;
-    min = min.length() > 1 ? min : L"0" + min;
+    month = month.length() > 1 ? month : _T("0") + month;
+    day = day.length() > 1 ? day : _T("0") + day;
+    hours = hours.length() > 1 ? hours : _T("0") + hours;
+    min = min.length() > 1 ? min : _T("0") + min;
 
     if (is_date_time) {
-      return(year + L"-" + month + L"-" + day + L"T" + hours + L":" + min);
+      return(year + _T("-") + month + _T("-") + day + _T("T") + hours + _T(":") + min);
     } else {
-      return(year + L"-" + month + L"-" + day);
+      return(year + _T("-") + month + _T("-") + day);
     }
   }
 
@@ -475,18 +475,18 @@ MUP_NAMESPACE_START
 
   string_type localized_weekday(int week_day, const ptr_val_type *a_pArg) {
     string_type locale = a_pArg[1]->GetString();
-    string_type ret = L"";
+    string_type ret = _T("");
     string_type localized_weekdays[8][7] = {
-      {L"Sunday", L"Monday", L"Tuesday", L"Wednesday", L"Thursday", L"Friday", L"Saturday"},
-      {L"Søndag", L"Mandag", L"Tirsdag", L"Onsdag", L"Torsdag", L"Fredag", L"Lørdag"},
-      {L"Domingo", L"Segunda-Feira", L"Terça-feira", L"Quarta-feira", L"Quinta-feira", L"Sexta-feira", L"Sábado"},
-      {L"Domingo", L"Lunes", L"Martes", L"Miércoles", L"Jueves", L"Viernes", L"Sabado"},
-      {L"Dimanche", L"Lundi", L"Mardi", L"Mercredi", L"Jeudi", L"Vendredi", L"Samedi"},
-      {L"Sonntag", L"Montag", L"Dienstag", L"Mittwoch", L"Donnerstag", L"Freitag", L"Samstag"},
-      {L"星期天", L"星期一", L"星期二", L"星期三", L"星期四", L"星期五", L"星期六"},
-      {L"วันอาทิตย์", L"วันจันทร์", L"วันอังคาร", L"วันพุธ", L"วันพฤหัสบดี", L"วันศุกร์", L"วันเสาร์"}
+      {_T("Sunday"), _T("Monday"), _T("Tuesday"), _T("Wednesday"), _T("Thursday"), _T("Friday"), _T("Saturday")},
+      {_T("Søndag"), _T("Mandag"), _T("Tirsdag"), _T("Onsdag"), _T("Torsdag"), _T("Fredag"), _T("Lørdag")},
+      {_T("Domingo"), _T("Segunda-Feira"), _T("Terça-feira"), _T("Quarta-feira"), _T("Quinta-feira"), _T("Sexta-feira"), _T("Sábado")},
+      {_T("Domingo"), _T("Lunes"), _T("Martes"), _T("Miércoles"), _T("Jueves"), _T("Viernes"), _T("Sabado")},
+      {_T("Dimanche"), _T("Lundi"), _T("Mardi"), _T("Mercredi"), _T("Jeudi"), _T("Vendredi"), _T("Samedi")},
+      {_T("Sonntag"), _T("Montag"), _T("Dienstag"), _T("Mittwoch"), _T("Donnerstag"), _T("Freitag"), _T("Samstag")},
+      {_T("星期天"), _T("星期一"), _T("星期二"), _T("星期三"), _T("星期四"), _T("星期五"), _T("星期六")},
+      {_T("วันอาทิตย์"), _T("วันจันทร์"), _T("วันอังคาร"), _T("วันพุธ"), _T("วันพฤหัสบดี"), _T("วันศุกร์"), _T("วันเสาร์")}
     };
-    string_type locales[8] = {L"en", L"nb", L"pt-BR", L"es-ES", L"fr-FR", L"de-DE", L"zh-CN", L"th-TH"};
+    string_type locales[8] = {_T("en"), _T("nb"), _T("pt-BR"), _T("es-ES"), _T("fr-FR"), _T("de-DE"), _T("zh-CN"), _T("th-TH")};
 
     for (int i = 0; i < 8; i++) {
       if(locale == locales[i]) {
@@ -494,7 +494,7 @@ MUP_NAMESPACE_START
       }
     }
 
-    if(ret == L""){
+    if(ret == _T("")){
       raise_error(ecUKNOWN_LOCALE, 2, a_pArg);
     }
 
@@ -579,10 +579,10 @@ MUP_NAMESPACE_START
     string_type date_b = a_pArg[1]->GetString();
 
     // Matches exactly: "yyyy-mm-dd"
-    std::wregex basic_date (L"^\\d{4}-\\d{1,2}-\\d{1,2}$");
+    std::wregex basic_date (_T("^\\d{4}-\\d{1,2}-\\d{1,2}$"));
     if (std::regex_match (date_a, basic_date) && std::regex_match (date_b, basic_date)) {
-      date_a += L"T00:00";
-      date_b += L"T00:00";
+      date_a += _T("T00:00");
+      date_b += _T("T00:00");
     } else if (std::regex_match (date_a, basic_date) || std::regex_match (date_b, basic_date)) {
       raise_error(ecDATE_AND_DATETIME, 1, a_pArg);
     }
@@ -681,8 +681,8 @@ MUP_NAMESPACE_START
     string_type date = a_pArg[0]->GetString();
     float_type days = a_pArg[1]->GetFloat(); // Accept both integer or float numbers! :D
 
-    std::wregex date_regex (L"^\\d{4}-\\d{1,2}-\\d{1,2}$"); // "yyyy-mm-dd"
-    std::wregex date_time_regex (L"^\\d{4}-\\d{1,2}-\\d{1,2}T\\d{1,2}:\\d{1,2}$"); // "yyyy-mm-ddTHH:MM"
+    std::wregex date_regex (_T("^\\d{4}-\\d{1,2}-\\d{1,2}$")); // "yyyy-mm-dd"
+    std::wregex date_time_regex (_T("^\\d{4}-\\d{1,2}-\\d{1,2}T\\d{1,2}:\\d{1,2}$")); // "yyyy-mm-ddTHH:MM"
     bool is_date_time = false;
 
     // http://man7.org/linux/man-pages/man3/strptime.3.html
@@ -831,7 +831,7 @@ MUP_NAMESPACE_START
   string_type format_time (struct tm time, int gmt_offset) {
     char_type buffer[9];
     int hours = calculate_hour_offset(time.tm_hour, gmt_offset);
-    _snwprintf(buffer, sizeof(buffer), L"%02d:%02d:%02d", hours, time.tm_min, time.tm_sec);
+    _snwprintf(buffer, sizeof(buffer), _T("%02d:%02d:%02d"), hours, time.tm_min, time.tm_sec);
 
     return string_type(buffer);
   }
@@ -985,7 +985,7 @@ MUP_NAMESPACE_START
      auto captured_groups = capture_regex_groups(input, pattern);
 
      if (captured_groups.size() == 0 || captured_groups[0].size() == 0) {
-       *ret = (string_type) L"";
+       *ret = (string_type) _T("");
      } else {
        *ret = (string_type) captured_groups[0][0];
      }

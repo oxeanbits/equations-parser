@@ -30,14 +30,14 @@ string_type Calc(string_type input) {
   catch(ParserError &e)
   {
     if (e.GetPos() != -1) {
-      string_type error = L"Error: ";
+      string_type error = _T("Error: ");
       error.append(e.GetMsg());
       return error;
     }
   }
   catch(std::runtime_error & ex)
   {
-    string_type error = L"Error: Runtime error - ";
+    string_type error = _T("Error: Runtime error - ");
     const char* msg = ex.what();
     size_t len = strlen(msg) + 1;
     std::vector<wchar_t> buffer(len);
@@ -106,7 +106,7 @@ string_type CalcJson(string_type input) {
 
     string_type ansString = ans.AsString();
 
-    ReplaceAll(ansString, L"\"", L"\\\"");
+    ReplaceAll(ansString, _T("\""), _T("\\\""));
 
     ss << _T("\"val\": \"") << ansString << _T("\"");
     ss << _T(",\"type\": \"") << ans.GetType() << _T("\"");
@@ -120,7 +120,7 @@ string_type CalcJson(string_type input) {
   }
   catch(std::runtime_error & ex)
   {
-    string_type error = L"Error: Runtime error - ";
+    string_type error = _T("Error: Runtime error - ");
     const char* msg = ex.what();
     size_t len = strlen(msg) + 1;
     std::vector<wchar_t> buffer(len);

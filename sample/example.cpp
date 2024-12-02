@@ -174,17 +174,17 @@ void Calc()
 } // Calc
 
 void EquationsParserSample() {
-  console() << EquationsParser::CalcJson(L"sin(0.57) * 33") << endl;
-  console() << EquationsParser::Calc(L"sin(0.57) * 33") << endl;
+  console() << EquationsParser::CalcJson(_T("sin(0.57) * 33")) << endl;
+  console() << EquationsParser::Calc(_T("sin(0.57) * 33")) << endl;
 
-  vector<string_type> equations = {L"5*7", L"40+2"};
+  vector<string_type> equations = {_T("5*7"), _T("40+2")};
   vector<string_type> results;
   EquationsParser::CalcArray(equations, results);
   for (string_type r : results) {
     console() << r << endl;
   }
 
-  console() << EquationsParser::Calc(L"weekyear(\"2022-04-20\")") << endl;
+  console() << EquationsParser::Calc(_T("weekyear(\"2022-04-20\")")) << endl;
 }
 
 //---------------------------------------------------------------------------
