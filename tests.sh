@@ -166,6 +166,8 @@ test_eval 'number("4")' '4'
 
 # Date tests
 test_eval 'current_date()' '"'$(date '+%Y-%m-%d')'"'
+test_eval 'current_date(1)' '"'$(date '+%Y-%m-%d')'"'
+test_eval 'current_date(-2)' '"'$(date '+%Y-%m-%d')'"'
 test_eval 'daysdiff("2018-01-01", "2018-12-31")' '364'
 test_eval 'daysdiff("2016-01-01", "2016-12-31")' '365'
 test_eval 'daysdiff("2000-01-01", "2000-12-31")' '365'
