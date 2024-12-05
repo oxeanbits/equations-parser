@@ -644,12 +644,39 @@ MUP_NAMESPACE_START
   */
   void FunCurrentDate::Eval(ptr_val_type &ret, const ptr_val_type *a_pArg, int a_iArgc)
   {
-    if (a_iArgc != 0)
+    int gmt_offset = 0;
+    if (a_iArgc > 1) {
       throw ParserError(ErrorContext(ecTOO_MANY_PARAMS, GetExprPos(), GetIdent()));
+    } else if (a_iArgc == 1) {
+      switch(a_pArg[0]->GetType())
+      {
+      case 'i': gmt_offset = a_pArg[0]->GetInteger();   break;
+      default:
+        {
+          ErrorContext err;
+          err.Errc = ecTYPE_CONFLICT_FUN;
+          err.Arg = 1;
+          err.Type1 = a_pArg[0]->GetType();
+          err.Type2 = 'i';
+          err.Ident = GetIdent();
+          throw ParserError(err);
+        }
+      }
+    }
 
     (void)*a_pArg;
     std::time_t t = std::time(0); // get time now
     std::tm now = *std::localtime(&t);
+
+    if (gmt_offset != 0) {
+      int original_hour = now.tm_hour;
+      now.tm_hour = calculate_hour_offset(original_hour, gmt_offset);
+      if (now.tm_hour <= original_hour && gmt_offset > 0) {
+        add_days(&now, 1);
+      } else if (now.tm_hour >= original_hour && gmt_offset < 0) {
+        add_days(&now, -1);
+      }
+    }
 
     *ret = format_date(now, false);
   }
