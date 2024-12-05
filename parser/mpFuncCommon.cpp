@@ -49,6 +49,136 @@
 MUP_NAMESPACE_START
 
   //------------------------------------------------------------------------------
+  //                                                                             |
+  //                         Time auxiliar functions!                            |
+  //                                                                             |
+  //------------------------------------------------------------------------------
+
+  int calculate_hour_offset(int original_hour, int gmt_offset) {
+    return ((original_hour + gmt_offset) % 24 + 24) % 24;
+  }
+
+  string_type format_time (struct tm time, int gmt_offset) {
+    char buffer[9];
+    int hours = calculate_hour_offset(time.tm_hour, gmt_offset);
+    snprintf(buffer, sizeof(buffer), "%02d:%02d:%02d", hours, time.tm_min, time.tm_sec);
+
+    return std::string(buffer);
+  }
+
+  //------------------------------------------------------------------------------
+  //                                                                             |
+  //                         Date auxiliar functions!                            |
+  //                                                                             |
+  //------------------------------------------------------------------------------
+
+  // https://en.wikipedia.org/wiki/Rata_Die
+  int rata_die (int y, int m, int d) { /* Rata Die day one is 0001-01-01 */
+    if (m < 3)
+      y--, m += 12;
+    return 365*y + y/4 - y/100 + y/400 + (153*m - 457)/5 + d - 306;
+  }
+
+  string_type format_date (struct tm time, bool is_date_time) {
+    string_type year  = std::to_string(time.tm_year + 1900);
+    string_type month = std::to_string(time.tm_mon + 1);
+    string_type day   = std::to_string(time.tm_mday);
+    string_type hours = std::to_string(time.tm_hour);
+    string_type min   = std::to_string(time.tm_min);
+
+    month = month.length() > 1 ? month : '0' + month;
+    day = day.length() > 1 ? day : '0' + day;
+    hours = hours.length() > 1 ? hours : '0' + hours;
+    min = min.length() > 1 ? min : '0' + min;
+
+    if (is_date_time) {
+      return(year + "-" + month + "-" + day + "T" + hours + ":" + min);
+    } else {
+      return(year + "-" + month + "-" + day);
+    }
+  }
+
+  void add_days (struct tm* date, float_type days) {
+    // Avoid mismatch between winter and summer time on mktime() conversion
+    date->tm_isdst = -1;
+
+    // Seconds since start of epoch
+    time_t new_day = mktime(date) + (days * ONE_DAY);
+
+    // Update caller's date
+    // localtime is used because mktime converts from localtime to UTC and we need to convert it back
+    *date = *localtime(&new_day);
+  }
+
+  void raise_error (EErrorCodes error, int position, const ptr_val_type *arguments) {
+    ErrorContext err;
+    err.Errc = error;
+    err.Arg = position;
+    err.Type1 = arguments[position - 1]->GetType();
+    err.Type2 = 's';
+    throw ParserError(err);
+  }
+
+  string_type localized_weekday(int week_day, const ptr_val_type *a_pArg) {
+    string_type locale = a_pArg[1]->GetString();
+    string_type ret = "";
+    string_type localized_weekdays[8][7] = {
+      {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"},
+      {"Søndag", "Mandag", "Tirsdag", "Onsdag", "Torsdag", "Fredag", "Lørdag"},
+      {"Domingo", "Segunda-Feira", "Terça-feira", "Quarta-feira", "Quinta-feira", "Sexta-feira", "Sábado"},
+      {"Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sabado"},
+      {"Dimanche", "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi"},
+      {"Sonntag", "Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag"},
+      {"星期天", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"},
+      {"วันอาทิตย์", "วันจันทร์", "วันอังคาร", "วันพุธ", "วันพฤหัสบดี", "วันศุกร์", "วันเสาร์"}
+    };
+    string_type locales[8] = {"en", "nb", "pt-BR", "es-ES", "fr-FR", "de-DE", "zh-CN", "th-TH"};
+
+    for (int i = 0; i < 8; i++) {
+      if(locale == locales[i]) {
+        ret = localized_weekdays[i][week_day];
+      }
+    }
+
+    if(ret == ""){
+      raise_error(ecUKNOWN_LOCALE, 2, a_pArg);
+    }
+
+    return ret;
+  }
+
+  //------------------------------------------------------------------------------
+  //                                                                             |
+  //                         String auxiliar functions!                          |
+  //                                                                             |
+  //------------------------------------------------------------------------------
+
+  static string_type to_string(long_double_type number) {
+    std::string string_number = std::to_string (number);
+    int offset = 1;
+    if (string_number.find_last_not_of('0') == string_number.find('.')) {
+      offset = 0;
+    }
+    string_number.erase(string_number.find_last_not_of('0') + offset, std::string::npos);
+    return string_number;
+  }
+
+  static string_type apply_mask(string_type mask, string_type number_string) {
+    for (int i = mask.length() - 1; i >= 0; i--) {
+      if (mask[i] == '0' && number_string.length() > 0) {
+        mask[i] = number_string.back();
+        number_string.pop_back();
+      }
+    }
+
+    if (number_string.length() > 0) {
+      mask.insert(0, number_string);
+    }
+
+    return mask;
+  }
+
+  //------------------------------------------------------------------------------
   //
   // FunParserID
   //
@@ -338,31 +468,6 @@ MUP_NAMESPACE_START
   //
   //------------------------------------------------------------------------------
 
-  static string_type to_string(long_double_type number) {
-    std::string string_number = std::to_string (number);
-    int offset = 1;
-    if (string_number.find_last_not_of('0') == string_number.find('.')) {
-      offset = 0;
-    }
-    string_number.erase(string_number.find_last_not_of('0') + offset, std::string::npos);
-    return string_number;
-  }
-
-  static string_type apply_mask(string_type mask, string_type number_string) {
-    for (int i = mask.length() - 1; i >= 0; i--) {
-      if (mask[i] == '0' && number_string.length() > 0) {
-        mask[i] = number_string.back();
-        number_string.pop_back();
-      }
-    }
-
-    if (number_string.length() > 0) {
-      mask.insert(0, number_string);
-    }
-
-    return mask;
-  }
-
   FunMask::FunMask()
     :ICallback(cmFUNC, _T("mask"), -1)
   {}
@@ -405,86 +510,6 @@ MUP_NAMESPACE_START
   //                                                                             |
   //------------------------------------------------------------------------------
 
-  //------------------------------------------------------------------------------
-  //                                                                             |
-  //                         Date auxiliar functions!                            |
-  //                                                                             |
-  //------------------------------------------------------------------------------
-
-  // https://en.wikipedia.org/wiki/Rata_Die
-  int rata_die (int y, int m, int d) { /* Rata Die day one is 0001-01-01 */
-    if (m < 3)
-      y--, m += 12;
-    return 365*y + y/4 - y/100 + y/400 + (153*m - 457)/5 + d - 306;
-  }
-
-  string_type format_date (struct tm time, bool is_date_time) {
-    string_type year  = std::to_string(time.tm_year + 1900);
-    string_type month = std::to_string(time.tm_mon + 1);
-    string_type day   = std::to_string(time.tm_mday);
-    string_type hours = std::to_string(time.tm_hour);
-    string_type min   = std::to_string(time.tm_min);
-
-    month = month.length() > 1 ? month : '0' + month;
-    day = day.length() > 1 ? day : '0' + day;
-    hours = hours.length() > 1 ? hours : '0' + hours;
-    min = min.length() > 1 ? min : '0' + min;
-
-    if (is_date_time) {
-      return(year + "-" + month + "-" + day + "T" + hours + ":" + min);
-    } else {
-      return(year + "-" + month + "-" + day);
-    }
-  }
-
-  void add_days (struct tm* date, float_type days) {
-    // Avoid mismatch between winter and summer time on mktime() conversion
-    date->tm_isdst = -1;
-
-    // Seconds since start of epoch
-    time_t new_day = mktime(date) + (days * ONE_DAY);
-
-    // Update caller's date
-    // localtime is used because mktime converts from localtime to UTC and we need to convert it back
-    *date = *localtime(&new_day);
-  }
-
-  void raise_error (EErrorCodes error, int position, const ptr_val_type *arguments) {
-    ErrorContext err;
-    err.Errc = error;
-    err.Arg = position;
-    err.Type1 = arguments[position - 1]->GetType();
-    err.Type2 = 's';
-    throw ParserError(err);
-  }
-
-  string_type localized_weekday(int week_day, const ptr_val_type *a_pArg) {
-    string_type locale = a_pArg[1]->GetString();
-    string_type ret = "";
-    string_type localized_weekdays[8][7] = {
-      {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"},
-      {"Søndag", "Mandag", "Tirsdag", "Onsdag", "Torsdag", "Fredag", "Lørdag"},
-      {"Domingo", "Segunda-Feira", "Terça-feira", "Quarta-feira", "Quinta-feira", "Sexta-feira", "Sábado"},
-      {"Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sabado"},
-      {"Dimanche", "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi"},
-      {"Sonntag", "Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag"},
-      {"星期天", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"},
-      {"วันอาทิตย์", "วันจันทร์", "วันอังคาร", "วันพุธ", "วันพฤหัสบดี", "วันศุกร์", "วันเสาร์"}
-    };
-    string_type locales[8] = {"en", "nb", "pt-BR", "es-ES", "fr-FR", "de-DE", "zh-CN", "th-TH"};
-
-    for (int i = 0; i < 8; i++) {
-      if(locale == locales[i]) {
-        ret = localized_weekdays[i][week_day];
-      }
-    }
-
-    if(ret == ""){
-      raise_error(ecUKNOWN_LOCALE, 2, a_pArg);
-    }
-
-    return ret;
-  }
 
   //------------------------------------------------------------------------------
   //
@@ -802,24 +827,6 @@ MUP_NAMESPACE_START
   //            Below we have the section related to Time functions              |
   //                                                                             |
   //------------------------------------------------------------------------------
-
-  //------------------------------------------------------------------------------
-  //                                                                             |
-  //                         Time auxiliar functions!                            |
-  //                                                                             |
-  //------------------------------------------------------------------------------
-
-  int calculate_hour_offset(int original_hour, int gmt_offset) {
-    return ((original_hour + gmt_offset) % 24 + 24) % 24;
-  }
-
-  string_type format_time (struct tm time, int gmt_offset) {
-    char buffer[9];
-    int hours = calculate_hour_offset(time.tm_hour, gmt_offset);
-    snprintf(buffer, sizeof(buffer), "%02d:%02d:%02d", hours, time.tm_min, time.tm_sec);
-
-    return std::string(buffer);
-  }
 
   //------------------------------------------------------------------------------
   //
