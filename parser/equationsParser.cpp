@@ -137,4 +137,11 @@ void CalcArray(vector<string> equations, vector<string> &out) {
   }
 }
 
+Value PureCalc(string input) {
+  Value result;
+  ParserX parser(pckALL_NON_COMPLEX);
+  parser.SetExpr(input);
+  return parser.Eval();
+}
+
 EQUATIONS_PARSER_END
