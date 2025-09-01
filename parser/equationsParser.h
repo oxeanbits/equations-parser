@@ -15,6 +15,7 @@ void ReplaceAll(std::string& source, const std::string& from, const std::string&
 std::string Calc(std::string input);
 std::string CalcJson(std::string input);
 void CalcArray(std::vector<std::string> in, std::vector<std::string> &out);
+mup::Value PureCalc(std::string input);
 
 EQUATIONS_PARSER_END
 
