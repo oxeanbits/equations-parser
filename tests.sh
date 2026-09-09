@@ -79,6 +79,10 @@ test_eval "max(1, 2) + min(3, 4) + sum(5, 6)" "16"
 test_eval "avg(9, 9.8, 10)" "9.6"
 test_eval "pow(2, 3)" "8"
 test_eval "round_decimal(4.559, 2)" "4.56"
+test_eval 'round_decimal(10.11, 1, "up")' "10.2"
+test_eval 'round_decimal(10.19, 1, "down")' "10.1"
+test_eval 'round_decimal(-10.19, 1, "up")' "-10.1"
+test_eval 'round_decimal(-10.11, 1, "down")' "-10.2"
 
 # Conditional tests
 test_eval "4 > 2 ? \"bigger\" : \"smaller\"" "\"bigger\""

@@ -51,16 +51,6 @@ MUP_NAMESPACE_START
 
 //------------------------------------------------------------------------------
 //
-// Auxiliary Functions
-//
-//------------------------------------------------------------------------------
-double round(long_double_type number, int_type precision) {
-  int_type decimals = std::pow(10, precision);
-  return (std::round(number * decimals)) / decimals;
-}
-
-//------------------------------------------------------------------------------
-//
 //
 //
 //------------------------------------------------------------------------------
@@ -138,7 +128,6 @@ double round(long_double_type number, int_type precision) {
     MUP_BINARY_FUNC(FunHypot,  "hypot",  std::hypot, "hypot(x, y) - compute the length of the vector x,y")
     MUP_BINARY_FUNC(FunAtan2,  "atan2",  std::atan2, "arcus tangens with quadrant fix")
     MUP_BINARY_FUNC(FunFmod,   "fmod",   std::fmod,  "fmod(x, y) - floating point remainder of x / y")
-    MUP_BINARY_FUNC(FunRoundDecimal, "round_decimal", round, "round_decimal(x, y) - round the x number considering y precision")
     MUP_BINARY_FUNC(FunRemainder,    "remainder", std::remainder,  "remainder(x, y) - IEEE remainder of x / y")
 #undef MUP_BINARY_FUNC
 
