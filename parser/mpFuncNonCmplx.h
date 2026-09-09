@@ -81,7 +81,6 @@ MUP_NAMESPACE_START
     MUP_UNARY_FUNC_DEF(FunExp)
     // number functions
     MUP_UNARY_FUNC_DEF(FunAbs)
-    MUP_UNARY_FUNC_DEF(FunRound)
 #undef MUP_UNARY_FUNC_DEF
 
 #define MUP_BINARY_FUNC_DEF(CLASS)                                          \

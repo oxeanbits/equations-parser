@@ -33,6 +33,7 @@
   </pre>
 */
 #include "mpFuncNonCmplx.h"
+#include "mpFuncRound.h"
 
 //--- Standard includes ----------------------------------------------------
 #include <cmath>
@@ -111,7 +112,6 @@ double round(long_double_type number, int_type precision) {
     MUP_UNARY_FUNC(FunExp,   "exp",   std::exp,   "exp(x) - e to the power of x")
     // number functions
     MUP_UNARY_FUNC(FunAbs,   "abs",    std::fabs,  "abs(x) - absolute value of x")
-    MUP_UNARY_FUNC(FunRound, "round",  std::round, "round(x) - round the value of x to its nearest integer")
 #undef MUP_UNARY_FUNC
 
 #define MUP_BINARY_FUNC(CLASS, IDENT, FUNC, DESC) \

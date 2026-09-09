@@ -32,6 +32,7 @@
 
 #include "mpParserBase.h"
 #include "mpFuncNonCmplx.h"
+#include "mpFuncRound.h"
 #include "mpOprtNonCmplx.h"
 #include "mpOprtBinCommon.h"
 
