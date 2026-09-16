@@ -133,6 +133,19 @@ MUP_NAMESPACE_START
     virtual IToken* Clone() const override;
   }; // class FunMask
 
+    //------------------------------------------------------------------------------
+  /** \brief Returns the result of a case operation.
+      \ingroup functions
+  */
+  class FunCase: public ICallback
+  {
+  public:
+    FunCase();
+    virtual void Eval(ptr_val_type &ret, const ptr_val_type *a_pArg, int a_iArgc) override;
+    virtual const char_type* GetDesc() const override;
+    virtual IToken* Clone() const override;
+  }; // class FunCase
+
   //------------------------------------------------------------------------------
   /** \brief Determine the difference in days between two dates.
       \ingroup functions
@@ -238,7 +251,7 @@ MUP_NAMESPACE_START
   }; // class FunWeekYear
 
   //------------------------------------------------------------------------------
-  /** \brief Return the week of year of a date.
+  /** \brief Return the weekday of a date.
       \ingroup functions
   */
   class FunWeekDay: public ICallback
