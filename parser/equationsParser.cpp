@@ -71,6 +71,34 @@ void ReplaceAll(std::string& source, const std::string& from, const std::string&
   source.swap(newString);
 }
 
+string EscapeJsonString(string value) {
+  const char hexDigits[] = "0123456789abcdef";
+  string escaped;
+  escaped.reserve(value.size());
+
+  for (const unsigned char character : value) {
+    switch (character) {
+      case '"': escaped += "\\\""; break;
+      case '\\': escaped += "\\\\"; break;
+      case '\b': escaped += "\\b"; break;
+      case '\f': escaped += "\\f"; break;
+      case '\n': escaped += "\\n"; break;
+      case '\r': escaped += "\\r"; break;
+      case '\t': escaped += "\\t"; break;
+      default:
+        if (character < 0x20) {
+          escaped += "\\u00";
+          escaped += hexDigits[character >> 4];
+          escaped += hexDigits[character & 0x0f];
+        } else {
+          escaped += static_cast<char>(character);
+        }
+    }
+  }
+
+  return escaped;
+}
+
 /**
  * @brief Evaluates an input string as a mathematical expression and returns the result as a JSON
  * @param input The string to be evaluated as a mathematical expression
@@ -99,9 +127,7 @@ string CalcJson(string input) {
     parser.SetExpr(input);
     ans = parser.Eval();
 
-    std::string ansString = ans.AsString();
-
-    ReplaceAll(ansString, "\"", "\\\"");
+    std::string ansString = EscapeJsonString(ans.AsString());
 
     ss << _T("\"val\": \"") << ansString << _T("\"");
     ss << _T(",\"type\": \"") << ans.GetType() << _T("\"");
@@ -109,7 +135,7 @@ string CalcJson(string input) {
   catch(ParserError &e)
   {
     if (e.GetPos() != -1) {
-      string_type error = e.GetMsg();
+      string_type error = EscapeJsonString(e.GetMsg());
       ss << _T("\"error\": \"") << error << _T("\"");
     }
   }
@@ -117,7 +143,7 @@ string CalcJson(string input) {
   {
     string_type error = "Error: Runtime error - ";
     error.append(ex.what());
-    ss << _T("\"error\": \"") << error << _T("\"");
+    ss << _T("\"error\": \"") << EscapeJsonString(error) << _T("\"");
   }
 
   ss << _T("}");
