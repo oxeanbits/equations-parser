@@ -154,10 +154,9 @@ A powerful C++ mathematical expression parser library with support for **complex
 | Equal | `a == b` | Equality | `3 == 3 = true` |
 | Not Equal | `a != b` | Inequality | `3 != 4 = true` |
 | Logical AND | `a && b`, `a and b` | Logical conjunction | `true && false = false` |
-| Logical OR | `a || b`, `a or b` | Logical disjunction | `true || false = true` |
-| Logical NOT | `!a` | Logical negation | `!true = false` |
+| Logical OR | <code>a &#124;&#124; b</code>, <code>a or b</code> | Logical disjunction | <code>true &#124;&#124; false = true</code> |
 | Bitwise AND | `a & b` | Bitwise conjunction | `5 & 3 = 1` |
-| Bitwise OR | `a | b` | Bitwise disjunction | `5 | 3 = 7` |
+| Bitwise OR | <code>a &#124; b</code> | Bitwise disjunction | <code>5 &#124; 3 = 7</code> |
 | Left Shift | `a << b` | Bitwise left shift | `1 << 3 = 8` |
 | Right Shift | `a >> b` | Bitwise right shift | `8 >> 3 = 1` |
 

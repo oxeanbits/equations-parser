@@ -81,7 +81,6 @@ MUP_NAMESPACE_START
     MUP_UNARY_FUNC_DEF(FunExp)
     // number functions
     MUP_UNARY_FUNC_DEF(FunAbs)
-    MUP_UNARY_FUNC_DEF(FunRound)
 #undef MUP_UNARY_FUNC_DEF
 
 #define MUP_BINARY_FUNC_DEF(CLASS)                                          \
@@ -98,7 +97,6 @@ MUP_NAMESPACE_START
     MUP_BINARY_FUNC_DEF(FunHypot)
     MUP_BINARY_FUNC_DEF(FunAtan2)
     MUP_BINARY_FUNC_DEF(FunFmod)
-    MUP_BINARY_FUNC_DEF(FunRoundDecimal)
     MUP_BINARY_FUNC_DEF(FunRemainder)
 #undef MUP_BINARY_FUNC_DEF
 
